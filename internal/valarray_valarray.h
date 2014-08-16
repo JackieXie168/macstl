@@ -28,18 +28,17 @@
 
 namespace impl
 	{
-		template <typename Val> class valarray_base: public array_base <Val>
+		template <typename Val> class valarray_base: public array <Val>
 			{
 				public:
-					typedef chunk_traits <Val> chunk_traits;
-					
 					~valarray_base ()
 						{
-							chunk_traits::deallocate (begin (), size ());
+							free (begin ());
 						}
 			
 				protected:
-					valarray_base (size_t n): array_base <Val> (chunk_traits::allocate (n), n)
+					valarray_base (size_t n):
+						array <Val> (reinterpret_cast <Val*> (malloc (sizeof (Val) * n)), n)
 						{
 						}
 			};
@@ -96,7 +95,7 @@ namespace std
 				return *this;																		\
 			}																						\
 																									\
-		template <typename Expr> valarray& FUNC (const impl::term_base <value_type, Expr>& other)	\
+		template <typename Expr> valarray& FUNC (const impl::term <value_type, Expr>& other)	\
 			{																						\
 				for_each_array (*this, other.expr (), impl::function <OPER>::operation <value_type> ());	\
 				return *this;																		\
@@ -133,7 +132,7 @@ namespace std
 							impl::uninitialized_copy_array (*this, other);
 						}
 		
-					template <typename Expr> valarray (const impl::term_base <value_type, Expr>& other):
+					template <typename Expr> valarray (const impl::term <value_type, Expr>& other):
 						impl::valarray_base <Val> (other.expr ().size ())
 						{
 							impl::uninitialized_copy_array (*this, other.expr ());
@@ -168,7 +167,7 @@ namespace std
 							return *this;
 						}
 						
-					template <typename Expr> valarray& operator= (const impl::term_base <value_type, Expr>& other)
+					template <typename Expr> valarray& operator= (const impl::term <value_type, Expr>& other)
 						{
 							impl::copy_array (*this, other.expr ());
 							return *this;

@@ -98,7 +98,7 @@ namespace impl
 			};
 			
 		template <typename Expr> class shift_term:
-			public term_base <typename Expr::value_type, shift_term <Expr> >
+			public term <typename Expr::value_type, shift_term <Expr> >
 			{
 				public:
 					typedef typename Expr::value_type value_type;
@@ -192,7 +192,7 @@ namespace impl
 
 					
 		template <typename Expr> class cshift_term:
-			public term_base <typename Expr::value_type, cshift_term <Expr> >
+			public term <typename Expr::value_type, cshift_term <Expr> >
 			{
 				public:
 					typedef typename Expr::value_type value_type;

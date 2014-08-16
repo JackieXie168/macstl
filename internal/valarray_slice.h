@@ -117,56 +117,89 @@ namespace impl
 					ExprIt exprit_;
 					const size_t stride_;
 			};
-
-		template <typename Expr> class slice_term: public term_base <typename Expr::value_type, slice_term <Expr> >
+			
+		template <typename Expr> class slice_term_base
 			{
 				public:
 					typedef typename Expr::value_type value_type;					
 					typedef slice_iterator <typename Expr::const_iterator> const_iterator;
 					
-					slice_term (const Expr& expr, const std::slice& sliced): expr_ (expr), slice_ (sliced) { }
-											
 					value_type operator[] (size_t index) const	{ return expr_ [index * slice_.stride () + slice_.start ()]; }
 					size_t size () const						{ return slice_.size (); }
 
 					const_iterator begin () const				{ return const_iterator (expr_.begin (), slice_.start (), slice_.stride ()); }
 										
-				private:
+				protected:
 					const Expr& expr_;
 					const std::slice slice_;
+					
+					slice_term_base (const Expr& expr, const std::slice& sliced): expr_ (expr), slice_ (sliced) { }
 			};
-	};
-	
-namespace std
-	{
-		template <typename Val> class slice_array: public impl::subset_base <Val, slice_array <Val> >
+			
+		template <typename Expr, typename Val, bool is_const_chunkable> class slice_term_dispatch: public slice_term_base <Expr>
+			{
+				protected:
+					slice_term_dispatch (const Expr& expr, const std::slice& sliced):
+						slice_term_base <Expr> (expr, sliced) { }
+			};
+			
+		template <typename Expr> class slice_term:
+			public term <typename Expr::value_type, slice_term <Expr> >,
+			public slice_term_dispatch <Expr, typename Expr::value_type, const_chunkable <Expr>::value>
 			{
 				public:
-					typedef Val value_type;
-					
-					using impl::subset_base <Val, slice_array <Val> >::operator=;
-					
-					typedef impl::slice_iterator <typename impl::array_base <Val>::const_iterator> const_iterator;
-					typedef impl::slice_iterator <typename impl::array_base <Val>::iterator> iterator;
+					slice_term (const Expr& expr, const std::slice& sliced):
+						slice_term_dispatch <Expr, typename Expr::value_type, const_chunkable <Expr>::value> (expr, sliced) { }
+			};
+			
+		template <typename Expr> class slice_array_base
+			{
+				public:
+					typedef typename Expr::value_type value_type;
+					typedef slice_iterator <typename Expr::const_iterator> const_iterator;
+					typedef slice_iterator <typename Expr::iterator> iterator;
 					
 					size_t size () const			{ return slice_.size (); }
 						
 					const_iterator begin () const	{ return const_iterator (expr_.begin (), slice_.start (), slice_.stride ()); }
 					iterator begin ()				{ return iterator (expr_.begin (), slice_.start (), slice_.stride ()); }
 					
-						
+				protected:
+					Expr& expr_;
+					const std::slice slice_;
+
+					slice_array_base (Expr& expr, const std::slice& slice): expr_ (expr), slice_ (slice)
+						{
+						}
+			};
+			
+		template <typename Expr, typename Val, bool is_const_chunkable> class slice_array_dispatch: public slice_array_base <Expr>
+			{
+				protected:
+					slice_array_dispatch (Expr& expr, const std::slice& slice): slice_array_base <Expr> (expr, slice)
+						{
+						}
+			};
+
+	};
+	
+namespace std
+	{
+		template <typename Val> class slice_array:
+			public impl::subset <Val, slice_array <Val> >,
+			public impl::slice_array_dispatch <impl::array <Val>, Val, impl::const_chunkable <impl::array <Val> >::value>
+			{
 				private:
-					impl::array_base <Val>& expr_;
-					const slice slice_;
+					friend class impl::array <Val>;
 
-					friend class impl::array_base <Val>;
-
-					slice_array (impl::array_base <Val>& expr, slice slice): expr_ (expr), slice_ (slice)
+					slice_array (impl::array <Val>& expr, const slice& slice):
+						impl::slice_array_dispatch <impl::array <Val>, Val, impl::const_chunkable <impl::array <Val> >::value> (expr, slice)
 						{
 						}
 						
 					// to allow valarray subsetters to return slice_arrays
-					slice_array (const slice_array& other): expr_ (other.expr_), slice_ (other.slice_)
+					slice_array (const slice_array& other):
+						impl::slice_array_dispatch <impl::array <Val>, Val, impl::const_chunkable <impl::array <Val> >::value> (other)
 						{
 						}
 

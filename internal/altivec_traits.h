@@ -564,9 +564,9 @@ namespace macstl
 						static vector_type less_equal (vector_type x, vector_type y)	{ return vec_or (vec_nor (x, x), y); }
 						static vector_type greater_equal (vector_type x, vector_type y)	{ return vec_or (x, vec_nor (y, y)); }
 						
-						static value_type sum (vector_type x)	{ return (value_type) vec_any_ne (x, zero ()); }
-						static value_type min (vector_type x)	{ return (value_type) vec_all_ne (x, zero ()); }
-						static value_type max (vector_type x)	{ return (value_type) vec_any_ne (x, zero ()); }
+						static value_type sum (vector_type x)	{ value_type result; result = vec_any_ne (x, zero ()); return result; }
+						static value_type min (vector_type x)	{ value_type result; result = vec_all_ne (x, zero ()); return result; }
+						static value_type max (vector_type x)	{ value_type result; result = vec_any_ne (x, zero ()); return result; }
 					};
 		
 			};

@@ -1,5 +1,15 @@
 Release history
 
+0.1.2	 18 Aug 2003	
+	．Optimized chunked slicing of floats and longs e.g. v1 [slice]: used Altivec permutes, 39% faster.
+	．Optimized chunked relational min, max e.g. (v1 == v2).min (): used Altivec predicates, 21% faster.
+	．Optimized unchunked bool-valued min, max: 2.44x faster.
+	．Now builds correctly with Project Builder 2.1 and December 2002 gcc 3.3 Updater.
+	．Refactored entire term hierarchy for easier value type partial specialization.
+	．Allocations are now exact instead of rounded up to Altivec alignment; algorithms adjusted to use scalar code on array tails.
+	．Fixed bug where element access to a unary term could not compile e.g. sin (v1) [0].
+	．Fixed bug where chunked min, max or sum of boolean could not compile.
+
 0.1.1	 26 Jul 2003	
 	．Fixed gcc 3.3 compile issues: stricter access control, in-class init of vector constant. [ACu]
 

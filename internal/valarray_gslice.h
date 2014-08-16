@@ -118,7 +118,7 @@ namespace impl
 			};
 		
 		template <typename Expr> class gslice_term:
-			public term_base <typename Expr::value_type, gslice_term <Expr> >
+			public term <typename Expr::value_type, gslice_term <Expr> >
 			{
 				public:
 					typedef typename Expr::value_type value_type;
@@ -179,9 +179,9 @@ namespace std
 						{
 						}
 					
-					size_t start () const						{ return start_; }
-					impl::array_base <size_t> size () const		{ return length_; }
-					impl::array_base <size_t> stride () const	{ return stride_; }
+					size_t start () const					{ return start_; }
+					impl::array <size_t> size () const		{ return length_; }
+					impl::array <size_t> stride () const	{ return stride_; }
 					
 				private:
 					const size_t start_;
@@ -193,15 +193,15 @@ namespace std
 					template <typename Val> friend class gslice_array;
 			};
 	
-		template <typename Val> class gslice_array: public impl::subset_base <Val, gslice_array <Val> >
+		template <typename Val> class gslice_array: public impl::subset <Val, gslice_array <Val> >
 			{
 				public:
 					typedef Val value_type;
 					
-					using impl::subset_base <Val, gslice_array <Val> >::operator=;
+					using impl::subset <Val, gslice_array <Val> >::operator=;
 					
-					typedef impl::gslice_iterator <typename impl::array_base <Val>::const_iterator> const_iterator;
-					typedef impl::gslice_iterator <typename impl::array_base <Val>::iterator> iterator;
+					typedef impl::gslice_iterator <typename impl::array <Val>::const_iterator> const_iterator;
+					typedef impl::gslice_iterator <typename impl::array <Val>::iterator> iterator;
 					
 					size_t size () const
 						{
@@ -219,13 +219,13 @@ namespace std
 						}
 						
 				private:
-					impl::array_base <Val>& expr_;
+					impl::array <Val>& expr_;
 					const gslice& slice_;
 					const size_t size_;
 
-					friend class impl::array_base <Val>;
+					friend class impl::array <Val>;
 
-					gslice_array (impl::array_base <Val>& expr, const gslice& slice): expr_ (expr), slice_ (slice),
+					gslice_array (impl::array <Val>& expr, const gslice& slice): expr_ (expr), slice_ (slice),
 						size_ (std::accumulate (slice.length_, slice.length_ + slice.length_.size (), 1, std::multiplies <size_t> ()))
 						{
 						}

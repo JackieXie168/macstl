@@ -71,7 +71,7 @@ namespace std
 		class gslice;
 		
 		template <typename Val> class valarray;
-		template <typename Val> class slice_array;
+		template <typename Expr> class slice_array;
 		template <typename Val> class gslice_array;
 		template <typename Val, typename BExpr = std::valarray <bool> > class mask_array;
 		template <typename Val, typename InExpr = std::valarray <size_t> > class indirect_array;
@@ -79,7 +79,10 @@ namespace std
 	
 namespace impl
 	{
+		// forward declares
+		
 		template <typename Expr, template <typename> class UOp> class unary_term;
+			
 		template <typename LExpr, typename RExpr, template <typename> class BOp> class binary_term;
 
 		template <typename Expr> class shift_term;
@@ -115,27 +118,61 @@ namespace impl
 					<first_category_rank < second_category_rank ? first_category_rank : second_category_rank>::type	type;
 			};
 
-		// whether two types are compatible i.e. assignable or copy constructible from each other
-		
-		template <typename Type1, typename Type2> struct compatible		{ typedef __false_type type; };
-		template <typename Type> struct compatible <Type, Type>			{ typedef __true_type type; };
+		// whether a term is const chunkable or chunkable (SFINAE...)
 
-		// logic on type traits
+		struct yes { char ch [1]; };
+		struct no {char ch [100]; };
+		struct nothing { };
 		
-		template <
-			typename Type1 = __true_type,
-			typename Type2 = __true_type,
-			typename Type3 = __true_type,
-			typename Type4 = __true_type> struct ander
+		template <typename Term> yes has_const_chunk_iterator (typename Term::const_chunk_iterator*);
+		template <typename Term> no has_const_chunk_iterator (...);
+		
+		template <typename Term> yes has_chunk_iterator (typename Term::chunk_iterator*);
+		template <typename Term> no has_chunk_iterator (...);
+		
+		template <typename Type> yes same_type (Type, Type);
+		template <typename Type1, typename Type2> no same_type (Type1, Type2);
+		template <typename Term> typename std::iterator_traits <typename Term::chunk_iterator>::value_type
+			chunk_type (typename Term::chunk_iterator*);
+		template <typename Term> nothing chunk_type (...);
+		template <typename Term> typename std::iterator_traits <typename Term::const_chunk_iterator>::value_type
+			const_chunk_type (typename Term::const_chunk_iterator*);
+		template <typename Term> nothing const_chunk_type (...);
+		
+		template <typename Term> struct const_chunkable
 			{
-				typedef __false_type type;
+				enum { value = sizeof (has_const_chunk_iterator <Term> (NULL)) == sizeof (yes) };
 			};
+
+		template <typename Term> struct chunkable
+			{
+				enum { value = sizeof (has_chunk_iterator <Term> (NULL)) == sizeof (yes) };
+			};
+			
+		template <typename Term1, typename Term2> struct const_rechunkable
+			{
+				enum { value = sizeof (same_type (const_chunk_type <Term1> (NULL), const_chunk_type <Term2> (NULL))) == sizeof (yes) };
+			};
+
+		template <typename Term1, typename Term2> struct rechunkable
+			{
+				enum { value = sizeof (same_type (chunk_type <Term1> (NULL), const_chunk_type <Term2> (NULL))) == sizeof (yes) };
+			};
+			
+		// convert from bool into boolean "type"
 		
-		template <> struct ander <__true_type, __true_type, __true_type, __true_type>
+		template <bool value> struct to_boolean;
+				
+		template <> struct to_boolean <true>
 			{
 				typedef __true_type type;
 			};
-
+			
+		template <> struct to_boolean <false>
+			{
+				typedef __false_type type;
+			};
+			
 		// dereferences: used in iterators whose operator* and operator[] could either return a value or a reference
 		
 		template <typename Type> struct dereference
@@ -147,43 +184,81 @@ namespace impl
 			{
 				typedef Type type;
 			};
-					
-		// chunk_traits
 		
-		template <typename Val> struct chunk_traits
+		// scalarizations
+		
+		template <typename Type> class summate
 			{
-				typedef __false_type const_chunkable;
-				typedef __false_type chunkable;
-				
-				typedef const Val* const_iterator;
-				typedef Val* iterator;
-				
-				static Val* allocate (size_t n)
-					{
-						return reinterpret_cast <Val*> (malloc (sizeof (Val) * n));
-					}
+				public:
+					summate (const Type& init): result_ (init)
+						{
+						}
 					
-				static void deallocate (Val* mem, size_t)
-					{
-						free (mem);
-					}
+					template <typename ReType> summate (const summate <ReType>& other):
+						result_ (other.result ().sum ())
+						{
+						}
+						
+					void operator() (const Type& val)			{ result_ += val; }
+					Type result () const						{ return result_; }
+					
+				private:
+					Type result_;
 			};
+			
+
+		template <typename Type> class minimize
+			{
+				public:
+					minimize (const Type& init): result_ (init)
+						{
+						}	
+										
+					template <typename ReType> minimize (const minimize <ReType>& other):
+						result_ (other.result ().min ())
+						{
+						}
+					
+					void operator() (const Type& val)			{ result_ = std::min (result_, val); }
+					Type result () const						{ return result_; }
+
+				private:
+					Type result_;
+			};
+			
+
+		template <typename Type> class maximize
+			{
+				public:
+					maximize (const Type& init): result_ (init)
+						{
+						}
+
+					template <typename ReType> maximize (const maximize <ReType>& other):
+						result_ (other.result ().max ())
+						{
+						}
+					
+					void operator() (const Type& val)		{ result_ = std::max (result_, val); }
+					Type result () const					{ return result_; }
+					
+				private:
+					Type result_;
+			};
+					
 	};
 
 #include <valarray_algorithm.h>
 #include <valarray_base.h>
 #include <valarray_function.h>
 #include <valarray_shift.h>
+#include <valarray_valarray.h>
+#include <valarray_slice.h>
 
 #ifdef __VEC__
 #include <valarray_altivec.h>
 #endif
 
-#include <valarray_valarray.h>
-#include <valarray_slice.h>
 #include <valarray_gslice.h>
 #include <valarray_mask.h>
 #include <valarray_indirect.h>
-
-
-	

@@ -108,7 +108,7 @@ namespace impl
 			};
 
 		template <typename Expr, typename InExpr> class indirect_term:
-			public term_base <typename Expr::value_type, indirect_term <Expr, InExpr> >
+			public term <typename Expr::value_type, indirect_term <Expr, InExpr> >
 			{
 				public:
 					typedef typename Expr::value_type value_type;
@@ -133,17 +133,17 @@ namespace impl
 namespace std
 	{
 		template <typename Val, typename InExpr> class indirect_array:
-			public impl::subset_base <Val, indirect_array <Val, InExpr> >
+			public impl::subset <Val, indirect_array <Val, InExpr> >
 			{
 				public:
 					typedef Val value_type;
 					
-					typedef impl::indirect_iterator <typename impl::array_base <Val>::const_iterator,
+					typedef impl::indirect_iterator <typename impl::array <Val>::const_iterator,
 						typename InExpr::const_iterator> const_iterator;
-					typedef impl::indirect_iterator <typename impl::array_base <Val>::iterator,
+					typedef impl::indirect_iterator <typename impl::array <Val>::iterator,
 						typename InExpr::const_iterator> iterator;
 						
-					using impl::subset_base <Val, indirect_array <Val, InExpr> >::operator=;
+					using impl::subset <Val, indirect_array <Val, InExpr> >::operator=;
 
 					size_t size () const
 						{
@@ -161,12 +161,12 @@ namespace std
 						}
 						
 				private:
-					impl::array_base <Val>& expr_;
+					impl::array <Val>& expr_;
 					const InExpr& inexpr_;
 					
-					friend class impl::array_base <Val>;
+					friend class impl::array <Val>;
 					
-					indirect_array (impl::array_base <Val>& expr, const InExpr& inexpr): expr_ (expr), inexpr_ (inexpr)
+					indirect_array (impl::array <Val>& expr, const InExpr& inexpr): expr_ (expr), inexpr_ (inexpr)
 						{
 						}
 						

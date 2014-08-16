@@ -73,6 +73,7 @@ class outline_transcendental
 	
 	};
 
+
 class inline_scalarization
 	{
 		public:
@@ -86,6 +87,24 @@ class inline_scalarization
 		private:
 			std::valarray <float> v1;
 			float r;
+	
+	};
+	
+class inline_predication
+	{
+		public:
+			inline_predication ():
+				v1 (std::valarray <float> (size)),
+				v2 (std::valarray <float> (size))
+				{
+				}
+				
+			void operator() ()		{ r = (v1 == v2).min (); }
+		
+		private:
+			std::valarray <float> v1;
+			std::valarray <float> v2;
+			bool r;
 	
 	};
 
@@ -121,10 +140,10 @@ class unchunked_shift
 			std::valarray <float> vr;
 	};
 	
-class unchunked_slice
+class inline_slice
 	{
 		public:
-			unchunked_slice ():
+			inline_slice ():
 				v1 (std::valarray <float> (size)),
 				vr (std::valarray <float> (size / 2)),
 				slice (0, size / 2, 2)
@@ -194,19 +213,14 @@ class unchunked_indirect
 			
 int main (int argc, const char * argv[])
 	{
-		std::valarray <float> f1 (10.0f, 100);
-		std::valarray <float> f2 (10.0f, 100);
-		f2 [90] = 11.0f;
-		
-		std::cout << (f1 == f2).min ();
-		
 		benchmark (inline_arithmetic (), 1000000, "inline arithmetic");
 		benchmark (inline_transcendental (), 100000, "inline transcendental");
 		benchmark (outline_transcendental (), 10000, "outline transcendental");
 		benchmark (inline_scalarization (), 1000000, "inline scalarization");
+		benchmark (inline_predication (), 100000, "inline predication");
+		benchmark (inline_slice (), 1000000, "inline slice");
 		benchmark (unchunked_application (), 100000, "unchunked application");
-	//	benchmark (unchunked_shift (), 100000, "unchunked shift");
-		benchmark (unchunked_slice (), 1000000, "unchunked slice");
+		benchmark (unchunked_shift (), 100000, "unchunked shift");
 		benchmark (unchunked_mask (), 100000, "unchunked mask");
 		benchmark (unchunked_indirect (), 100000, "unchunked indirect");
 		

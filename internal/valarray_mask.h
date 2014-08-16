@@ -107,7 +107,7 @@ namespace impl
 			};
 
 		template <typename Expr, typename BExpr> class mask_term:
-			public term_base <typename Expr::value_type, mask_term <Expr, BExpr> >
+			public term <typename Expr::value_type, mask_term <Expr, BExpr> >
 			{
 				public:
 					typedef typename Expr::value_type value_type;					
@@ -147,16 +147,16 @@ namespace impl
 	
 namespace std
 	{
-		template <typename Val, typename BExpr> class mask_array: public impl::subset_base <Val, mask_array <Val> >
+		template <typename Val, typename BExpr> class mask_array: public impl::subset <Val, mask_array <Val, BExpr> >
 			{
 				public:
 					typedef Val value_type;
 					
-					using impl::subset_base <Val, mask_array <Val> >::operator=;
+					using impl::subset <Val, mask_array <Val, BExpr> >::operator=;
 
-					typedef impl::mask_iterator <typename impl::array_base <Val>::const_iterator,
+					typedef impl::mask_iterator <typename impl::array <Val>::const_iterator,
 						typename BExpr::const_iterator> const_iterator;
-					typedef impl::mask_iterator <typename impl::array_base <Val>::iterator,
+					typedef impl::mask_iterator <typename impl::array <Val>::iterator,
 						typename BExpr::const_iterator> iterator;
 						
 					size_t size () const
@@ -175,13 +175,13 @@ namespace std
 						}
 						
 				private:
-					impl::array_base <Val>& expr_;
+					impl::array <Val>& expr_;
 					const BExpr& bexpr_;
 					const size_t size_;
 					
-					friend class impl::array_base <Val>;
+					friend class impl::array <Val>;
 					
-					mask_array (impl::array_base <Val>& expr, const BExpr& bexpr):
+					mask_array (impl::array <Val>& expr, const BExpr& bexpr):
 						expr_ (expr), bexpr_ (bexpr), size_ (stdext::count_n (bexpr.begin (), bexpr.size (), true))
 						{
 						}

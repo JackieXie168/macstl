@@ -94,19 +94,16 @@ namespace impl
 					ExprIt exprit_;
 			};
 			
-		template <typename Expr, template <typename> class UOp> class unary_term:
-			public term_base <typename UOp <typename Expr::value_type>::result_type, unary_term <Expr, UOp> >,
-			private UOp <typename Expr::value_type>
+		template <typename Expr, template <typename> class UOp, bool is_const_chunkable> class unary_term_base;
+		
+		template <typename Expr, template <typename> class UOp> class unary_term_base <Expr, UOp, false>:
+			protected UOp <typename Expr::value_type>
 			{
 				public:
-					typedef UOp <typename Expr::value_type> operation;
-					
-					typedef typename operation::result_type value_type;
+					typedef typename UOp <typename Expr::value_type>::result_type value_type;
 					typedef unary_iterator <typename Expr::const_iterator, UOp> const_iterator;
 					
-					unary_term (const Expr& expr, const operation& op): operation (op), expr_ (expr) { }
-		
-					value_type operator[] (size_t index) const	{ return *this (expr_ [index]); }
+					value_type operator[] (size_t index) const	{ return (*this) (expr_ [index]); }
 					size_t size () const						{ return expr_.size (); }
 						
 					const_iterator begin () const
@@ -114,28 +111,74 @@ namespace impl
 							return const_iterator (expr_.begin (), *this);
 						}
 						
-				private:
+				protected:
 					const Expr& expr_;
-					
-					friend class chunk_base <value_type, unary_term>;
+
+					unary_term_base (const Expr& expr, const UOp <typename Expr::value_type>& op):
+						UOp <typename Expr::value_type> (op), expr_ (expr) { }		
 			};
 			
-		template <typename Val, typename Expr, template <typename> class UOp> class chunk_base <Val, unary_term <Expr, UOp> >
+		template <typename Expr, template <typename> class UOp> class unary_term_base <Expr, UOp, true>:
+			public unary_term_base <Expr, UOp, false>
 			{
 				public:
-					typedef typename ander <
-						typename Expr::const_chunkable,
-						typename UOp <typename Expr::value_type>::retypeable>::type const_chunkable;
-
-					typedef unary_iterator <typename Expr::const_chunk_iterator, UOp> const_chunk_iterator;
+					enum { chunk_length = Expr::chunk_length };
 					
+					typedef unary_iterator <typename Expr::const_chunk_iterator, UOp> const_chunk_iterator;
+				
 					const_chunk_iterator chunk_begin () const
 						{
-							const unary_term <Expr, UOp>& expr = static_cast <const unary_term <Expr, UOp>&> (*this);
-							return const_chunk_iterator (expr.expr_.chunk_begin (), expr);
+							return const_chunk_iterator (expr_.chunk_begin (), *this);
+						}
+						
+				protected:
+					unary_term_base (const Expr& expr, const UOp <typename Expr::value_type>& op): unary_term_base <Expr, UOp, false> (expr, op)
+						{
 						}
 			};
 			
+		template <typename Expr, template <typename> class UOp, typename Val, bool is_const_chunkable>
+			class unary_term_dispatch: public unary_term_base <Expr, UOp, is_const_chunkable>
+			{
+				protected:
+					unary_term_dispatch (const Expr& expr, const UOp <Val>& op): unary_term_base <Expr, UOp, is_const_chunkable> (expr, op)
+						{
+						}
+			};
+
+		template <typename Expr, typename Val>
+			class unary_term_dispatch <Expr, apply_value, Val, true>: public unary_term_base <Expr, apply_value, false>
+			{
+				protected:
+					unary_term_dispatch (const Expr& expr, const apply_value <Val>& op):
+						unary_term_base <Expr, apply_value, false> (expr, op)
+						{
+						}
+			};
+
+		template <typename Expr, typename Val>
+			class unary_term_dispatch <Expr, apply_reference, Val, true>: public unary_term_base <Expr, apply_reference, false>
+			{
+				protected:
+					unary_term_dispatch (const Expr& expr, const apply_reference <Val>& op):
+						unary_term_base <Expr, apply_reference, false> (expr, op)
+						{
+						}
+			};
+
+		template <typename Expr, template <typename> class UOp> class unary_term:
+			public term <typename UOp <typename Expr::value_type>::result_type, unary_term <Expr, UOp> >,
+			public unary_term_dispatch <Expr, UOp, typename Expr::value_type, const_chunkable <Expr>::value>
+			{
+				public:
+					using term <typename UOp <typename Expr::value_type>::result_type, unary_term <Expr, UOp> >::operator[];
+					using unary_term_dispatch <Expr, UOp, typename Expr::value_type, const_chunkable <Expr>::value>::operator[];
+
+					unary_term (const Expr& expr, const UOp <typename Expr::value_type>& op):
+						unary_term_dispatch <Expr, UOp, typename Expr::value_type, const_chunkable <Expr>::value> (expr, op)
+						{
+						}
+			};
 
 		template <typename LExprIt, typename RExprIt, template <typename> class BOp> class binary_iterator:
 			private BOp <typename std::iterator_traits <LExprIt>::value_type>
@@ -208,20 +251,16 @@ namespace impl
 					LExprIt lexprit_;
 					RExprIt rexprit_;
 			};
-						
-		template <typename LExpr, typename RExpr, template <typename> class BOp> class binary_term:
-			public term_base <typename BOp <typename LExpr::value_type>::result_type, binary_term <LExpr, RExpr, BOp> >,
-			private BOp <typename LExpr::value_type>
+
+		template <typename LExpr, typename RExpr, template <typename> class BOp, bool is_const_chunkable> class binary_term_base;
+		
+		template <typename LExpr, typename RExpr, template <typename> class BOp>
+			class binary_term_base <LExpr, RExpr, BOp, false>: protected BOp <typename LExpr::value_type>
 			{
 				public:
-					typedef BOp <typename LExpr::value_type> operation;
-					
-					typedef typename operation::result_type value_type;
+					typedef typename BOp <typename LExpr::value_type>::result_type value_type;
 					typedef binary_iterator <typename LExpr::const_iterator, typename RExpr::const_iterator, BOp> const_iterator;
 					
-					binary_term (const LExpr& lexpr, const RExpr& rexpr, const operation& op):
-						operation (op), lexpr_ (lexpr), rexpr_ (rexpr)  { }
-		
 					value_type operator[] (size_t index) const	{ return (*this) (lexpr_ [index], rexpr_ [index]); }
 					size_t size () const						{ return lexpr_.size (); }
 						
@@ -230,32 +269,59 @@ namespace impl
 							return const_iterator (lexpr_.begin (), rexpr_.begin (), *this);
 						}
 
-				public:
+				protected:
 					const LExpr& lexpr_;
 					const RExpr& rexpr_;
 					
-					friend class chunk_base <value_type, binary_term>;
+					binary_term_base (const LExpr& lexpr, const RExpr& rexpr, const BOp <typename LExpr::value_type>& op):
+						BOp <typename LExpr::value_type> (op), lexpr_ (lexpr), rexpr_ (rexpr)  { }
 			};
-
-		template <typename Val, typename LExpr, typename RExpr, template <typename> class BOp>
-			class chunk_base <Val, binary_term <LExpr, RExpr, BOp> >
+			
+		template <typename LExpr, typename RExpr, template <typename> class BOp>
+			class binary_term_base <LExpr, RExpr, BOp, true>: public binary_term_base <LExpr, RExpr, BOp, false>
 			{
 				public:
-					typedef typename ander <
-						typename LExpr::const_chunkable,
-						typename RExpr::const_chunkable,
-						typename BOp <typename LExpr::value_type>::retypeable,
-						typename compatible <
-							typename std::iterator_traits <typename LExpr::const_chunk_iterator>::value_type,
-							typename std::iterator_traits <typename RExpr::const_chunk_iterator>::value_type>::type>::type const_chunkable;
-						
-					typedef binary_iterator <typename LExpr::const_chunk_iterator, typename RExpr::const_chunk_iterator, BOp> const_chunk_iterator;
+					enum { chunk_length = LExpr::chunk_length };
 					
+					typedef binary_iterator <typename LExpr::const_chunk_iterator, typename RExpr::const_chunk_iterator, BOp> const_chunk_iterator;
+
 					const_chunk_iterator chunk_begin () const
 						{
-							const binary_term <LExpr, RExpr, BOp>& expr = static_cast <const binary_term <LExpr, RExpr, BOp>&> (*this);
-							return const_chunk_iterator (expr.lexpr_.chunk_begin (), expr.rexpr_.chunk_begin (), expr);
+							return const_chunk_iterator (lexpr_.chunk_begin (), rexpr_.chunk_begin (), *this);
 						}
+						
+				protected:
+					binary_term_base (const LExpr& lexpr, const RExpr& rexpr, const BOp <typename LExpr::value_type>& op):
+						binary_term_base <LExpr, RExpr, BOp, false> (lexpr, rexpr, op)  { }					
+			};
+
+		template <typename LExpr, typename RExpr, template <typename> class BOp, typename Val, bool is_const_chunkable>
+			class binary_term_dispatch: public binary_term_base <LExpr, RExpr, BOp, is_const_chunkable>
+			{
+				protected:
+					binary_term_dispatch (const LExpr& lexpr, const RExpr& rexpr, const BOp <Val>& op):
+						binary_term_base <LExpr, RExpr, BOp, is_const_chunkable> (lexpr, rexpr, op)  { }
+			};
+
+		template <typename LExpr, typename RExpr, template <typename> class BOp> class binary_term:
+			public term <typename BOp <typename LExpr::value_type>::result_type, binary_term <LExpr, RExpr, BOp> >,
+			public binary_term_dispatch <LExpr, RExpr, BOp, typename LExpr::value_type,
+				const_chunkable <LExpr>::value &&
+				const_chunkable <RExpr>::value &&
+				const_rechunkable <LExpr, RExpr>::value>
+			{
+				public:
+					using term <typename BOp <typename LExpr::value_type>::result_type, binary_term <LExpr, RExpr, BOp> >::operator[];
+					using binary_term_dispatch <LExpr, RExpr, BOp, typename LExpr::value_type,
+						const_chunkable <LExpr>::value &&
+						const_chunkable <RExpr>::value &&
+						const_rechunkable <LExpr, RExpr>::value>::operator[];
+					
+					binary_term (const LExpr& lexpr, const RExpr& rexpr, const BOp <typename LExpr::value_type>& op):
+						binary_term_dispatch <LExpr, RExpr, BOp, typename LExpr::value_type,
+							const_chunkable <LExpr>::value &&
+							const_chunkable <RExpr>::value &&
+							const_rechunkable <LExpr, RExpr>::value> (lexpr, rexpr, op)  { }
 			};
 			
 	};
