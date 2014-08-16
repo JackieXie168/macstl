@@ -338,7 +338,19 @@ namespace macstl
 						/** Returns the result of circularly shifting each element of @a x left @a n places. */
 						static vector_type cshift (vector_type x, int n)
 							{
-								return vec_perm (x, x, vec_lvsl (n * from_vector <vector_type>::size, (int*) NULL));
+								return vec_perm (x, x, vec_lvsl (n * sizeof (value_type), (int*) NULL));
+							}
+
+						/** Returns the result of shifting each element of @a x left @a n places with zero fill. */
+						static vector_type shift (vector_type x, int n)
+							{
+								// no way to avoid this ickiness, the hope is that if n is constant, the compiler will optimize this away
+								if (n >= (int) length || -n >= (int) length)
+									return zero ();
+								else if (n >= 0)
+									return vec_perm (x, zero (), vec_lvsl (n * sizeof (value_type), (int*) NULL));
+								else
+									return vec_perm (zero (), x, vec_lvsr (-n * sizeof (value_type), (int*) NULL));
 							}
 					};
 					

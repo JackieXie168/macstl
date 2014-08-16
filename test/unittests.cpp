@@ -79,7 +79,7 @@ void random_fill (void* area, size_t len)
 
 template <typename Type> struct square_root
 	{
-		Type operator() (Type x) { return sqrt (x); }
+		Type operator() (const Type& x) { return sqrt (x); }
 	};
 	
 template <typename Type, int size> void copy_construct_test (const char* title)
@@ -377,7 +377,7 @@ void tests ()
 		integer_test_suite <unsigned char, 99> ("unsigned char");
 		
 		vec_mtvscr ((vector unsigned char) (0));
-		floating_test_suite <float, 99> ("float");
+		floating_test_suite <float, 4> ("float");
 		floating_test_suite <double, 99> ("double (unoptimized)");
 		
 	}

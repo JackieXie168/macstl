@@ -98,9 +98,17 @@ namespace macstl
 				// for short constants, specializations will use Holger Bettag's algorithmically
 				// derived list of optimal Altivec short constants, given the C++ treatment...
 
-				template <unsigned char hi, unsigned char lo> struct generator;
+				template <unsigned char hi, unsigned char lo> struct generator
+					{
+						static v call ()
+							{
+								return altivec_traits <unsigned short>::splat (hi * 0x100 + lo);
+							}
+					};
 							
+				#ifdef NDEBUG
 				#include <internal/generator.h>
+				#endif
 				
 				// for long constants, dispatch repeated shorts to the generator, else try to map to vec_splat
 				

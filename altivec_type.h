@@ -52,7 +52,7 @@ RSLT FUNC () const										{ return altivec_traits::OPER (data ()); }
 
 #define __DEFINE_ALTIVEC_UNARY_FUNCTION(FUNC, OPER, RSLT)																			\
 /** Returns the result of applying @c FUNC to each element of @a x. */													\
-template <typename Type> RSLT FUNC (altivec <Type> x)						{ return altivec_traits <Type>::OPER (x.data ()); }
+template <typename Type> inline RSLT FUNC (const altivec <Type>& x)						{ return altivec_traits <Type>::OPER (x.data ()); }
 
 #define __DEFINE_ALTIVEC_BINARY_FUNCTION(FUNC, OPER, RSLT)																			\
 /** Returns the result of applying @c FUNC to each element of @a x and the corresponding element of @a y. */				\
@@ -248,6 +248,12 @@ namespace macstl
 						{
 							return altivec_traits::cshift (data_, n);
 						}
+
+					/** Returns the result of shifting each element left @a n places with zero fill. */
+					altivec shift (int n) const
+						{
+							return altivec_traits::shift (data_, n);
+						}
 						
 					/** @name appliers */
 					
@@ -290,7 +296,6 @@ namespace macstl
 		/** @name binary operators */
 		
 		//@{
-		
 		__DEFINE_ALTIVEC_BINARY_FUNCTION (operator+, plus, altivec <Type>)
 		__DEFINE_ALTIVEC_BINARY_FUNCTION (operator-, minus, altivec <Type>)
 		__DEFINE_ALTIVEC_BINARY_FUNCTION (operator*, multiplies, altivec <Type>)
@@ -321,7 +326,6 @@ namespace macstl
 		/** @name logical operators */
 		
 		//@{
-		
 		__DEFINE_ALTIVEC_BINARY_FUNCTION (operator==, equal_to, typename altivec <Type>::altivec_bool)
 		__DEFINE_ALTIVEC_BINARY_FUNCTION (operator!=, not_equal_to, typename altivec <Type>::altivec_bool)
 		__DEFINE_ALTIVEC_BINARY_FUNCTION (operator>, greater, typename altivec <Type>::altivec_bool)
@@ -330,13 +334,11 @@ namespace macstl
 		__DEFINE_ALTIVEC_BINARY_FUNCTION (operator<=, less_equal, typename altivec <Type>::altivec_bool)
 		__DEFINE_ALTIVEC_BINARY_FUNCTION (operator&&, logical_and, typename altivec <Type>::altivec_bool)
 		__DEFINE_ALTIVEC_BINARY_FUNCTION (operator||, logical_or, typename altivec <Type>::altivec_bool)
-		
 		//@}
 		
 		/** @name transcendental functions */
 		
 		//@{
-		
 		__DEFINE_ALTIVEC_UNARY_FUNCTION (abs, abs, altivec <Type>)
 		__DEFINE_ALTIVEC_UNARY_FUNCTION (cos, cos, altivec <Type>)
 		__DEFINE_ALTIVEC_UNARY_FUNCTION (acos, acos, altivec <Type>)
@@ -353,8 +355,14 @@ namespace macstl
 		__DEFINE_ALTIVEC_UNARY_FUNCTION (sqrt, sqrt, altivec <Type>)
 		__DEFINE_ALTIVEC_BINARY_FUNCTION (atan2, atan2, altivec <Type>)
 		__DEFINE_ALTIVEC_BINARY_FUNCTION (pow, pow, altivec <Type>)
-		
 		//@}
+		
+		/** @name max and min functions */
+		
+		//@{
+		__DEFINE_ALTIVEC_BINARY_FUNCTION (max, max, altivec <Type>)
+		__DEFINE_ALTIVEC_BINARY_FUNCTION (min, min, altivec <Type>)
+		//@}		
 			
 		/** @name stream I/O */
 		
@@ -365,7 +373,7 @@ namespace macstl
 		 * Inserts altivec @a vec into a standard output stream @a os.
 		 */
 		template <typename Type, typename CharT, typename Traits> std::basic_ostream <CharT, Traits>&
-			operator<< (std::basic_ostream <CharT, Traits>& os, altivec <Type> vec)
+			operator<< (std::basic_ostream <CharT, Traits>& os, const altivec <Type>& vec)
 			{
 				std::streamsize subwidth = os.width () / altivec <Type>::length;
 				if (subwidth)
@@ -442,10 +450,14 @@ namespace macstl
 				template <> struct tag_to_type <vector_pixel> { typedef altivec <pixel> type; };
 			}
 
+		// Altivec operators with 0 arguments
+
 		#define __DEFINE_ALTIVEC_GENERATOR(FUNC, OPER)											\
 		/** @relates altivec Returns the result of @c OPER. */									\
 		inline impl::tag_to_type <sizeof (*impl::type_to_tag (OPER ()))>::type FUNC () { return OPER (); }
 
+		// Altivec operators with 1 argument
+		
 		#define __DEFINE_ALTIVEC_UNARY_OPERATION(FUNC, OPER)									\
 																								\
 		namespace impl																			\
@@ -464,6 +476,8 @@ namespace macstl
 				return OPER (x.data ());														\
 			}
 			
+		// Altivec operators with 2 arguments
+		
 		#define __DEFINE_ALTIVEC_BINARY_OPERATION(FUNC, OPER)									\
 																								\
 		namespace impl																			\
@@ -476,7 +490,30 @@ namespace macstl
 					};																			\
 			}																					\
 																								\
-		/** @relates altivec Returns the result of applying	@c OPER to @a x and @a y. */			\
+		/** @relates altivec Returns the result of applying	@c OPER to @a x and @a y. */		\
+		template <typename Type1, typename Type2>												\
+			inline typename impl::OPER##_result <Type1, Type2>::type							\
+			FUNC (const altivec <Type1>& x, const altivec <Type2>& y)							\
+			{																					\
+				return OPER (x.data (), y.data ());												\
+			}
+
+		// Altivec operators with 2 arguments, overload defined already when argument types are same
+		
+		#define __DEFINE_ALTIVEC_BINARY_OPERATION_WITH_OVERLOAD(FUNC, OPER)						\
+																								\
+		namespace impl																			\
+			{																					\
+				template <typename Type1, typename Type2> struct OPER##_result					\
+					{																			\
+						typedef typename tag_to_type <sizeof (*type_to_tag (					\
+							OPER (*(typename altivec <Type1>::vector_type*) NULL,				\
+							*(typename altivec <Type2>::vector_type*) NULL)))>::type type;		\
+					};																			\
+				template <typename Type> struct OPER##_result <Type, Type>;						\
+			}																					\
+																								\
+		/** @relates altivec Returns the result of applying	@c OPER to @a x and @a y. */		\
 		template <typename Type1, typename Type2>												\
 			inline typename impl::OPER##_result <Type1, Type2>::type							\
 			FUNC (const altivec <Type1>& x, const altivec <Type2>& y)							\
@@ -484,6 +521,8 @@ namespace macstl
 				return OPER (x.data (), y.data ());												\
 			}
 			
+		// Altivec operators with 3 arguments
+		
 		#define __DEFINE_ALTIVEC_TERNARY_OPERATION(FUNC, OPER)									\
 																								\
 		namespace impl																			\
@@ -504,7 +543,9 @@ namespace macstl
 			{																					\
 				return OPER (x.data (), y.data (), z.data ());									\
 			}
-						
+		
+		// Altivec operator with 2 arguments, 2nd is integer literal
+		
 		#define __DEFINE_ALTIVEC_BINARY_OPERATION_WITH_LITERAL(FUNC, OPER, LIT)					\
 																								\
 		namespace impl																			\
@@ -524,6 +565,8 @@ namespace macstl
 				return OPER (x.data (), i);														\
 			}
 
+		// Altivec operator with 3 arguments, 3rd is integer literal
+		
 		#define __DEFINE_ALTIVEC_TERNARY_OPERATION_WITH_LITERAL(FUNC, OPER, LIT)				\
 																								\
 		namespace impl																			\
@@ -544,6 +587,8 @@ namespace macstl
 				return OPER (x.data (), y.data (), i);											\
 			}
 
+		// Altivec predicate with 1 argument
+		
 		#define __DEFINE_ALTIVEC_UNARY_PREDICATE(FUNC, OPER)									\
 		/** @relates altivec Returns the result of applying	@c OPER to @a x. */					\
 		template <typename Type> inline bool FUNC (const altivec <Type>& x)						\
@@ -551,6 +596,8 @@ namespace macstl
 				return OPER (x.data ());														\
 			}
 
+		// Altivec predicate with 2 arguments
+		
 		#define __DEFINE_ALTIVEC_BINARY_PREDICATE(FUNC, OPER)									\
 		/** @relates altivec Returns the result of applying	@c OPER to @a x and @a y. */		\
 		template <typename Type1, typename Type2>												\
@@ -559,6 +606,8 @@ namespace macstl
 				return OPER (x.data (), y.data ());												\
 			}
 			
+		// Altivec load for alignment
+		
 		#define __DEFINE_ALTIVEC_LOAD_FOR_ALIGN(FUNC, OPER)										\
 		/** @relates altivec Returns the result of applying @c OPER to @a i and @a p. */		\
 		template <typename Type> inline altivec <unsigned char> FUNC (int i, Type* p)			\
@@ -566,6 +615,8 @@ namespace macstl
 				return OPER (i, p);																\
 			}
 
+		// Altivec load
+		
 		#define __DEFINE_ALTIVEC_LOAD(FUNC, OPER)												\
 																								\
 		namespace impl																			\
@@ -583,6 +634,8 @@ namespace macstl
 			{																					\
 				return OPER (i, p);																\
 			}
+			
+		// Altivec store
 
 		#define __DEFINE_ALTIVEC_STORE(FUNC, OPER)												\
 		/** @relates altivec Stores @a x into @a p by @a i using @c OPER. */					\
@@ -595,37 +648,37 @@ namespace macstl
 		/** @name load and store */
 		//@{
 		__DEFINE_ALTIVEC_LOAD(ld,vec_ld)
-		__DEFINE_ALTIVEC_LOAD(lde,vec_lde)
 		__DEFINE_ALTIVEC_LOAD(ldl,vec_ldl)
+		__DEFINE_ALTIVEC_LOAD(lde,vec_lde)
 		__DEFINE_ALTIVEC_LOAD_FOR_ALIGN(lvsl,vec_lvsl)
 		__DEFINE_ALTIVEC_LOAD_FOR_ALIGN(lvsr,vec_lvsr)
 		__DEFINE_ALTIVEC_STORE(st, vec_st)
-		__DEFINE_ALTIVEC_STORE(ste, vec_ste)
 		__DEFINE_ALTIVEC_STORE(stl, vec_stl)
+		__DEFINE_ALTIVEC_STORE(ste, vec_ste)
 		//@}
 		
 		/** @name data manipulation */
 		//@{
+		__DEFINE_ALTIVEC_TERNARY_OPERATION(perm,vec_perm)
+		__DEFINE_ALTIVEC_TERNARY_OPERATION(sel,vec_sel)
+		__DEFINE_ALTIVEC_BINARY_OPERATION(sr,vec_sr)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_OVERLOAD(operator>>,vec_sra)
+		__DEFINE_ALTIVEC_BINARY_OPERATION(srl,vec_srl)
+		__DEFINE_ALTIVEC_BINARY_OPERATION(sro,vec_sro)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_OVERLOAD(operator<<,vec_sl)
+		__DEFINE_ALTIVEC_BINARY_OPERATION(sll,vec_sll)
+		__DEFINE_ALTIVEC_BINARY_OPERATION(slo,vec_slo)
+		__DEFINE_ALTIVEC_TERNARY_OPERATION_WITH_LITERAL(sld,vec_sld,unsigned int)
+		__DEFINE_ALTIVEC_BINARY_OPERATION(rl,vec_rl)
 		__DEFINE_ALTIVEC_BINARY_OPERATION(mergeh,vec_mergeh)
 		__DEFINE_ALTIVEC_BINARY_OPERATION(mergel,vec_mergel)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_LITERAL(splat,vec_splat,unsigned int)
 		__DEFINE_ALTIVEC_GENERATOR(mfvscr,vec_mfvscr)
 		__DEFINE_ALTIVEC_UNARY_OPERATION(mtvscr,vec_mtvscr)
 		__DEFINE_ALTIVEC_BINARY_OPERATION(pack,vec_pack)
 		__DEFINE_ALTIVEC_BINARY_OPERATION(packpx,vec_packpx)
 		__DEFINE_ALTIVEC_BINARY_OPERATION(packs,vec_packs)
 		__DEFINE_ALTIVEC_BINARY_OPERATION(packsu,vec_packsu)
-		__DEFINE_ALTIVEC_TERNARY_OPERATION(perm,vec_perm)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(rl,vec_rl)
-		__DEFINE_ALTIVEC_TERNARY_OPERATION(sel,vec_sel)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(sr,vec_sr)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(sra,vec_sra)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(srl,vec_srl)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(sro,vec_sro)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(sl,vec_sl)
-		__DEFINE_ALTIVEC_TERNARY_OPERATION_WITH_LITERAL(sld,vec_sld,unsigned int)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(sll,vec_sll)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(slo,vec_slo)
-		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_LITERAL(splat,vec_splat,unsigned int)
 		__DEFINE_ALTIVEC_UNARY_OPERATION(unpackh,vec_unpackh)
 		__DEFINE_ALTIVEC_UNARY_OPERATION(unpackl,vec_unpackl)		
 		//@}
@@ -634,53 +687,53 @@ namespace macstl
 		//@{
 		__DEFINE_ALTIVEC_UNARY_OPERATION(abs,vec_abs)
 		__DEFINE_ALTIVEC_UNARY_OPERATION(abss,vec_abss)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(operator+,vec_add)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_OVERLOAD(operator+,vec_add)
 		__DEFINE_ALTIVEC_BINARY_OPERATION(addc,vec_addc)
 		__DEFINE_ALTIVEC_BINARY_OPERATION(adds,vec_adds)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(avg,vec_avg)
-		__DEFINE_ALTIVEC_UNARY_OPERATION(ceil,vec_ceil)
-		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_LITERAL(ctf,vec_ctf,unsigned int)
-		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_LITERAL(cts,vec_cts,unsigned int)
-		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_LITERAL(ctu,vec_ctu,unsigned int)
-		__DEFINE_ALTIVEC_UNARY_OPERATION(expte,vec_expte)
-		__DEFINE_ALTIVEC_UNARY_OPERATION(floor,vec_floor)		
-		__DEFINE_ALTIVEC_UNARY_OPERATION(loge,vec_loge)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_OVERLOAD(operator-,vec_sub)
+		__DEFINE_ALTIVEC_BINARY_OPERATION(subc,vec_subc)
+		__DEFINE_ALTIVEC_BINARY_OPERATION(subs,vec_subs)
+		__DEFINE_ALTIVEC_BINARY_OPERATION(mule,vec_mule)
+		__DEFINE_ALTIVEC_BINARY_OPERATION(mulo,vec_mulo)
 		__DEFINE_ALTIVEC_TERNARY_OPERATION(madd,vec_madd)
 		__DEFINE_ALTIVEC_TERNARY_OPERATION(madds,vec_madds)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(max,vec_max)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(min,vec_min)
 		__DEFINE_ALTIVEC_TERNARY_OPERATION(mladd,vec_mladd)
 		__DEFINE_ALTIVEC_TERNARY_OPERATION(mradds,vec_mradds)
 		__DEFINE_ALTIVEC_TERNARY_OPERATION(msum,vec_msum)
 		__DEFINE_ALTIVEC_TERNARY_OPERATION(msums,vec_msums)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(mule,vec_mule)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(mulo,vec_mulo)
-		__DEFINE_ALTIVEC_TERNARY_OPERATION(nmsub,vec_nmsub)
-		__DEFINE_ALTIVEC_UNARY_OPERATION(re,vec_re)
-		__DEFINE_ALTIVEC_UNARY_OPERATION(round,vec_round)
-		__DEFINE_ALTIVEC_UNARY_OPERATION(rsqrte,vec_rsqrte)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(operator-,vec_sub)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(subc,vec_subc)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(subs,vec_subs)
 		__DEFINE_ALTIVEC_BINARY_OPERATION(sum4s,vec_sum4s)
 		__DEFINE_ALTIVEC_BINARY_OPERATION(sum2s,vec_sum2s)
 		__DEFINE_ALTIVEC_BINARY_OPERATION(sums,vec_sums)
+		__DEFINE_ALTIVEC_TERNARY_OPERATION(nmsub,vec_nmsub)
+		__DEFINE_ALTIVEC_BINARY_OPERATION(avg,vec_avg)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_OVERLOAD(max,vec_max)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_OVERLOAD(min,vec_min)
+		__DEFINE_ALTIVEC_UNARY_OPERATION(round,vec_round)
+		__DEFINE_ALTIVEC_UNARY_OPERATION(ceil,vec_ceil)
+		__DEFINE_ALTIVEC_UNARY_OPERATION(floor,vec_floor)		
 		__DEFINE_ALTIVEC_UNARY_OPERATION(trunc,vec_trunc)
+		__DEFINE_ALTIVEC_UNARY_OPERATION(re,vec_re)
+		__DEFINE_ALTIVEC_UNARY_OPERATION(rsqrte,vec_rsqrte)
+		__DEFINE_ALTIVEC_UNARY_OPERATION(loge,vec_loge)
+		__DEFINE_ALTIVEC_UNARY_OPERATION(expte,vec_expte)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_LITERAL(ctf,vec_ctf,unsigned int)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_LITERAL(cts,vec_cts,unsigned int)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_LITERAL(ctu,vec_ctu,unsigned int)
 		//@}
 
 		/** @name logical and compare */
 		//@{
-		__DEFINE_ALTIVEC_BINARY_OPERATION(operator&,vec_and)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_OVERLOAD(operator&,vec_and)
 		__DEFINE_ALTIVEC_BINARY_OPERATION(andc,vec_andc)
 		__DEFINE_ALTIVEC_BINARY_OPERATION(cmpb,vec_cmpb)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(operator==,vec_cmpeq)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(operator>=,vec_cmpge)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(operator>,vec_cmpgt)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(operator<=,vec_cmple)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(operator<,vec_cmplt)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_OVERLOAD(operator==,vec_cmpeq)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_OVERLOAD(operator>=,vec_cmpge)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_OVERLOAD(operator>,vec_cmpgt)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_OVERLOAD(operator<=,vec_cmple)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_OVERLOAD(operator<,vec_cmplt)
 		__DEFINE_ALTIVEC_BINARY_OPERATION(nor,vec_nor)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(operator|,vec_or)
-		__DEFINE_ALTIVEC_BINARY_OPERATION(operator^,vec_xor)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_OVERLOAD(operator|,vec_or)
+		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_OVERLOAD(operator^,vec_xor)
 		//@}
 
 		/** @name predicates */
@@ -821,37 +874,6 @@ namespace std
 					}
 			};
 			
-		// max and min from algorithm
-		// NOTE: these functions have a different sense from the ones in algorithm since the result is a composition of the two
-		// inputs, not one or the other. On the other hand, the ones in algorithm could not have worked anyway since operator< does
-		// yield a bool, it yields an altivec boolean.
-		
-		/** @name algorithms */
-		
-		//@{
-		
-		/** 
-		 * @relates macstl::altivec
-		 *
-		 * Returns the maximum of each element of @a x and the corresponding element of @a y.
-		 */																					
-		template <typename Type> inline macstl::altivec <Type> max (const macstl::altivec <Type>& a, const macstl::altivec <Type>& b)
-			{
-				return macstl::altivec_traits <Type>::max (a.data (), b.data ());
-			}
-
-		/** 
-		 * @relates macstl::altivec
-		 *
-		 * Returns the minimum of each element of @a x and the corresponding element of @a y.
-		 */																					
-		template <typename Type> inline macstl::altivec <Type> min (const macstl::altivec <Type>& a, const macstl::altivec <Type>& b)
-			{
-				return macstl::altivec_traits <Type>::min (a.data (), b.data ());
-			}
-			
-		//@}
-
 	}
 	
 #endif

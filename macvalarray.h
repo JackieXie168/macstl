@@ -247,7 +247,7 @@ namespace std
 								{
 								}
 							
-							void operator() (const Type& val)			{ result_ = std::min (result_, val); }
+							void operator() (const Type& val)			{ result_ = min (result_, val); }
 							Type result () const						{ return result_; }
 		
 						private:
@@ -267,7 +267,7 @@ namespace std
 								{
 								}
 							
-							void operator() (const Type& val)		{ result_ = std::max (result_, val); }
+							void operator() (const Type& val)		{ result_ = max (result_, val); }
 							Type result () const					{ return result_; }
 							
 						private:

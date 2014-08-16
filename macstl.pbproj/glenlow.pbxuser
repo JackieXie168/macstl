@@ -16,7 +16,7 @@
 			D875426A03BB138B00FE70F5,
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 86143649;
+			PBXPerProjectTemplateStateSaveDate = 86526229;
 			"PBXTemplateGeometry-F5CA7ECB015C094F0DCA290F" = {
 				ContentSize = "{668, 621}";
 				LeftSlideOut = {
@@ -141,7 +141,7 @@
 				StatusViewVisible = NO;
 				Template = F5CA7ECB015C094F0DCA290F;
 				ToolbarVisible = NO;
-				WindowLocation = "{255, 94}";
+				WindowLocation = "{48, 127}";
 			};
 			PBXWorkspaceContents = (
 				{
@@ -149,7 +149,7 @@
 						Split0 = {
 							Split0 = {
 								NavContent0 = {
-									bookmark = D8B07D4A0523467100FE92F6;
+									bookmark = D8B3226F0528498300FE44A1;
 									history = (
 										D8BE26FE0476236E008DA29E,
 										D8BE26FF0476236E008DA29E,
@@ -176,24 +176,26 @@
 										D84F63B405211A1D00FE7878,
 										D84F63C90521F21C00FE7878,
 										D839D41C0521F2D200FE7878,
-										D8372307052266BB00FE7878,
-										D8372308052266BB00FE7878,
-										D8B07D200523467100FE92F6,
-										D8B07D210523467100FE92F6,
-										D8B07D220523467100FE92F6,
 										D8B07D230523467100FE92F6,
-										D8B07D240523467100FE92F6,
-										D8B07D250523467100FE92F6,
 										D8B07D260523467100FE92F6,
 										D8B07D270523467100FE92F6,
-										D8B07D280523467100FE92F6,
-										D8B07D290523467100FE92F6,
-										D8B07D2A0523467100FE92F6,
-										D8B07D2B0523467100FE92F6,
 										D8B07D2C0523467100FE92F6,
 										D8B07D2D0523467100FE92F6,
 										D8B07D2E0523467100FE92F6,
-										D8B07D2F0523467100FE92F6,
+										D8FF38050525C7E100FE92F6,
+										D83592A9052709A500FE92F6,
+										D8D847D80528246D00FEC8C6,
+										D8D847D90528246D00FEC8C6,
+										D8D847DA0528246D00FEC8C6,
+										D8D847DB0528246D00FEC8C6,
+										D8D847DD0528246D00FEC8C6,
+										D8D847DE0528246D00FEC8C6,
+										D8E4B4920528461300FE6D4D,
+										D8E4B4930528461300FE6D4D,
+										D8E4B4940528461300FE6D4D,
+										D8E4B4950528461300FE6D4D,
+										D8E4B4960528461300FE6D4D,
+										D8B3226E0528498300FE44A1,
 									);
 									prevStack = (
 										D88D1B4704538E320081807C,
@@ -1108,11 +1110,80 @@
 										D8B07D470523467100FE92F6,
 										D8B07D480523467100FE92F6,
 										D8B07D490523467100FE92F6,
+										D8FF38060525C7E100FE92F6,
+										D835929C052686FF00FE92F6,
+										D835929D052686FF00FE92F6,
+										D83592AC052709A500FE92F6,
+										D83592AD052709A500FE92F6,
+										D83592AE052709A500FE92F6,
+										D8D847E40528246D00FEC8C6,
+										D8D847E50528246D00FEC8C6,
+										D8D847E60528246D00FEC8C6,
+										D8D847E70528246D00FEC8C6,
+										D8D847E80528246D00FEC8C6,
+										D8D847E90528246D00FEC8C6,
+										D8D847EA0528246D00FEC8C6,
+										D8D847EB0528246D00FEC8C6,
+										D8D847EC0528246D00FEC8C6,
+										D8D847ED0528246D00FEC8C6,
+										D8D847EE0528246D00FEC8C6,
+										D8D847EF0528246D00FEC8C6,
+										D8D847F00528246D00FEC8C6,
+										D8D847F10528246D00FEC8C6,
+										D8D847F20528246D00FEC8C6,
+										D8D847F30528246D00FEC8C6,
+										D8D847F40528246D00FEC8C6,
+										D8D847F50528246D00FEC8C6,
+										D8D847F60528246D00FEC8C6,
+										D8D847F70528246D00FEC8C6,
+										D8D847F80528246D00FEC8C6,
+										D8D847F90528246D00FEC8C6,
+										D8D847FA0528246D00FEC8C6,
+										D8D847FB0528246D00FEC8C6,
+										D8D847FC0528246D00FEC8C6,
+										D8D847FD0528246D00FEC8C6,
+										D8D847FE0528246D00FEC8C6,
+										D8D847FF0528246D00FEC8C6,
+										D8D848000528246D00FEC8C6,
+										D8D848010528246D00FEC8C6,
+										D8D848020528246D00FEC8C6,
+										D8D848030528246D00FEC8C6,
+										D8D848040528246D00FEC8C6,
+										D8D848050528246D00FEC8C6,
+										D8D848060528246D00FEC8C6,
+										D8D848070528246D00FEC8C6,
+										D8D848080528246D00FEC8C6,
+										D8D848090528246D00FEC8C6,
+										D8D8480A0528246D00FEC8C6,
+										D8D8480B0528246D00FEC8C6,
+										D8D8480C0528246D00FEC8C6,
+										D8E4B4980528461300FE6D4D,
+										D8E4B4990528461300FE6D4D,
+										D8E4B49A0528461300FE6D4D,
+										D8E4B49B0528461300FE6D4D,
+										D8E4B49C0528461300FE6D4D,
+										D8E4B49D0528461300FE6D4D,
+										D8E4B49E0528461300FE6D4D,
+										D8E4B49F0528461300FE6D4D,
+										D8E4B4A00528461300FE6D4D,
+										D8E4B4A10528461300FE6D4D,
+										D8E4B4A20528461300FE6D4D,
+										D8E4B4A30528461300FE6D4D,
+										D8E4B4A40528461300FE6D4D,
+										D8E4B4A50528461300FE6D4D,
+										D8E4B4A60528461300FE6D4D,
+										D8E4B4A70528461300FE6D4D,
+										D8E4B4A80528461300FE6D4D,
+										D8E4B4A90528461300FE6D4D,
+										D8E4B4AA0528461300FE6D4D,
+										D8E4B4AB0528461300FE6D4D,
+										D8E4B4AC0528461300FE6D4D,
+										D8E4B4AD0528461300FE6D4D,
 									);
 								};
 								NavCount = 1;
 								NavGeometry0 = {
-									Frame = "{{0, 0}, {695, 290}}";
+									Frame = "{{0, 0}, {791, 290}}";
 									NavBarVisible = YES;
 								};
 								NavSplitVertical = NO;
@@ -1147,17 +1218,17 @@
 				{
 					ContentSize = "{1006, 638}";
 					LeftSlideOut = {
-						ActiveTab = 0;
-						ActiveTabName = PBXGroupTreeModule;
+						ActiveTab = 3;
+						ActiveTabName = PBXTargetTreeModule;
 						Collapsed = NO;
 						Frame = "{{0, 23}, {1006, 615}}";
 						Split0 = {
 							ActiveTab = 2;
 							ActiveTabName = PBXBuildResultsModule;
 							Collapsed = NO;
-							Frame = "{{311, 0}, {695, 615}}";
+							Frame = "{{215, 0}, {791, 615}}";
 							Split0 = {
-								Frame = "{{0, 325}, {695, 290}}";
+								Frame = "{{0, 325}, {791, 290}}";
 							};
 							SplitCount = 1;
 							Tab0 = {
@@ -1201,17 +1272,17 @@
 								LauncherConfigVersion = 7;
 							};
 							Tab2 = {
-								Frame = "{{0, 0}, {695, 238}}";
+								Frame = "{{0, 0}, {791, 238}}";
 								LauncherConfigVersion = 3;
 								Runner = {
-									Frame = "{{0, 0}, {695, 238}}";
+									Frame = "{{0, 0}, {791, 238}}";
 								};
 							};
 							Tab3 = {
-								BuildMessageFrame = "{{0, 0}, {697, 125}}";
-								BuildTranscriptFrame = "{{0, 134}, {697, 145}}";
+								BuildMessageFrame = "{{0, 0}, {793, 125}}";
+								BuildTranscriptFrame = "{{0, 134}, {793, 145}}";
 								BuildTranscriptFrameExpanded = YES;
-								Frame = "{{0, 0}, {695, 301}}";
+								Frame = "{{0, 0}, {791, 301}}";
 							};
 							Tab4 = {
 								Frame = "{{0, 0}, {695, 321}}";
@@ -1223,12 +1294,10 @@
 						Tab0 = {
 							Frame = "{{0, 0}, {287, 615}}";
 							GroupTreeTableConfiguration = (
-								SCMStatusColumn,
-								22,
 								TargetStatusColumn,
 								18,
 								MainColumn,
-								232,
+								254,
 							);
 						};
 						Tab1 = {
@@ -1276,10 +1345,10 @@
 					StatusViewVisible = YES;
 					Template = F5F68CF101725D4C0D7A8F4C;
 					ToolbarVisible = YES;
-					WindowLocation = "{46, 52}";
+					WindowLocation = "{23, 34}";
 				},
 			);
-			PBXWorkspaceStateSaveDate = 86143649;
+			PBXWorkspaceStateSaveDate = 86526229;
 		};
 		perUserProjectItems = {
 			D818CB0204F0B9DA00FEBFEE = D818CB0204F0B9DA00FEBFEE;
@@ -1387,8 +1456,12 @@
 			D81D83F304DCE15200FEAD97 = D81D83F304DCE15200FEAD97;
 			D81D83F404DCE15200FEAD97 = D81D83F404DCE15200FEAD97;
 			D81D83F504DCE15200FEAD97 = D81D83F504DCE15200FEAD97;
-			D8372307052266BB00FE7878 = D8372307052266BB00FE7878;
-			D8372308052266BB00FE7878 = D8372308052266BB00FE7878;
+			D835929C052686FF00FE92F6 = D835929C052686FF00FE92F6;
+			D835929D052686FF00FE92F6 = D835929D052686FF00FE92F6;
+			D83592A9052709A500FE92F6 = D83592A9052709A500FE92F6;
+			D83592AC052709A500FE92F6 = D83592AC052709A500FE92F6;
+			D83592AD052709A500FE92F6 = D83592AD052709A500FE92F6;
+			D83592AE052709A500FE92F6 = D83592AE052709A500FE92F6;
 			D837230A052266BB00FE7878 = D837230A052266BB00FE7878;
 			D837230B052266BB00FE7878 = D837230B052266BB00FE7878;
 			D837230C052266BB00FE7878 = D837230C052266BB00FE7878;
@@ -1797,22 +1870,12 @@
 			D89F139004574A82006E8A02 = D89F139004574A82006E8A02;
 			D8AF017004D1E08A00FEAA71 = D8AF017004D1E08A00FEAA71;
 			D8AF017104D1E08A00FEAA71 = D8AF017104D1E08A00FEAA71;
-			D8B07D200523467100FE92F6 = D8B07D200523467100FE92F6;
-			D8B07D210523467100FE92F6 = D8B07D210523467100FE92F6;
-			D8B07D220523467100FE92F6 = D8B07D220523467100FE92F6;
 			D8B07D230523467100FE92F6 = D8B07D230523467100FE92F6;
-			D8B07D240523467100FE92F6 = D8B07D240523467100FE92F6;
-			D8B07D250523467100FE92F6 = D8B07D250523467100FE92F6;
 			D8B07D260523467100FE92F6 = D8B07D260523467100FE92F6;
 			D8B07D270523467100FE92F6 = D8B07D270523467100FE92F6;
-			D8B07D280523467100FE92F6 = D8B07D280523467100FE92F6;
-			D8B07D290523467100FE92F6 = D8B07D290523467100FE92F6;
-			D8B07D2A0523467100FE92F6 = D8B07D2A0523467100FE92F6;
-			D8B07D2B0523467100FE92F6 = D8B07D2B0523467100FE92F6;
 			D8B07D2C0523467100FE92F6 = D8B07D2C0523467100FE92F6;
 			D8B07D2D0523467100FE92F6 = D8B07D2D0523467100FE92F6;
 			D8B07D2E0523467100FE92F6 = D8B07D2E0523467100FE92F6;
-			D8B07D2F0523467100FE92F6 = D8B07D2F0523467100FE92F6;
 			D8B07D300523467100FE92F6 = D8B07D300523467100FE92F6;
 			D8B07D310523467100FE92F6 = D8B07D310523467100FE92F6;
 			D8B07D320523467100FE92F6 = D8B07D320523467100FE92F6;
@@ -1839,7 +1902,8 @@
 			D8B07D470523467100FE92F6 = D8B07D470523467100FE92F6;
 			D8B07D480523467100FE92F6 = D8B07D480523467100FE92F6;
 			D8B07D490523467100FE92F6 = D8B07D490523467100FE92F6;
-			D8B07D4A0523467100FE92F6 = D8B07D4A0523467100FE92F6;
+			D8B3226E0528498300FE44A1 = D8B3226E0528498300FE44A1;
+			D8B3226F0528498300FE44A1 = D8B3226F0528498300FE44A1;
 			D8BE26FE0476236E008DA29E = D8BE26FE0476236E008DA29E;
 			D8BE26FF0476236E008DA29E = D8BE26FF0476236E008DA29E;
 			D8BE27080476236E008DA29E = D8BE27080476236E008DA29E;
@@ -1955,6 +2019,53 @@
 			D8D61FA80464F4EA0032D73B = D8D61FA80464F4EA0032D73B;
 			D8D61FA90464F4EA0032D73B = D8D61FA90464F4EA0032D73B;
 			D8D61FAB0464F4EA0032D73B = D8D61FAB0464F4EA0032D73B;
+			D8D847D80528246D00FEC8C6 = D8D847D80528246D00FEC8C6;
+			D8D847D90528246D00FEC8C6 = D8D847D90528246D00FEC8C6;
+			D8D847DA0528246D00FEC8C6 = D8D847DA0528246D00FEC8C6;
+			D8D847DB0528246D00FEC8C6 = D8D847DB0528246D00FEC8C6;
+			D8D847DD0528246D00FEC8C6 = D8D847DD0528246D00FEC8C6;
+			D8D847DE0528246D00FEC8C6 = D8D847DE0528246D00FEC8C6;
+			D8D847E40528246D00FEC8C6 = D8D847E40528246D00FEC8C6;
+			D8D847E50528246D00FEC8C6 = D8D847E50528246D00FEC8C6;
+			D8D847E60528246D00FEC8C6 = D8D847E60528246D00FEC8C6;
+			D8D847E70528246D00FEC8C6 = D8D847E70528246D00FEC8C6;
+			D8D847E80528246D00FEC8C6 = D8D847E80528246D00FEC8C6;
+			D8D847E90528246D00FEC8C6 = D8D847E90528246D00FEC8C6;
+			D8D847EA0528246D00FEC8C6 = D8D847EA0528246D00FEC8C6;
+			D8D847EB0528246D00FEC8C6 = D8D847EB0528246D00FEC8C6;
+			D8D847EC0528246D00FEC8C6 = D8D847EC0528246D00FEC8C6;
+			D8D847ED0528246D00FEC8C6 = D8D847ED0528246D00FEC8C6;
+			D8D847EE0528246D00FEC8C6 = D8D847EE0528246D00FEC8C6;
+			D8D847EF0528246D00FEC8C6 = D8D847EF0528246D00FEC8C6;
+			D8D847F00528246D00FEC8C6 = D8D847F00528246D00FEC8C6;
+			D8D847F10528246D00FEC8C6 = D8D847F10528246D00FEC8C6;
+			D8D847F20528246D00FEC8C6 = D8D847F20528246D00FEC8C6;
+			D8D847F30528246D00FEC8C6 = D8D847F30528246D00FEC8C6;
+			D8D847F40528246D00FEC8C6 = D8D847F40528246D00FEC8C6;
+			D8D847F50528246D00FEC8C6 = D8D847F50528246D00FEC8C6;
+			D8D847F60528246D00FEC8C6 = D8D847F60528246D00FEC8C6;
+			D8D847F70528246D00FEC8C6 = D8D847F70528246D00FEC8C6;
+			D8D847F80528246D00FEC8C6 = D8D847F80528246D00FEC8C6;
+			D8D847F90528246D00FEC8C6 = D8D847F90528246D00FEC8C6;
+			D8D847FA0528246D00FEC8C6 = D8D847FA0528246D00FEC8C6;
+			D8D847FB0528246D00FEC8C6 = D8D847FB0528246D00FEC8C6;
+			D8D847FC0528246D00FEC8C6 = D8D847FC0528246D00FEC8C6;
+			D8D847FD0528246D00FEC8C6 = D8D847FD0528246D00FEC8C6;
+			D8D847FE0528246D00FEC8C6 = D8D847FE0528246D00FEC8C6;
+			D8D847FF0528246D00FEC8C6 = D8D847FF0528246D00FEC8C6;
+			D8D848000528246D00FEC8C6 = D8D848000528246D00FEC8C6;
+			D8D848010528246D00FEC8C6 = D8D848010528246D00FEC8C6;
+			D8D848020528246D00FEC8C6 = D8D848020528246D00FEC8C6;
+			D8D848030528246D00FEC8C6 = D8D848030528246D00FEC8C6;
+			D8D848040528246D00FEC8C6 = D8D848040528246D00FEC8C6;
+			D8D848050528246D00FEC8C6 = D8D848050528246D00FEC8C6;
+			D8D848060528246D00FEC8C6 = D8D848060528246D00FEC8C6;
+			D8D848070528246D00FEC8C6 = D8D848070528246D00FEC8C6;
+			D8D848080528246D00FEC8C6 = D8D848080528246D00FEC8C6;
+			D8D848090528246D00FEC8C6 = D8D848090528246D00FEC8C6;
+			D8D8480A0528246D00FEC8C6 = D8D8480A0528246D00FEC8C6;
+			D8D8480B0528246D00FEC8C6 = D8D8480B0528246D00FEC8C6;
+			D8D8480C0528246D00FEC8C6 = D8D8480C0528246D00FEC8C6;
 			D8D8567C04F1150800FE652D = D8D8567C04F1150800FE652D;
 			D8D8567D04F1150800FE652D = D8D8567D04F1150800FE652D;
 			D8D8568304F1150800FE652D = D8D8568304F1150800FE652D;
@@ -2048,6 +2159,33 @@
 			D8D9127404EBEF8A00FEA61A = D8D9127404EBEF8A00FEA61A;
 			D8D9127504EBEF8A00FEA61A = D8D9127504EBEF8A00FEA61A;
 			D8D9127604EBEF8A00FEA61A = D8D9127604EBEF8A00FEA61A;
+			D8E4B4920528461300FE6D4D = D8E4B4920528461300FE6D4D;
+			D8E4B4930528461300FE6D4D = D8E4B4930528461300FE6D4D;
+			D8E4B4940528461300FE6D4D = D8E4B4940528461300FE6D4D;
+			D8E4B4950528461300FE6D4D = D8E4B4950528461300FE6D4D;
+			D8E4B4960528461300FE6D4D = D8E4B4960528461300FE6D4D;
+			D8E4B4980528461300FE6D4D = D8E4B4980528461300FE6D4D;
+			D8E4B4990528461300FE6D4D = D8E4B4990528461300FE6D4D;
+			D8E4B49A0528461300FE6D4D = D8E4B49A0528461300FE6D4D;
+			D8E4B49B0528461300FE6D4D = D8E4B49B0528461300FE6D4D;
+			D8E4B49C0528461300FE6D4D = D8E4B49C0528461300FE6D4D;
+			D8E4B49D0528461300FE6D4D = D8E4B49D0528461300FE6D4D;
+			D8E4B49E0528461300FE6D4D = D8E4B49E0528461300FE6D4D;
+			D8E4B49F0528461300FE6D4D = D8E4B49F0528461300FE6D4D;
+			D8E4B4A00528461300FE6D4D = D8E4B4A00528461300FE6D4D;
+			D8E4B4A10528461300FE6D4D = D8E4B4A10528461300FE6D4D;
+			D8E4B4A20528461300FE6D4D = D8E4B4A20528461300FE6D4D;
+			D8E4B4A30528461300FE6D4D = D8E4B4A30528461300FE6D4D;
+			D8E4B4A40528461300FE6D4D = D8E4B4A40528461300FE6D4D;
+			D8E4B4A50528461300FE6D4D = D8E4B4A50528461300FE6D4D;
+			D8E4B4A60528461300FE6D4D = D8E4B4A60528461300FE6D4D;
+			D8E4B4A70528461300FE6D4D = D8E4B4A70528461300FE6D4D;
+			D8E4B4A80528461300FE6D4D = D8E4B4A80528461300FE6D4D;
+			D8E4B4A90528461300FE6D4D = D8E4B4A90528461300FE6D4D;
+			D8E4B4AA0528461300FE6D4D = D8E4B4AA0528461300FE6D4D;
+			D8E4B4AB0528461300FE6D4D = D8E4B4AB0528461300FE6D4D;
+			D8E4B4AC0528461300FE6D4D = D8E4B4AC0528461300FE6D4D;
+			D8E4B4AD0528461300FE6D4D = D8E4B4AD0528461300FE6D4D;
 			D8E622BC04E3805B00FE1A80 = D8E622BC04E3805B00FE1A80;
 			D8E622C104E3805B00FE1A80 = D8E622C104E3805B00FE1A80;
 			D8E622C204E3805B00FE1A80 = D8E622C204E3805B00FE1A80;
@@ -2238,6 +2376,8 @@
 			D8FE45500491E34A00E319F4 = D8FE45500491E34A00E319F4;
 			D8FE45520491E34A00E319F4 = D8FE45520491E34A00E319F4;
 			D8FE45540491E34A00E319F4 = D8FE45540491E34A00E319F4;
+			D8FF38050525C7E100FE92F6 = D8FF38050525C7E100FE92F6;
+			D8FF38060525C7E100FE92F6 = D8FF38060525C7E100FE92F6;
 		};
 		projectwideBuildSettings = {
 		};
@@ -2659,7 +2799,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 196";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 287;
 		vrLoc = 7729;
@@ -2853,7 +2993,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 195";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 336;
 		vrLoc = 7712;
@@ -2893,7 +3033,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 194";
 		rLen = 0;
-		rLoc = 9358;
+		rLoc = 9353;
 		rType = 0;
 		vrLen = 626;
 		vrLoc = 7422;
@@ -3073,7 +3213,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: operator*";
 		rLen = 71;
-		rLoc = 6937;
+		rLoc = 6951;
 		rType = 0;
 		vrLen = 1100;
 		vrLoc = 5985;
@@ -3097,7 +3237,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 194";
 		rLen = 0;
-		rLoc = 9358;
+		rLoc = 9353;
 		rType = 0;
 		vrLen = 463;
 		vrLoc = 7416;
@@ -3264,17 +3404,7 @@
 		isa = PBXTargetBookmark;
 		trg = 08FB779FFE84155DC02AAC07;
 	};
-	D8372307052266BB00FE7878 = {
-		fRef = D84F63BD05211A4F00FE7878;
-		isa = PBXTextBookmark;
-		name = "main.cpp: __WCHAR_TYPE__";
-		rLen = 0;
-		rLoc = 101;
-		rType = 0;
-		vrLen = 122;
-		vrLoc = 0;
-	};
-	D8372308052266BB00FE7878 = {
+	D835929C052686FF00FE92F6 = {
 		fRef = D84F63BC05211A4F00FE7878;
 		isa = PBXTextBookmark;
 		name = "benchmarks.cpp: __EXCEPTIONS";
@@ -3284,12 +3414,56 @@
 		vrLen = 383;
 		vrLoc = 0;
 	};
+	D835929D052686FF00FE92F6 = {
+		fRef = D84F63A8052119C300FE7878;
+		isa = PBXTextBookmark;
+		name = "altivec_constant.h: 101";
+		rLen = 0;
+		rLoc = 6391;
+		rType = 0;
+		vrLen = 620;
+		vrLoc = 6156;
+	};
+	D83592A9052709A500FE92F6 = {
+		fRef = D84F63A8052119C300FE7878;
+		isa = PBXTextBookmark;
+		name = "altivec_constant.h: 101";
+		rLen = 0;
+		rLoc = 6391;
+		rType = 0;
+		vrLen = 753;
+		vrLoc = 6424;
+	};
+	D83592AC052709A500FE92F6 = {
+		isa = PBXTargetBookmark;
+		trg = 08FB779FFE84155DC02AAC07;
+	};
+	D83592AD052709A500FE92F6 = {
+		fRef = D84F63A8052119C300FE7878;
+		isa = PBXTextBookmark;
+		name = "altivec_constant.h: 101";
+		rLen = 0;
+		rLoc = 6391;
+		rType = 0;
+		vrLen = 753;
+		vrLoc = 6424;
+	};
+	D83592AE052709A500FE92F6 = {
+		fRef = D84F63BD05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "main.cpp: __GXX_WEAK__";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 119;
+		vrLoc = 0;
+	};
 	D837230A052266BB00FE7878 = {
 		fRef = D84F63A8052119C300FE7878;
 		isa = PBXTextBookmark;
 		name = "altivec_constant.h: 229";
 		rLen = 113;
-		rLoc = 13621;
+		rLoc = 13778;
 		rType = 0;
 		vrLen = 984;
 		vrLoc = 12952;
@@ -3298,8 +3472,8 @@
 		fRef = D875427903BBDBAF00FE70F5;
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 802";
-		rLen = 70;
-		rLoc = 34859;
+		rLen = 0;
+		rLoc = 35965;
 		rType = 0;
 		vrLen = 1022;
 		vrLoc = 31322;
@@ -3309,7 +3483,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_constant.h: 256";
 		rLen = 0;
-		rLoc = 14616;
+		rLoc = 14773;
 		rType = 0;
 		vrLen = 961;
 		vrLoc = 13936;
@@ -3318,8 +3492,8 @@
 		fRef = D875427903BBDBAF00FE70F5;
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 830";
-		rLen = 70;
-		rLoc = 34859;
+		rLen = 0;
+		rLoc = 35965;
 		rType = 0;
 		vrLen = 995;
 		vrLoc = 31934;
@@ -3329,7 +3503,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_constant.h: 258";
 		rLen = 0;
-		rLoc = 14616;
+		rLoc = 14773;
 		rType = 0;
 		vrLen = 924;
 		vrLoc = 13918;
@@ -3349,7 +3523,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_traits.h: 767";
 		rLen = 0;
-		rLoc = 27620;
+		rLoc = 28186;
 		rType = 0;
 		vrLen = 703;
 		vrLoc = 27313;
@@ -3358,8 +3532,8 @@
 		fRef = D875427903BBDBAF00FE70F5;
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 837";
-		rLen = 70;
-		rLoc = 34859;
+		rLen = 0;
+		rLoc = 35965;
 		rType = 0;
 		vrLen = 762;
 		vrLoc = 31927;
@@ -3379,7 +3553,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: vec_sra_result<Type1,Type2>";
 		rLen = 0;
-		rLoc = 25483;
+		rLoc = 27857;
 		rType = 0;
 		vrLen = 959;
 		vrLoc = 21184;
@@ -3413,9 +3587,9 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: __WCHAR_TYPE__";
 		rLen = 0;
-		rLoc = 101;
+		rLoc = 99;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D8372318052266BB00FE7878 = {
@@ -3513,9 +3687,9 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: __WCHAR_TYPE__";
 		rLen = 0;
-		rLoc = 101;
+		rLoc = 99;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D839D4240521F2D200FE7878 = {
@@ -3533,9 +3707,9 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: __WCHAR_TYPE__";
 		rLen = 0;
-		rLoc = 101;
+		rLoc = 99;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D839D4260521F2D200FE7878 = {
@@ -3563,9 +3737,9 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: __WCHAR_TYPE__";
 		rLen = 0;
-		rLoc = 101;
+		rLoc = 99;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D839D4290521F2D200FE7878 = {
@@ -3603,7 +3777,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 853";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -3613,7 +3787,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 883";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -3631,7 +3805,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 849";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -3641,7 +3815,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 152";
 		rLen = 0;
-		rLoc = 6463;
+		rLoc = 6477;
 		rType = 0;
 		vrLen = 652;
 		vrLoc = 1673;
@@ -3661,7 +3835,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 891";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -3675,7 +3849,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 891";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -3685,7 +3859,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1432";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -3705,7 +3879,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 585";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -3715,7 +3889,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 585";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 465;
 		vrLoc = 5420;
@@ -3745,7 +3919,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 214";
 		rLen = 0;
-		rLoc = 9469;
+		rLoc = 9483;
 		rType = 0;
 		vrLen = 941;
 		vrLoc = 7673;
@@ -3787,7 +3961,7 @@
 	D84F63C70521E19A00FE7878 = {
 		fileReference = D84F63A8052119C300FE7878;
 		isa = PBXFileBreakpoint;
-		lineNumber = 146;
+		lineNumber = 154;
 		state = 1;
 	};
 	D84F63C90521F21C00FE7878 = {
@@ -3809,9 +3983,9 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: 9";
 		rLen = 0;
-		rLoc = 68;
+		rLoc = 69;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D84F63D30521F21C00FE7878 = {
@@ -3823,9 +3997,9 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: 1";
 		rLen = 0;
-		rLoc = 0;
+		rLoc = 1;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D84F63D50521F21C00FE7878 = {
@@ -3837,9 +4011,9 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: __WINT_TYPE__";
 		rLen = 0;
-		rLoc = 68;
+		rLoc = 69;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D84F63D70521F21C00FE7878 = {
@@ -3863,9 +4037,9 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: 9";
 		rLen = 0;
-		rLoc = 68;
+		rLoc = 69;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D84F63DC0521F21C00FE7878 = {
@@ -3873,7 +4047,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 444";
 		rLen = 0;
-		rLoc = 17876;
+		rLoc = 18293;
 		rType = 0;
 		vrLen = 1426;
 		vrLoc = 16603;
@@ -3883,9 +4057,9 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: 10";
 		rLen = 0;
-		rLoc = 68;
+		rLoc = 69;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D84F63DE0521F21C00FE7878 = {
@@ -3893,7 +4067,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 444";
 		rLen = 0;
-		rLoc = 17876;
+		rLoc = 18293;
 		rType = 0;
 		vrLen = 1399;
 		vrLoc = 16603;
@@ -3903,7 +4077,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_constant.h: 125";
 		rLen = 0;
-		rLoc = 11707;
+		rLoc = 11864;
 		rType = 0;
 		vrLen = 873;
 		vrLoc = 5527;
@@ -3913,9 +4087,9 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: 10";
 		rLen = 0;
-		rLoc = 68;
+		rLoc = 69;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D84F63E10521F21C00FE7878 = {
@@ -3923,7 +4097,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_constant.h: long_generator<65535,65520>";
 		rLen = 0;
-		rLoc = 6903;
+		rLoc = 7060;
 		rType = 0;
 		vrLen = 2630;
 		vrLoc = 7490;
@@ -3933,9 +4107,9 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: 10";
 		rLen = 0;
-		rLoc = 68;
+		rLoc = 69;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D84F63E30521F21C00FE7878 = {
@@ -3943,7 +4117,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_constant.h: 228";
 		rLen = 0;
-		rLoc = 13732;
+		rLoc = 13889;
 		rType = 0;
 		vrLen = 838;
 		vrLoc = 12992;
@@ -3953,9 +4127,9 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: 10";
 		rLen = 0;
-		rLoc = 68;
+		rLoc = 69;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D84F63E50521F21C00FE7878 = {
@@ -3963,7 +4137,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_constant.h: 228";
 		rLen = 113;
-		rLoc = 13621;
+		rLoc = 13778;
 		rType = 0;
 		vrLen = 838;
 		vrLoc = 12992;
@@ -3973,9 +4147,9 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: 2";
 		rLen = 0;
-		rLoc = 0;
+		rLoc = 1;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D84F63E70521F21C00FE7878 = {
@@ -3993,7 +4167,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 444";
 		rLen = 0;
-		rLoc = 17876;
+		rLoc = 18293;
 		rType = 0;
 		vrLen = 900;
 		vrLoc = 21873;
@@ -4003,7 +4177,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_constant.h: 229";
 		rLen = 113;
-		rLoc = 13621;
+		rLoc = 13778;
 		rType = 0;
 		vrLen = 838;
 		vrLoc = 13047;
@@ -4013,9 +4187,9 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: 13";
 		rLen = 0;
-		rLoc = 88;
+		rLoc = 89;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D84F63EB0521F21C00FE7878 = {
@@ -4027,17 +4201,17 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: __INT_MAX__";
 		rLen = 0;
-		rLoc = 68;
+		rLoc = 69;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D84F63ED0521F21C00FE7878 = {
 		fRef = D875427903BBDBAF00FE70F5;
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: vec_ldl_result<Type>";
-		rLen = 5524;
-		rLoc = 24522;
+		rLen = 5698;
+		rLoc = 26482;
 		rType = 0;
 		vrLen = 1120;
 		vrLoc = 23927;
@@ -4047,17 +4221,17 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: __INT_MAX__";
 		rLen = 0;
-		rLoc = 68;
+		rLoc = 69;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D84F63EF0521F21C00FE7878 = {
 		fRef = D875427903BBDBAF00FE70F5;
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: vec_ldl_result<Type>";
-		rLen = 5524;
-		rLoc = 24522;
+		rLen = 5698;
+		rLoc = 26482;
 		rType = 0;
 		vrLen = 1120;
 		vrLoc = 23927;
@@ -4067,9 +4241,9 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: __SCHAR_MAX__";
 		rLen = 0;
-		rLoc = 68;
+		rLoc = 69;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D84F63F10521F21C00FE7878 = {
@@ -4077,7 +4251,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 557";
 		rLen = 0;
-		rLoc = 23667;
+		rLoc = 25567;
 		rType = 0;
 		vrLen = 917;
 		vrLoc = 22184;
@@ -4087,9 +4261,9 @@
 		isa = PBXTextBookmark;
 		name = "main.cpp: __VEC__";
 		rLen = 0;
-		rLoc = 0;
+		rLoc = 1;
 		rType = 0;
-		vrLen = 122;
+		vrLen = 119;
 		vrLoc = 0;
 	};
 	D84F63F30521F21C00FE7878 = {
@@ -4106,8 +4280,8 @@
 		fRef = D875427903BBDBAF00FE70F5;
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 786";
-		rLen = 70;
-		rLoc = 34859;
+		rLen = 0;
+		rLoc = 35965;
 		rType = 0;
 		vrLen = 598;
 		vrLoc = 31519;
@@ -4117,7 +4291,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_traits.h: 767";
 		rLen = 0;
-		rLoc = 27620;
+		rLoc = 28186;
 		rType = 0;
 		vrLen = 770;
 		vrLoc = 27313;
@@ -4137,7 +4311,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1113";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4147,7 +4321,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: operation";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4157,7 +4331,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1027";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4167,7 +4341,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1027";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4177,7 +4351,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1028";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4187,7 +4361,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1252";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4197,7 +4371,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: it";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4305,7 +4479,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 227";
 		rLen = 1;
-		rLoc = 9418;
+		rLoc = 9413;
 		rType = 0;
 		vrLen = 230;
 		vrLoc = 7818;
@@ -4315,7 +4489,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 421";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4325,7 +4499,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 530";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4335,7 +4509,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 530";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4345,7 +4519,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 420";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4355,7 +4529,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: term";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4365,7 +4539,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 529";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4375,7 +4549,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 530";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4385,7 +4559,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 592";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4395,7 +4569,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 537";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4405,7 +4579,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 535";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4415,7 +4589,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 538";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4425,7 +4599,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 424";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4435,7 +4609,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 424";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4445,7 +4619,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 598";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4455,7 +4629,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 406";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4465,7 +4639,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 249";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4475,7 +4649,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 509";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4485,7 +4659,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 152";
 		rLen = 0;
-		rLoc = 6463;
+		rLoc = 6477;
 		rType = 0;
 		vrLen = 463;
 		vrLoc = 4440;
@@ -4495,7 +4669,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 628";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4505,7 +4679,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 642";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4515,7 +4689,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 540";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4525,7 +4699,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 540";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4535,7 +4709,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: term";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4545,7 +4719,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: term";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4555,7 +4729,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: term";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4565,7 +4739,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 428";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4575,7 +4749,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: operator==";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4585,7 +4759,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 792";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4615,7 +4789,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1092";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4625,7 +4799,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 82";
 		rLen = 8;
-		rLoc = 4035;
+		rLoc = 4049;
 		rType = 0;
 		vrLen = 414;
 		vrLoc = 2519;
@@ -4635,7 +4809,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1092";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4645,7 +4819,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 979";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4655,7 +4829,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1214";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4664,8 +4838,8 @@
 		fRef = D875427903BBDBAF00FE70F5;
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 50";
-		rLen = 58;
-		rLoc = 3311;
+		rLen = 28;
+		rLoc = 3355;
 		rType = 0;
 		vrLen = 685;
 		vrLoc = 12571;
@@ -4675,7 +4849,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 640";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4685,7 +4859,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 640";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4695,7 +4869,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 640";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4705,7 +4879,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 217";
 		rLen = 24;
-		rLoc = 9469;
+		rLoc = 9483;
 		rType = 0;
 		vrLen = 704;
 		vrLoc = 7861;
@@ -4725,7 +4899,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 82";
 		rLen = 8;
-		rLoc = 4035;
+		rLoc = 4049;
 		rType = 0;
 		vrLen = 342;
 		vrLoc = 2699;
@@ -4735,7 +4909,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1276";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4745,7 +4919,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1278";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4755,7 +4929,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 932";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4765,7 +4939,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 930";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4775,7 +4949,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 82";
 		rLen = 8;
-		rLoc = 4035;
+		rLoc = 4049;
 		rType = 0;
 		vrLen = 342;
 		vrLoc = 2699;
@@ -4785,7 +4959,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 941";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4803,7 +4977,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 941";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4813,7 +4987,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 941";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4823,7 +4997,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1276";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4833,7 +5007,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1276";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4843,7 +5017,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1280";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4853,7 +5027,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1281";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4863,7 +5037,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1280";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4877,7 +5051,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1280";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4887,7 +5061,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1276";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4897,7 +5071,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1276";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4907,7 +5081,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1289";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4917,7 +5091,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 82";
 		rLen = 8;
-		rLoc = 4035;
+		rLoc = 4049;
 		rType = 0;
 		vrLen = 342;
 		vrLoc = 2699;
@@ -4927,7 +5101,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1286";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4937,7 +5111,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1286";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4947,7 +5121,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1285";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4965,7 +5139,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1285";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4975,7 +5149,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1309";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4985,7 +5159,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1273";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -4995,7 +5169,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1286";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5005,7 +5179,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 939";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5015,7 +5189,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 940";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5025,7 +5199,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 592";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5035,7 +5209,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 331";
 		rLen = 7;
-		rLoc = 13418;
+		rLoc = 13607;
 		rType = 0;
 		vrLen = 495;
 		vrLoc = 12183;
@@ -5045,7 +5219,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 592";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5055,7 +5229,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 331";
 		rLen = 7;
-		rLoc = 13418;
+		rLoc = 13607;
 		rType = 0;
 		vrLen = 495;
 		vrLoc = 12183;
@@ -5065,7 +5239,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 604";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5075,7 +5249,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 703";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5085,7 +5259,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 705";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5115,7 +5289,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: func";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5125,7 +5299,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 390";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5135,7 +5309,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1445";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5145,7 +5319,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1094";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5155,7 +5329,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 978";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5165,7 +5339,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 346";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5175,7 +5349,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 295";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5185,7 +5359,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 333";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5195,7 +5369,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1147";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5205,7 +5379,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 331";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5215,7 +5389,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: valuer";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5235,7 +5409,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: valuer";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5245,7 +5419,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 900";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5255,7 +5429,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 900";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5265,7 +5439,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray2.h: 842";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5275,7 +5449,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray2.h: 1045";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5285,7 +5459,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray2.h: 1281";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5295,7 +5469,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray2.h: 258";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5305,7 +5479,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray2.h: 268";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5315,7 +5489,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray2.h: 268";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5325,7 +5499,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray2.h: 276";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5335,7 +5509,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray2.h: 255";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5345,7 +5519,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray2.h: 255";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5355,7 +5529,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray2.h: 1138";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5365,7 +5539,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray2.h: 1035";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5375,7 +5549,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1052";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5385,7 +5559,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1042";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5395,7 +5569,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 276";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5415,7 +5589,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 522";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5441,7 +5615,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1150";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5461,7 +5635,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1150";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5481,7 +5655,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1438";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5491,7 +5665,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 716";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5501,7 +5675,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 478";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5515,7 +5689,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1097";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5525,7 +5699,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1037";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5535,7 +5709,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1099";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5545,7 +5719,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1355";
 		rLen = 0;
-		rLoc = 9389;
+		rLoc = 9384;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5555,7 +5729,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 339";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5575,7 +5749,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1057";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5585,7 +5759,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 533";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5605,7 +5779,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 565";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5615,7 +5789,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: ander<__false_type,__false_type>";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5625,7 +5799,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1136";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5665,7 +5839,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 448";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5685,7 +5859,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 155";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5695,7 +5869,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 274";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5705,7 +5879,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 408";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5715,7 +5889,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 373";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5725,7 +5899,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 374";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5735,7 +5909,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1059";
 		rLen = 0;
-		rLoc = 9472;
+		rLoc = 9467;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5745,7 +5919,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 410";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5755,7 +5929,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 404";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5765,7 +5939,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 159";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 278;
 		vrLoc = 5751;
@@ -5779,7 +5953,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 159";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 366;
 		vrLoc = 5707;
@@ -5789,7 +5963,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 159";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 196;
 		vrLoc = 5707;
@@ -5803,7 +5977,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 159";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5817,7 +5991,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 159";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 158;
 		vrLoc = 5915;
@@ -5827,7 +6001,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: tan";
 		rLen = 57;
-		rLoc = 8921;
+		rLoc = 8935;
 		rType = 0;
 		vrLen = 969;
 		vrLoc = 7246;
@@ -5837,7 +6011,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 160";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 503;
 		vrLoc = 0;
@@ -5867,7 +6041,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 160";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 1084;
 		vrLoc = 0;
@@ -5877,7 +6051,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 160";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 865;
 		vrLoc = 219;
@@ -5887,7 +6061,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 160";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 1427;
 		vrLoc = 219;
@@ -5941,7 +6115,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1299";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -5971,7 +6145,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 227";
 		rLen = 1;
-		rLoc = 9418;
+		rLoc = 9413;
 		rType = 0;
 		vrLen = 231;
 		vrLoc = 7817;
@@ -6191,7 +6365,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1004";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6245,7 +6419,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1004";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6269,7 +6443,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1072";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6283,7 +6457,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1066";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6293,7 +6467,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 848";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6323,7 +6497,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1129";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6333,7 +6507,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 847";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6353,7 +6527,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1028";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6363,7 +6537,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1036";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6383,7 +6557,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 917";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6403,7 +6577,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 876";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6423,7 +6597,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 325";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6433,7 +6607,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 274";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6443,7 +6617,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 258";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6453,7 +6627,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 302";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6467,7 +6641,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1176";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6477,7 +6651,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 306";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6487,7 +6661,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 306";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6583,7 +6757,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 788";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6593,7 +6767,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: operation";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6613,7 +6787,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 747";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6643,7 +6817,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: term";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6663,7 +6837,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: operation";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6703,7 +6877,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 685";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6749,7 +6923,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 49";
 		rLen = 0;
-		rLoc = 3451;
+		rLoc = 3465;
 		rType = 0;
 		vrLen = 589;
 		vrLoc = 1865;
@@ -6769,7 +6943,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: chunk_traits<float>";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6779,7 +6953,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 48";
 		rLen = 0;
-		rLoc = 3444;
+		rLoc = 3458;
 		rType = 0;
 		vrLen = 460;
 		vrLoc = 1745;
@@ -6789,7 +6963,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 49";
 		rLen = 8;
-		rLoc = 3453;
+		rLoc = 3467;
 		rType = 0;
 		vrLen = 645;
 		vrLoc = 1802;
@@ -6799,7 +6973,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 691";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6809,7 +6983,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 106";
 		rLen = 0;
-		rLoc = 4590;
+		rLoc = 4604;
 		rType = 0;
 		vrLen = 345;
 		vrLoc = 3153;
@@ -6819,7 +6993,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 702";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6829,7 +7003,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: operator+";
 		rLen = 65;
-		rLoc = 6806;
+		rLoc = 6820;
 		rType = 0;
 		vrLen = 894;
 		vrLoc = 649;
@@ -6839,7 +7013,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 111";
 		rLen = 0;
-		rLoc = 5335;
+		rLoc = 5349;
 		rType = 0;
 		vrLen = 814;
 		vrLoc = 568;
@@ -6849,7 +7023,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 57";
 		rLen = 0;
-		rLoc = 3625;
+		rLoc = 3639;
 		rType = 0;
 		vrLen = 535;
 		vrLoc = 2115;
@@ -6859,7 +7033,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 702";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6873,7 +7047,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 702";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6883,7 +7057,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 108";
 		rLen = 0;
-		rLoc = 5013;
+		rLoc = 5027;
 		rType = 0;
 		vrLen = 837;
 		vrLoc = 3117;
@@ -6893,7 +7067,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 702";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6903,7 +7077,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 46";
 		rLen = 0;
-		rLoc = 3214;
+		rLoc = 3355;
 		rType = 0;
 		vrLen = 484;
 		vrLoc = 1743;
@@ -6927,7 +7101,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 386";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6937,7 +7111,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 386";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6957,7 +7131,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: term";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 721;
 		vrLoc = 4133;
@@ -6971,7 +7145,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: term";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 440;
 		vrLoc = 4133;
@@ -6981,7 +7155,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 263";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -6991,7 +7165,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: chunk_traits<float>";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7001,7 +7175,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 375";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7011,7 +7185,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 117";
 		rLen = 36;
-		rLoc = 5396;
+		rLoc = 5410;
 		rType = 0;
 		vrLen = 415;
 		vrLoc = 3456;
@@ -7021,7 +7195,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 626";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7035,7 +7209,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 361";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7045,7 +7219,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: maximize<Val,Chunk>";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7055,7 +7229,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 232";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7065,7 +7239,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 117";
 		rLen = 0;
-		rLoc = 5396;
+		rLoc = 5410;
 		rType = 0;
 		vrLen = 385;
 		vrLoc = 3337;
@@ -7088,8 +7262,8 @@
 		fRef = D875427903BBDBAF00FE70F5;
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 40";
-		rLen = 51;
-		rLoc = 2979;
+		rLen = 0;
+		rLoc = 3355;
 		rType = 0;
 		vrLen = 526;
 		vrLoc = 1554;
@@ -7098,8 +7272,8 @@
 		fRef = D875427903BBDBAF00FE70F5;
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 40";
-		rLen = 51;
-		rLoc = 2979;
+		rLen = 0;
+		rLoc = 3355;
 		rType = 0;
 		vrLen = 526;
 		vrLoc = 1554;
@@ -7109,7 +7283,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 205";
 		rLen = 0;
-		rLoc = 10273;
+		rLoc = 10474;
 		rType = 0;
 		vrLen = 480;
 		vrLoc = 7369;
@@ -7118,8 +7292,8 @@
 		fRef = D875427903BBDBAF00FE70F5;
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 40";
-		rLen = 51;
-		rLoc = 2979;
+		rLen = 0;
+		rLoc = 3355;
 		rType = 0;
 		vrLen = 333;
 		vrLoc = 0;
@@ -7128,8 +7302,8 @@
 		fRef = D875427903BBDBAF00FE70F5;
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 40";
-		rLen = 51;
-		rLoc = 2979;
+		rLen = 0;
+		rLoc = 3355;
 		rType = 0;
 		vrLen = 489;
 		vrLoc = 1545;
@@ -7138,8 +7312,8 @@
 		fRef = D875427903BBDBAF00FE70F5;
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 40";
-		rLen = 51;
-		rLoc = 2979;
+		rLen = 0;
+		rLoc = 3355;
 		rType = 0;
 		vrLen = 489;
 		vrLoc = 1545;
@@ -7149,7 +7323,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: __DEFINE_ALTIVEC_CASSIGN_FUNCTION";
 		rLen = 0;
-		rLoc = 2832;
+		rLoc = 3355;
 		rType = 0;
 		vrLen = 625;
 		vrLoc = 1240;
@@ -7174,42 +7348,6 @@
 		vrLen = 587;
 		vrLoc = 4807;
 	};
-	D8B07D200523467100FE92F6 = {
-		fRef = D84F63BE05211A4F00FE7878;
-		isa = PBXTextBookmark;
-		name = "unittests.cpp: __GXX_WEAK__";
-		rLen = 0;
-		rLoc = 43;
-		rType = 0;
-		vrLen = 1108;
-		vrLoc = 0;
-	};
-	D8B07D210523467100FE92F6 = {
-		isa = PBXTargetBookmark;
-		trg = 08FB779FFE84155DC02AAC07;
-		uiCtxt = {
-			TOCViewDetailVisibleRect = "{{0, 173}, {471, 299}}";
-			TOCViewExpandedItems = (
-				"com.apple.target-editor-pane.settings",
-				"com.apple.target-editor-pane.settings.simple",
-				"com.apple.target-editor-pane.buildphases",
-			);
-			TOCViewMasterVisibleRect = "{{0, 0}, {185, 299}}";
-			TOCViewSelectedItems = (
-				PBXTargetGccCompilerSettingsModule,
-			);
-		};
-	};
-	D8B07D220523467100FE92F6 = {
-		fRef = D875911A0471ACCD00B43157;
-		isa = PBXTextBookmark;
-		name = "valarray_altivec.h: 404";
-		rLen = 0;
-		rLoc = 17453;
-		rType = 0;
-		vrLen = 1027;
-		vrLoc = 16873;
-	};
 	D8B07D230523467100FE92F6 = {
 		fRef = D85F8DE104A6ADEA00469FFA;
 		isa = PBXTextBookmark;
@@ -7219,26 +7357,6 @@
 		rType = 0;
 		vrLen = 663;
 		vrLoc = 2804;
-	};
-	D8B07D240523467100FE92F6 = {
-		fRef = D84F63A8052119C300FE7878;
-		isa = PBXTextBookmark;
-		name = "altivec_constant.h: 30";
-		rLen = 145;
-		rLoc = 1237;
-		rType = 0;
-		vrLen = 670;
-		vrLoc = 830;
-	};
-	D8B07D250523467100FE92F6 = {
-		fRef = D84F63A9052119C300FE7878;
-		isa = PBXTextBookmark;
-		name = "altivec_traits.h: 30";
-		rLen = 140;
-		rLoc = 1233;
-		rType = 0;
-		vrLen = 851;
-		vrLoc = 555;
 	};
 	D8B07D260523467100FE92F6 = {
 		fRef = D875428003BBF11F00FE70F5;
@@ -7259,46 +7377,6 @@
 		rType = 0;
 		vrLen = 583;
 		vrLoc = 892;
-	};
-	D8B07D280523467100FE92F6 = {
-		fRef = D875428C03BBF6A800FE70F5;
-		isa = PBXTextBookmark;
-		name = "com_client.h: 33";
-		rLen = 0;
-		rLoc = 1275;
-		rType = 0;
-		vrLen = 475;
-		vrLoc = 1076;
-	};
-	D8B07D290523467100FE92F6 = {
-		fRef = D8D22F4D04217E0100FE622F;
-		isa = PBXTextBookmark;
-		name = "macvalarray.h: 35";
-		rLen = 0;
-		rLoc = 1406;
-		rType = 0;
-		vrLen = 634;
-		vrLoc = 974;
-	};
-	D8B07D2A0523467100FE92F6 = {
-		fRef = D875427903BBDBAF00FE70F5;
-		isa = PBXTextBookmark;
-		name = "altivec_type.h: 103";
-		rLen = 0;
-		rLoc = 5848;
-		rType = 0;
-		vrLen = 1497;
-		vrLoc = 5023;
-	};
-	D8B07D2B0523467100FE92F6 = {
-		fRef = D85F8DD904A5DD6700469FFA;
-		isa = PBXTextBookmark;
-		name = "valarray_valarray.h: 119";
-		rLen = 35;
-		rLoc = 3873;
-		rType = 0;
-		vrLen = 1306;
-		vrLoc = 3564;
 	};
 	D8B07D2C0523467100FE92F6 = {
 		fRef = D85761870494033D0099BB92;
@@ -7330,16 +7408,6 @@
 		vrLen = 1017;
 		vrLoc = 5594;
 	};
-	D8B07D2F0523467100FE92F6 = {
-		fRef = D85761890494039A0099BB92;
-		isa = PBXTextBookmark;
-		name = "valarray_slice.h: 30";
-		rLen = 0;
-		rLoc = 1236;
-		rType = 0;
-		vrLen = 420;
-		vrLoc = 1230;
-	};
 	D8B07D300523467100FE92F6 = {
 		fRef = D84F63BE05211A4F00FE7878;
 		isa = PBXTextBookmark;
@@ -7355,7 +7423,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_constant.h: 259";
 		rLen = 0;
-		rLoc = 14616;
+		rLoc = 14773;
 		rType = 0;
 		vrLen = 860;
 		vrLoc = 14095;
@@ -7363,25 +7431,13 @@
 	D8B07D320523467100FE92F6 = {
 		isa = PBXTargetBookmark;
 		trg = 08FB779FFE84155DC02AAC07;
-		uiCtxt = {
-			TOCViewDetailVisibleRect = "{{0, 173}, {471, 299}}";
-			TOCViewExpandedItems = (
-				"com.apple.target-editor-pane.settings",
-				"com.apple.target-editor-pane.settings.simple",
-				"com.apple.target-editor-pane.buildphases",
-			);
-			TOCViewMasterVisibleRect = "{{0, 0}, {185, 299}}";
-			TOCViewSelectedItems = (
-				PBXTargetGccCompilerSettingsModule,
-			);
-		};
 	};
 	D8B07D330523467100FE92F6 = {
 		fRef = D84F63A8052119C300FE7878;
 		isa = PBXTextBookmark;
 		name = "altivec_constant.h: 259";
 		rLen = 0;
-		rLoc = 14616;
+		rLoc = 14773;
 		rType = 0;
 		vrLen = 921;
 		vrLoc = 14042;
@@ -7561,7 +7617,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 103";
 		rLen = 0;
-		rLoc = 5848;
+		rLoc = 5862;
 		rType = 0;
 		vrLen = 1497;
 		vrLoc = 5023;
@@ -7606,15 +7662,37 @@
 		vrLen = 1017;
 		vrLoc = 5594;
 	};
-	D8B07D4A0523467100FE92F6 = {
-		fRef = D85761890494039A0099BB92;
-		isa = PBXTextBookmark;
-		name = "valarray_slice.h: 288";
-		rLen = 0;
-		rLoc = 10210;
-		rType = 0;
-		vrLen = 543;
-		vrLoc = 9715;
+	D8B3226E0528498300FE44A1 = {
+		isa = PBXTargetBookmark;
+		trg = 08FB779FFE84155DC02AAC07;
+		uiCtxt = {
+			TOCViewDetailVisibleRect = "{{0, 0}, {539, 233}}";
+			TOCViewExpandedItems = (
+				"com.apple.target-editor-pane.settings",
+				"com.apple.target-editor-pane.settings.simple",
+				"com.apple.target-editor-pane.buildphases",
+			);
+			TOCViewMasterVisibleRect = "{{0, 0}, {213, 236}}";
+			TOCViewSelectedItems = (
+				PBXTargetSummarySettingsModule,
+			);
+		};
+	};
+	D8B3226F0528498300FE44A1 = {
+		isa = PBXTargetBookmark;
+		trg = 08FB779FFE84155DC02AAC07;
+		uiCtxt = {
+			TOCViewDetailVisibleRect = "{{0, 236}, {539, 236}}";
+			TOCViewExpandedItems = (
+				"com.apple.target-editor-pane.settings",
+				"com.apple.target-editor-pane.settings.simple",
+				"com.apple.target-editor-pane.buildphases",
+			);
+			TOCViewMasterVisibleRect = "{{0, 0}, {213, 236}}";
+			TOCViewSelectedItems = (
+				PBXTargetGccCompilerSettingsModule,
+			);
+		};
 	};
 	D8BE26FE0476236E008DA29E = {
 		bstl = 014CEA460018CE2711CA2923;
@@ -7649,7 +7727,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 370";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7659,7 +7737,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 530";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7669,7 +7747,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 390";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7689,7 +7767,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 448";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7699,7 +7777,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 215";
 		rLen = 24;
-		rLoc = 9469;
+		rLoc = 9483;
 		rType = 0;
 		vrLen = 975;
 		vrLoc = 7673;
@@ -7709,7 +7787,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 215";
 		rLen = 24;
-		rLoc = 9469;
+		rLoc = 9483;
 		rType = 0;
 		vrLen = 975;
 		vrLoc = 7673;
@@ -7719,7 +7797,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 393";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7751,7 +7829,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 393";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7761,7 +7839,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 393";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7781,7 +7859,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 689";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7791,7 +7869,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 413";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7801,7 +7879,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 446";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7811,7 +7889,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1299";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7821,7 +7899,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1299";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -7945,7 +8023,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 215";
 		rLen = 24;
-		rLoc = 9469;
+		rLoc = 9483;
 		rType = 0;
 		vrLen = 982;
 		vrLoc = 7673;
@@ -8021,7 +8099,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 594";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -8031,7 +8109,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1165";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -8041,7 +8119,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1214";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -8051,7 +8129,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1183";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -8081,7 +8159,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: operator!=";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -8091,7 +8169,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 960";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -8111,7 +8189,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1217";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -8147,7 +8225,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 336";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -8157,7 +8235,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 333";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -8167,7 +8245,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1103";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -8177,7 +8255,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1152";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -8517,7 +8595,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 280";
 		rLen = 0;
-		rLoc = 9418;
+		rLoc = 9413;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 8048;
@@ -8537,7 +8615,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 214";
 		rLen = 0;
-		rLoc = 9418;
+		rLoc = 9413;
 		rType = 0;
 		vrLen = 165;
 		vrLoc = 7883;
@@ -8591,7 +8669,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 73";
 		rLen = 0;
-		rLoc = 3451;
+		rLoc = 3465;
 		rType = 0;
 		vrLen = 776;
 		vrLoc = 2840;
@@ -8625,7 +8703,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 225";
 		rLen = 57;
-		rLoc = 8921;
+		rLoc = 8935;
 		rType = 0;
 		vrLen = 1303;
 		vrLoc = 7024;
@@ -8649,7 +8727,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: tan";
 		rLen = 57;
-		rLoc = 8921;
+		rLoc = 8935;
 		rType = 0;
 		vrLen = 1035;
 		vrLoc = 7024;
@@ -8745,7 +8823,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 590";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -8755,10 +8833,468 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: term";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
+	};
+	D8D847D80528246D00FEC8C6 = {
+		fRef = D875427A03BBDBAF00FE70F5;
+		isa = PBXTextBookmark;
+		name = "functional.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 757;
+		vrLoc = 0;
+	};
+	D8D847D90528246D00FEC8C6 = {
+		fRef = D875428C03BBF6A800FE70F5;
+		isa = PBXTextBookmark;
+		name = "com_client.h: 33";
+		rLen = 0;
+		rLoc = 1275;
+		rType = 0;
+		vrLen = 368;
+		vrLoc = 1076;
+	};
+	D8D847DA0528246D00FEC8C6 = {
+		fRef = D875911A0471ACCD00B43157;
+		isa = PBXTextBookmark;
+		name = "valarray_altivec.h: 400";
+		rLen = 14;
+		rLoc = 17260;
+		rType = 0;
+		vrLen = 755;
+		vrLoc = 16873;
+	};
+	D8D847DB0528246D00FEC8C6 = {
+		fRef = D8D8480F0528246D00FEC8C6;
+		isa = PBXTextBookmark;
+		name = "stl_algobase.h: 156";
+		rLen = 45;
+		rLoc = 5505;
+		rType = 0;
+		vrLen = 515;
+		vrLoc = 4855;
+	};
+	D8D847DD0528246D00FEC8C6 = {
+		fRef = D8D22F4D04217E0100FE622F;
+		isa = PBXTextBookmark;
+		name = "macvalarray.h: 29";
+		rLen = 0;
+		rLoc = 1232;
+		rType = 0;
+		vrLen = 370;
+		vrLoc = 8226;
+	};
+	D8D847DE0528246D00FEC8C6 = {
+		fRef = D85F8DD904A5DD6700469FFA;
+		isa = PBXTextBookmark;
+		name = "valarray_valarray.h: 116";
+		rLen = 0;
+		rLoc = 3861;
+		rType = 0;
+		vrLen = 565;
+		vrLoc = 5071;
+	};
+	D8D847E40528246D00FEC8C6 = {
+		isa = PBXTargetBookmark;
+		trg = 08FB779FFE84155DC02AAC07;
+	};
+	D8D847E50528246D00FEC8C6 = {
+		fRef = D84F63A9052119C300FE7878;
+		isa = PBXTextBookmark;
+		name = "altivec_traits.h: 30";
+		rLen = 140;
+		rLoc = 1233;
+		rType = 0;
+		vrLen = 768;
+		vrLoc = 555;
+	};
+	D8D847E60528246D00FEC8C6 = {
+		fRef = D84F63BD05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "main.cpp: __WINT_TYPE__";
+		rLen = 0;
+		rLoc = 70;
+		rType = 0;
+		vrLen = 119;
+		vrLoc = 0;
+	};
+	D8D847E70528246D00FEC8C6 = {
+		fRef = D875427903BBDBAF00FE70F5;
+		isa = PBXTextBookmark;
+		name = "altivec_type.h: 103";
+		rLen = 0;
+		rLoc = 5862;
+		rType = 0;
+		vrLen = 1045;
+		vrLoc = 5023;
+	};
+	D8D847E80528246D00FEC8C6 = {
+		fRef = D84F63BD05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "main.cpp: __GXX_WEAK__";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 119;
+		vrLoc = 0;
+	};
+	D8D847E90528246D00FEC8C6 = {
+		fRef = D84F63A9052119C300FE7878;
+		isa = PBXTextBookmark;
+		name = "altivec_traits.h: 348";
+		rLen = 0;
+		rLoc = 9758;
+		rType = 0;
+		vrLen = 835;
+		vrLoc = 9204;
+	};
+	D8D847EA0528246D00FEC8C6 = {
+		fRef = D875427903BBDBAF00FE70F5;
+		isa = PBXTextBookmark;
+		name = "altivec_type.h: vec_sl_result<Type1,Type2>";
+		rLen = 0;
+		rLoc = 27857;
+		rType = 0;
+		vrLen = 614;
+		vrLoc = 14486;
+	};
+	D8D847EB0528246D00FEC8C6 = {
+		fRef = D84F63A9052119C300FE7878;
+		isa = PBXTextBookmark;
+		name = "altivec_traits.h: 348";
+		rLen = 0;
+		rLoc = 9780;
+		rType = 0;
+		vrLen = 754;
+		vrLoc = 9305;
+	};
+	D8D847EC0528246D00FEC8C6 = {
+		fRef = D875427903BBDBAF00FE70F5;
+		isa = PBXTextBookmark;
+		name = "altivec_type.h: vec_sra_result<Type1,Type2>";
+		rLen = 0;
+		rLoc = 27857;
+		rType = 0;
+		vrLen = 964;
+		vrLoc = 22201;
+	};
+	D8D847ED0528246D00FEC8C6 = {
+		fRef = D84F63BE05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "unittests.cpp: __GXX_ABI_VERSION";
+		rLen = 0;
+		rLoc = 97;
+		rType = 0;
+		vrLen = 1108;
+		vrLoc = 0;
+	};
+	D8D847EE0528246D00FEC8C6 = {
+		fRef = D875427A03BBDBAF00FE70F5;
+		isa = PBXTextBookmark;
+		name = "functional.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 757;
+		vrLoc = 0;
+	};
+	D8D847EF0528246D00FEC8C6 = {
+		fRef = D84F63BD05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "main.cpp: __WCHAR_MAX__";
+		rLen = 0;
+		rLoc = 99;
+		rType = 0;
+		vrLen = 119;
+		vrLoc = 0;
+	};
+	D8D847F00528246D00FEC8C6 = {
+		fRef = D875428C03BBF6A800FE70F5;
+		isa = PBXTextBookmark;
+		name = "com_client.h: 33";
+		rLen = 0;
+		rLoc = 1275;
+		rType = 0;
+		vrLen = 368;
+		vrLoc = 1076;
+	};
+	D8D847F10528246D00FEC8C6 = {
+		fRef = D875427903BBDBAF00FE70F5;
+		isa = PBXTextBookmark;
+		name = "altivec_type.h: vec_sl_result<Type1,Type2>";
+		rLen = 0;
+		rLoc = 27857;
+		rType = 0;
+		vrLen = 916;
+		vrLoc = 25334;
+	};
+	D8D847F20528246D00FEC8C6 = {
+		fRef = D84F63BD05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "main.cpp: __LONG_LONG_MAX__";
+		rLen = 0;
+		rLoc = 99;
+		rType = 0;
+		vrLen = 72;
+		vrLoc = 47;
+	};
+	D8D847F30528246D00FEC8C6 = {
+		fRef = D875427903BBDBAF00FE70F5;
+		isa = PBXTextBookmark;
+		name = "altivec_type.h: vec_packs_result<Type1,Type2>";
+		rLen = 53;
+		rLoc = 27749;
+		rType = 0;
+		vrLen = 874;
+		vrLoc = 24928;
+	};
+	D8D847F40528246D00FEC8C6 = {
+		fRef = D875911A0471ACCD00B43157;
+		isa = PBXTextBookmark;
+		name = "valarray_altivec.h: 400";
+		rLen = 14;
+		rLoc = 17260;
+		rType = 0;
+		vrLen = 755;
+		vrLoc = 16873;
+	};
+	D8D847F50528246D00FEC8C6 = {
+		fRef = D84F63BD05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "main.cpp: __LONG_MAX__";
+		rLen = 0;
+		rLoc = 99;
+		rType = 0;
+		vrLen = 72;
+		vrLoc = 47;
+	};
+	D8D847F60528246D00FEC8C6 = {
+		fRef = D8D8480E0528246D00FEC8C6;
+		isa = PBXTextBookmark;
+		name = "stl_algobase.h: 156";
+		rLen = 45;
+		rLoc = 5505;
+		rType = 0;
+		vrLen = 515;
+		vrLoc = 4855;
+	};
+	D8D847F70528246D00FEC8C6 = {
+		fRef = D8D22F4D04217E0100FE622F;
+		isa = PBXTextBookmark;
+		name = "macvalarray.h: 35";
+		rLen = 0;
+		rLoc = 1406;
+		rType = 0;
+		vrLen = 619;
+		vrLoc = 974;
+	};
+	D8D847F80528246D00FEC8C6 = {
+		fRef = D84F63BD05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "main.cpp: __LONG_MAX__";
+		rLen = 0;
+		rLoc = 99;
+		rType = 0;
+		vrLen = 0;
+		vrLoc = 119;
+	};
+	D8D847F90528246D00FEC8C6 = {
+		fRef = D875427903BBDBAF00FE70F5;
+		isa = PBXTextBookmark;
+		name = "altivec_type.h: vec_packs_result<Type1,Type2>";
+		rLen = 53;
+		rLoc = 27749;
+		rType = 0;
+		vrLen = 963;
+		vrLoc = 24922;
+	};
+	D8D847FA0528246D00FEC8C6 = {
+		fRef = D84F63A9052119C300FE7878;
+		isa = PBXTextBookmark;
+		name = "altivec_traits.h: 350";
+		rLen = 0;
+		rLoc = 9825;
+		rType = 0;
+		vrLen = 913;
+		vrLoc = 9305;
+	};
+	D8D847FB0528246D00FEC8C6 = {
+		fRef = D84F63BD05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "main.cpp: __LONG_MAX__";
+		rLen = 0;
+		rLoc = 99;
+		rType = 0;
+		vrLen = 0;
+		vrLoc = 119;
+	};
+	D8D847FC0528246D00FEC8C6 = {
+		fRef = D84F63BC05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "benchmarks.cpp: __EXCEPTIONS";
+		rLen = 0;
+		rLoc = 60;
+		rType = 0;
+		vrLen = 507;
+		vrLoc = 0;
+	};
+	D8D847FD0528246D00FEC8C6 = {
+		fRef = D8D22F4D04217E0100FE622F;
+		isa = PBXTextBookmark;
+		name = "macvalarray.h: 35";
+		rLen = 0;
+		rLoc = 1406;
+		rType = 0;
+		vrLen = 619;
+		vrLoc = 974;
+	};
+	D8D847FE0528246D00FEC8C6 = {
+		fRef = D84F63A9052119C300FE7878;
+		isa = PBXTextBookmark;
+		name = "altivec_traits.h: 348";
+		rLen = 0;
+		rLoc = 9773;
+		rType = 0;
+		vrLen = 905;
+		vrLoc = 9305;
+	};
+	D8D847FF0528246D00FEC8C6 = {
+		fRef = D84F63BD05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "main.cpp: __SHRT_MAX__";
+		rLen = 0;
+		rLoc = 99;
+		rType = 0;
+		vrLen = 119;
+		vrLoc = 0;
+	};
+	D8D848000528246D00FEC8C6 = {
+		fRef = D84F63A9052119C300FE7878;
+		isa = PBXTextBookmark;
+		name = "altivec_traits.h: 757";
+		rLen = 1;
+		rLoc = 26859;
+		rType = 0;
+		vrLen = 872;
+		vrLoc = 26293;
+	};
+	D8D848010528246D00FEC8C6 = {
+		fRef = D84F63BD05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "main.cpp: __SHRT_MAX__";
+		rLen = 0;
+		rLoc = 100;
+		rType = 0;
+		vrLen = 119;
+		vrLoc = 0;
+	};
+	D8D848020528246D00FEC8C6 = {
+		fRef = D8D22F4D04217E0100FE622F;
+		isa = PBXTextBookmark;
+		name = "macvalarray.h: 29";
+		rLen = 0;
+		rLoc = 1232;
+		rType = 0;
+		vrLen = 370;
+		vrLoc = 8226;
+	};
+	D8D848030528246D00FEC8C6 = {
+		fRef = D85F8DD904A5DD6700469FFA;
+		isa = PBXTextBookmark;
+		name = "valarray_valarray.h: 116";
+		rLen = 0;
+		rLoc = 3861;
+		rType = 0;
+		vrLen = 565;
+		vrLoc = 5071;
+	};
+	D8D848040528246D00FEC8C6 = {
+		fRef = D875427903BBDBAF00FE70F5;
+		isa = PBXTextBookmark;
+		name = "altivec_type.h: 55";
+		rLen = 0;
+		rLoc = 2006;
+		rType = 0;
+		vrLen = 2400;
+		vrLoc = 1548;
+	};
+	D8D848050528246D00FEC8C6 = {
+		fRef = D84F63BD05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "main.cpp: __LONG_MAX__";
+		rLen = 0;
+		rLoc = 99;
+		rType = 0;
+		vrLen = 119;
+		vrLoc = 0;
+	};
+	D8D848060528246D00FEC8C6 = {
+		isa = PBXTargetBookmark;
+		trg = 08FB779FFE84155DC02AAC07;
+	};
+	D8D848070528246D00FEC8C6 = {
+		fRef = D84F63BD05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "main.cpp: __VEC__";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 119;
+		vrLoc = 0;
+	};
+	D8D848080528246D00FEC8C6 = {
+		isa = PBXTargetBookmark;
+		trg = 08FB779FFE84155DC02AAC07;
+	};
+	D8D848090528246D00FEC8C6 = {
+		fRef = D84F63BE05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "unittests.cpp: __GXX_WEAK__";
+		rLen = 0;
+		rLoc = 43;
+		rType = 0;
+		vrLen = 1103;
+		vrLoc = 0;
+	};
+	D8D8480A0528246D00FEC8C6 = {
+		fRef = D84F63BC05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "benchmarks.cpp: __EXCEPTIONS";
+		rLen = 0;
+		rLoc = 60;
+		rType = 0;
+		vrLen = 502;
+		vrLoc = 0;
+	};
+	D8D8480B0528246D00FEC8C6 = {
+		isa = PBXTargetBookmark;
+		trg = 08FB779FFE84155DC02AAC07;
+	};
+	D8D8480C0528246D00FEC8C6 = {
+		fRef = D84F63BC05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "benchmarks.cpp: __EXCEPTIONS";
+		rLen = 0;
+		rLoc = 60;
+		rType = 0;
+		vrLen = 383;
+		vrLoc = 0;
+	};
+	D8D8480E0528246D00FEC8C6 = {
+		isa = PBXFileReference;
+		name = stl_algobase.h;
+		path = "/usr/include/gcc/darwin/3.3/c++/bits/stl_algobase.h";
+		refType = 0;
+	};
+	D8D8480F0528246D00FEC8C6 = {
+		isa = PBXFileReference;
+		name = stl_algobase.h;
+		path = "/usr/include/gcc/darwin/3.3/c++/bits/stl_algobase.h";
+		refType = 0;
 	};
 	D8D8567C04F1150800FE652D = {
 		fRef = D85F8DDB04A5ED5A00469FFA;
@@ -8809,7 +9345,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 194";
 		rLen = 0;
-		rLoc = 9358;
+		rLoc = 9353;
 		rType = 0;
 		vrLen = 522;
 		vrLoc = 7385;
@@ -9317,7 +9853,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 188";
 		rLen = 1;
-		rLoc = 9418;
+		rLoc = 9413;
 		rType = 0;
 		vrLen = 1268;
 		vrLoc = 0;
@@ -9337,7 +9873,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 188";
 		rLen = 1;
-		rLoc = 9418;
+		rLoc = 9413;
 		rType = 0;
 		vrLen = 1268;
 		vrLoc = 0;
@@ -9684,6 +10220,252 @@
 		path = /usr/include/stdlib.h;
 		refType = 0;
 	};
+	D8E4B4920528461300FE6D4D = {
+		fRef = D84F63A9052119C300FE7878;
+		isa = PBXTextBookmark;
+		name = "altivec_traits.h: 757";
+		rLen = 0;
+		rLoc = 26881;
+		rType = 0;
+		vrLen = 1046;
+		vrLoc = 26629;
+	};
+	D8E4B4930528461300FE6D4D = {
+		fRef = D875427903BBDBAF00FE70F5;
+		isa = PBXTextBookmark;
+		name = "altivec_type.h: __DEFINE_ALTIVEC_MEMBER_FUNCTION";
+		rLen = 0;
+		rLoc = 1581;
+		rType = 0;
+		vrLen = 642;
+		vrLoc = 35336;
+	};
+	D8E4B4940528461300FE6D4D = {
+		fRef = D84F63BC05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "benchmarks.cpp: 228";
+		rLen = 0;
+		rLoc = 4709;
+		rType = 0;
+		vrLen = 507;
+		vrLoc = 0;
+	};
+	D8E4B4950528461300FE6D4D = {
+		fRef = D84F63BE05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "unittests.cpp: __GXX_WEAK__";
+		rLen = 0;
+		rLoc = 43;
+		rType = 0;
+		vrLen = 1247;
+		vrLoc = 0;
+	};
+	D8E4B4960528461300FE6D4D = {
+		fRef = D84F63BD05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "main.cpp: __VEC__";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 119;
+		vrLoc = 0;
+	};
+	D8E4B4980528461300FE6D4D = {
+		fRef = D84F63BE05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "unittests.cpp: __GXX_WEAK__";
+		rLen = 0;
+		rLoc = 43;
+		rType = 0;
+		vrLen = 1108;
+		vrLoc = 0;
+	};
+	D8E4B4990528461300FE6D4D = {
+		isa = PBXTargetBookmark;
+		trg = 08FB779FFE84155DC02AAC07;
+	};
+	D8E4B49A0528461300FE6D4D = {
+		fRef = D84F63A9052119C300FE7878;
+		isa = PBXTextBookmark;
+		name = "altivec_traits.h: 757";
+		rLen = 1;
+		rLoc = 26859;
+		rType = 0;
+		vrLen = 987;
+		vrLoc = 26239;
+	};
+	D8E4B49B0528461300FE6D4D = {
+		fRef = D875427903BBDBAF00FE70F5;
+		isa = PBXTextBookmark;
+		name = "altivec_type.h: 55";
+		rLen = 0;
+		rLoc = 2006;
+		rType = 0;
+		vrLen = 1296;
+		vrLoc = 1460;
+	};
+	D8E4B49C0528461300FE6D4D = {
+		fRef = D84F63A9052119C300FE7878;
+		isa = PBXTextBookmark;
+		name = "altivec_traits.h: 757";
+		rLen = 1;
+		rLoc = 26859;
+		rType = 0;
+		vrLen = 1066;
+		vrLoc = 27232;
+	};
+	D8E4B49D0528461300FE6D4D = {
+		fRef = D875427903BBDBAF00FE70F5;
+		isa = PBXTextBookmark;
+		name = "altivec_type.h: 355";
+		rLen = 4;
+		rLoc = 14292;
+		rType = 0;
+		vrLen = 1072;
+		vrLoc = 13563;
+	};
+	D8E4B49E0528461300FE6D4D = {
+		fRef = D84F63A9052119C300FE7878;
+		isa = PBXTextBookmark;
+		name = "altivec_traits.h: 757";
+		rLen = 0;
+		rLoc = 26881;
+		rType = 0;
+		vrLen = 1046;
+		vrLoc = 26629;
+	};
+	D8E4B49F0528461300FE6D4D = {
+		fRef = D84F63BC05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "benchmarks.cpp: 229";
+		rLen = 0;
+		rLoc = 4709;
+		rType = 0;
+		vrLen = 778;
+		vrLoc = 3971;
+	};
+	D8E4B4A00528461300FE6D4D = {
+		fRef = D84F63BD05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "main.cpp: __VEC__";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 124;
+		vrLoc = 0;
+	};
+	D8E4B4A10528461300FE6D4D = {
+		isa = PBXTargetBookmark;
+		trg = 08FB779FFE84155DC02AAC07;
+	};
+	D8E4B4A20528461300FE6D4D = {
+		fRef = D875427903BBDBAF00FE70F5;
+		isa = PBXTextBookmark;
+		name = "altivec_type.h: __DEFINE_ALTIVEC_MEMBER_FUNCTION";
+		rLen = 0;
+		rLoc = 1581;
+		rType = 0;
+		vrLen = 1004;
+		vrLoc = 1420;
+	};
+	D8E4B4A30528461300FE6D4D = {
+		fRef = D84F63BC05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "benchmarks.cpp: 228";
+		rLen = 0;
+		rLoc = 4709;
+		rType = 0;
+		vrLen = 763;
+		vrLoc = 3971;
+	};
+	D8E4B4A40528461300FE6D4D = {
+		fRef = D84F63BD05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "main.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 124;
+		vrLoc = 0;
+	};
+	D8E4B4A50528461300FE6D4D = {
+		fRef = D84F63BC05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "benchmarks.cpp: 228";
+		rLen = 0;
+		rLoc = 4709;
+		rType = 0;
+		vrLen = 763;
+		vrLoc = 3971;
+	};
+	D8E4B4A60528461300FE6D4D = {
+		fRef = D84F63BD05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "main.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 119;
+		vrLoc = 0;
+	};
+	D8E4B4A70528461300FE6D4D = {
+		fRef = D84F63BE05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "unittests.cpp: __GXX_WEAK__";
+		rLen = 0;
+		rLoc = 43;
+		rType = 0;
+		vrLen = 1108;
+		vrLoc = 0;
+	};
+	D8E4B4A80528461300FE6D4D = {
+		isa = PBXTargetBookmark;
+		trg = 08FB779FFE84155DC02AAC07;
+	};
+	D8E4B4A90528461300FE6D4D = {
+		fRef = D875427903BBDBAF00FE70F5;
+		isa = PBXTextBookmark;
+		name = "altivec_type.h: __DEFINE_ALTIVEC_MEMBER_FUNCTION";
+		rLen = 0;
+		rLoc = 1581;
+		rType = 0;
+		vrLen = 642;
+		vrLoc = 35336;
+	};
+	D8E4B4AA0528461300FE6D4D = {
+		isa = PBXTargetBookmark;
+		trg = 08FB779FFE84155DC02AAC07;
+	};
+	D8E4B4AB0528461300FE6D4D = {
+		fRef = D84F63BC05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "benchmarks.cpp: 228";
+		rLen = 0;
+		rLoc = 4709;
+		rType = 0;
+		vrLen = 507;
+		vrLoc = 0;
+	};
+	D8E4B4AC0528461300FE6D4D = {
+		fRef = D84F63BE05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "unittests.cpp: __GXX_WEAK__";
+		rLen = 0;
+		rLoc = 43;
+		rType = 0;
+		vrLen = 1247;
+		vrLoc = 0;
+	};
+	D8E4B4AD0528461300FE6D4D = {
+		fRef = D84F63BD05211A4F00FE7878;
+		isa = PBXTextBookmark;
+		name = "main.cpp: __VEC__";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 119;
+		vrLoc = 0;
+	};
 	D8E622BC04E3805B00FE1A80 = {
 		fRef = D80B9292047AF96B005A9373;
 		isa = PBXTextBookmark;
@@ -9823,7 +10605,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1236";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -9833,7 +10615,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1325";
 		rLen = 0;
-		rLoc = 9472;
+		rLoc = 9467;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -9843,7 +10625,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 846";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -9853,7 +10635,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 845";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -9863,7 +10645,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 846";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -9873,7 +10655,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 855";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -9883,7 +10665,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 872";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -9897,7 +10679,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 882";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -9907,7 +10689,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 873";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -10635,7 +11417,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 175";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 1529;
 		vrLoc = 163;
@@ -10685,7 +11467,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 175";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 536;
 		vrLoc = 6582;
@@ -10815,7 +11597,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 73";
 		rLen = 0;
-		rLoc = 3451;
+		rLoc = 3465;
 		rType = 0;
 		vrLen = 421;
 		vrLoc = 3094;
@@ -10825,7 +11607,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 225";
 		rLen = 57;
-		rLoc = 8921;
+		rLoc = 8935;
 		rType = 0;
 		vrLen = 359;
 		vrLoc = 3496;
@@ -10883,7 +11665,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 707";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -10913,7 +11695,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 326";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -10923,7 +11705,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 328";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -10933,7 +11715,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 236";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -10953,7 +11735,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1448";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -10963,7 +11745,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 317";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -10973,7 +11755,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 317";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -10983,7 +11765,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 317";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -10993,7 +11775,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 319";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11003,7 +11785,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 319";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11047,7 +11829,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 597";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11067,7 +11849,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1227";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11081,7 +11863,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 679";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11101,7 +11883,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 689";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11121,7 +11903,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 690";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11141,7 +11923,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 686";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11161,7 +11943,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: and_traits<__true_type,__true_type>";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11171,7 +11953,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1159";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11181,7 +11963,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1159";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11191,7 +11973,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 643";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11201,7 +11983,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 241";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11211,7 +11993,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 297";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11221,7 +12003,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1028";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11231,7 +12013,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1044";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11241,7 +12023,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 905";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11251,7 +12033,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 987";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11261,7 +12043,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 821";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11271,7 +12053,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 839";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11301,7 +12083,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1051";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11311,7 +12093,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1068";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11321,7 +12103,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1068";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11331,7 +12113,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1493";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11341,7 +12123,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 417";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11351,7 +12133,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: it";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11361,7 +12143,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 710";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11371,7 +12153,7 @@
 		isa = PBXTextBookmark;
 		name = "altivec_type.h: 82";
 		rLen = 8;
-		rLoc = 4035;
+		rLoc = 4049;
 		rType = 0;
 		vrLen = 289;
 		vrLoc = 2710;
@@ -11381,7 +12163,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 560";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11401,7 +12183,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 711";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11411,7 +12193,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 402";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11421,7 +12203,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1547";
 		rLen = 0;
-		rLoc = 9472;
+		rLoc = 9467;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11431,7 +12213,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1560";
 		rLen = 0;
-		rLoc = 9472;
+		rLoc = 9467;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11441,7 +12223,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1328";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11451,7 +12233,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1418";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11471,7 +12253,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1579";
 		rLen = 0;
-		rLoc = 9472;
+		rLoc = 9467;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11481,7 +12263,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: __MACSTL_DEFINE_VALARRAY_UNARY_FUNCTION";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11491,7 +12273,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: __MACSTL_DEFINE_VALARRAY_UNARY_FUNCTION";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11501,7 +12283,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 921";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11511,7 +12293,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1035";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11521,7 +12303,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 1431";
 		rLen = 0;
-		rLoc = 9359;
+		rLoc = 9354;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11531,7 +12313,7 @@
 		isa = PBXTextBookmark;
 		name = "macvalarray.h: 869";
 		rLen = 0;
-		rLoc = 9300;
+		rLoc = 9295;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 6073;
@@ -11589,5 +12371,25 @@
 		name = stl_function.h;
 		path = "/usr/include/gcc/darwin/3.1/g++-v3/bits/stl_function.h";
 		refType = 0;
+	};
+	D8FF38050525C7E100FE92F6 = {
+		fRef = D85761890494039A0099BB92;
+		isa = PBXTextBookmark;
+		name = "valarray_slice.h: 288";
+		rLen = 0;
+		rLoc = 10210;
+		rType = 0;
+		vrLen = 498;
+		vrLoc = 9228;
+	};
+	D8FF38060525C7E100FE92F6 = {
+		fRef = D85761890494039A0099BB92;
+		isa = PBXTextBookmark;
+		name = "valarray_slice.h: 288";
+		rLen = 0;
+		rLoc = 10210;
+		rType = 0;
+		vrLen = 498;
+		vrLoc = 9228;
 	};
 }

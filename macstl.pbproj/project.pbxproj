@@ -134,7 +134,7 @@
 				INSTALL_PATH = "$(HOME)/bin";
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-faltivec -fstrict-aliasing";
+				OTHER_CFLAGS = "-faltivec -fast -mcpu=G4 -DNDEBUG";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = macstltest;
