@@ -39,10 +39,11 @@ namespace stdext
 	{
 		namespace impl
 			{
+			
 				template <typename T> class literal_iterator
 					{
 						public:
-							typedef typename std::random_access_iterator_tag iterator_category;
+							typedef std::random_access_iterator_tag iterator_category;
 							typedef T value_type; 
 							typedef std::ptrdiff_t difference_type;
 							typedef const value_type* pointer;
@@ -102,7 +103,74 @@ namespace stdext
 							const value_type literal_;
 							std::ptrdiff_t index_;
 					};
-				
+/*
+				template <typename T> class literal_iterator
+					{
+						public:
+							typedef std::random_access_iterator_tag iterator_category;
+							typedef T value_type; 
+							typedef std::ptrdiff_t difference_type;
+							typedef const value_type* pointer;
+							typedef value_type reference;
+							
+							literal_iterator (const value_type& literal): literal_ (literal)
+								{
+								}
+							literal_iterator (const value_type& literal, difference_type): literal_ (literal)
+								{
+								}
+								
+							value_type operator* () const					{ return literal_; }
+							value_type operator[] (std::ptrdiff_t) const	{ return literal_; }
+
+							literal_iterator& operator++ ()						{ return *this; }
+							literal_iterator operator++ (int)					{ return literal_iterator (literal_); }
+							literal_iterator& operator+= (difference_type n)	{ return *this; }
+		
+							literal_iterator& operator-- ()						{ return *this; }
+							literal_iterator operator-- (int)					{ return literal_iterator (literal_); }
+							literal_iterator& operator-= (difference_type n)	{ return *this; }
+								
+							friend literal_iterator operator+ (const literal_iterator& left, difference_type right)
+								{
+									return literal_iterator (left.literal_);
+								}
+		
+							friend literal_iterator operator+ (difference_type left, const literal_iterator& right)
+								{
+									return literal_iterator (right.literal_);
+								}
+		
+							friend literal_iterator operator- (const literal_iterator& left, difference_type right)
+								{
+									return literal_iterator (left.literal_);
+								}
+							
+							friend difference_type operator- (const literal_iterator& left, const literal_iterator& right)
+								{
+									return 0;
+								}
+								
+							friend bool operator== (const literal_iterator& left, const literal_iterator& right)
+								{
+									return 0;
+								}
+								
+							friend bool operator!= (const literal_iterator& left, const literal_iterator& right)
+								{
+									return 0;
+								}
+		
+							friend bool operator< (const literal_iterator& left, const literal_iterator& right)
+								{
+									return 0;
+								}
+								
+						protected:
+							const value_type literal_;
+							// std::ptrdiff_t index_;
+					};
+	*/			
 				template <typename Term, typename Enable2, typename Enable3, typename Enable4> class chunker <literal_term <Term>,
 					typename enable_if <exists <typename Term::const_chunk_iterator>::value>::type,
 					Enable2,
@@ -458,10 +526,12 @@ namespace stdext
 							<first_category_rank < second_category_rank ? first_category_rank : second_category_rank>::type	type;
 					};
 					
-				template <typename LTermIt, typename RTermIt, template <typename> class BOp> class binary_iterator
+				template <typename LTermIt, typename RTermIt, template <typename, typename> class BOp> class binary_iterator
 					{
 						public:
-							typedef BOp <typename std::iterator_traits <LTermIt>::value_type> operation;
+							typedef BOp <
+								typename std::iterator_traits <LTermIt>::value_type,
+								typename std::iterator_traits <RTermIt>::value_type> operation;
 							
 							// iterator category is the category with the least rank of the two expression's categories
 							typedef typename iterator_ranker
@@ -531,18 +601,21 @@ namespace stdext
 									return left.left_subterm_iter_ < right.left_subterm_iter_;
 								}
 															
-						private:
+						// private:
+						public:
 							LTermIt left_subterm_iter_;
 							RTermIt right_subterm_iter_;
 							
-							template <template <typename> class Func, typename Expr, typename Enable1, typename Enable2> friend struct accumulate_array_dispatch;
+						//	template <template <typename> class Func, typename Expr, typename Enable1, typename Enable2> friend struct accumulate_array_dispatch;
 							template <typename InIter, typename Size, typename T, typename BOp2, typename Enable1, typename Enable2> friend struct accumulate_n_dispatch;
 					};
 					
-				template <typename LTerm, typename RTerm, template <typename> class BOp, typename Enable3, typename Enable4>
+				template <typename LTerm, typename RTerm, template <typename, typename> class BOp, typename Enable2, typename Enable3, typename Enable4>
 					class chunker <binary_term <LTerm, RTerm, BOp>,
-						typename enable_if <const_rechunkable <LTerm, RTerm>::value>::type,
-						typename enable_if <exists <typename BOp <typename std::iterator_traits <typename LTerm::const_chunk_iterator>::value_type>::result_type>::value>::type,
+						typename enable_if <exists <typename BOp <
+							typename std::iterator_traits <typename LTerm::const_chunk_iterator>::value_type,
+							typename std::iterator_traits <typename RTerm::const_chunk_iterator>::value_type>::result_type>::value>::type,
+						Enable2,
 						Enable3,
 						Enable4>
 					{
@@ -575,12 +648,12 @@ namespace stdext
 				/// @param	RTerm	The right subterm type.
 				/// @param	BOp		The binary functor.
 				
-				template <typename LTerm, typename RTerm, template <typename> class BOp> class binary_term:
-					public term <typename BOp <typename LTerm::value_type>::result_type, binary_term <LTerm, RTerm, BOp> >,
+				template <typename LTerm, typename RTerm, template <typename, typename> class BOp> class binary_term:
+					public term <typename BOp <typename LTerm::value_type, typename RTerm::value_type>::result_type, binary_term <LTerm, RTerm, BOp> >,
 					public chunker <binary_term <LTerm, RTerm, BOp> >					
 					{
 						public:
-							typedef BOp <typename LTerm::value_type> operation;
+							typedef BOp <typename LTerm::value_type, typename RTerm::value_type> operation;
 							
 							/// The element value type.
 							typedef typename operation::result_type value_type;
@@ -613,89 +686,14 @@ namespace stdext
 							
 							template <typename Term, typename Enable1, typename Enable2, typename Enable3, typename Enable4> friend class chunker;
 					};
-					
-				template <typename LTermIt, typename RTermIt, template <typename, typename> class BOp> class binary_iterator2
+
+				template <typename LTermIt, typename MTermIt, typename RTermIt, template <typename, typename, typename> class TOp> class ternary_iterator
 					{
 						public:
-							typedef BOp <typename std::iterator_traits <LTermIt>::value_type, typename std::iterator_traits <RTermIt>::value_type> operation;
-							
-							// iterator category is the category with the least rank of the two expression's categories
-							typedef typename iterator_ranker
-								<typename std::iterator_traits <LTermIt>::iterator_category,
-								typename std::iterator_traits <RTermIt>::iterator_category>::type iterator_category;
-							
-							typedef typename std::iterator_traits <LTermIt>::difference_type difference_type;
-							typedef typename operation::result_type value_type;
-							typedef const value_type* pointer;
-							typedef value_type reference;
-							
-							binary_iterator2 (const LTermIt& left_subterm_iter, const RTermIt& right_subterm_iter):
-								left_subterm_iter_ (left_subterm_iter), right_subterm_iter_ (right_subterm_iter)
-								{
-								}
-								
-							value_type operator* () const
-								{
-									return operation () (*left_subterm_iter_, *right_subterm_iter_);
-								}
-								
-							value_type operator[] (typename std::iterator_traits <LTermIt>::difference_type n) const
-								{
-									return operation () (left_subterm_iter_ [n], right_subterm_iter_ [n]);
-								}
-								
-							binary_iterator2& operator++ ()					{ ++left_subterm_iter_; ++right_subterm_iter_; return *this; }
-							binary_iterator2 operator++ (int)				{ return binary_iterator2 (left_subterm_iter_++, right_subterm_iter_++); }
-							binary_iterator2& operator+= (difference_type n)	{ left_subterm_iter_ += n; right_subterm_iter_ += n; return *this; }
-		
-							binary_iterator2& operator-- ()					{ --left_subterm_iter_; --right_subterm_iter_; return *this; }
-							binary_iterator2 operator-- (int)				{ return binary_iterator2 (left_subterm_iter_--, right_subterm_iter_--); }
-							binary_iterator2& operator-= (difference_type n)	{ left_subterm_iter_ -= n; right_subterm_iter_ -= n; return *this; }
-								
-							friend binary_iterator2 operator+ (const binary_iterator2& left, difference_type right)
-								{
-									return binary_iterator2 (left.left_subterm_iter_ + right, left.right_subterm_iter_ + right);
-								}
-
-							friend binary_iterator2 operator+ (difference_type left, const binary_iterator2& right)
-								{
-									return binary_iterator2 (left + right.left_subterm_iter_, left + right.right_subterm_iter_);
-								}
-
-							friend binary_iterator2 operator- (const binary_iterator2& left, difference_type right)
-								{
-									return binary_iterator2 (left.left_subterm_iter_ - right, left.right_subterm_iter_ - right);
-								}
-							
-							friend difference_type operator- (const binary_iterator2& left, const binary_iterator2& right)
-								{
-									return left.left_subterm_iter_ - right.left_subterm_iter_;
-								}
-								
-							friend bool operator== (const binary_iterator2& left, const binary_iterator2& right)
-								{
-									return left.left_subterm_iter_ == right.left_subterm_iter_;
-								}
-								
-							friend bool operator!= (const binary_iterator2& left, const binary_iterator2& right)
-								{
-									return left.left_subterm_iter_ != right.left_subterm_iter_;
-								}
-
-							friend bool operator< (const binary_iterator2& left, const binary_iterator2& right)
-								{
-									return left.left_subterm_iter_ < right.left_subterm_iter_;
-								}
-														
-						private:
-							LTermIt left_subterm_iter_;
-							RTermIt right_subterm_iter_;
-					};
-
-				template <typename LTermIt, typename MTermIt, typename RTermIt, template <typename> class TOp> class ternary_iterator
-					{
-						public:
-							typedef TOp <typename std::iterator_traits <LTermIt>::value_type> operation;
+							typedef TOp <
+								typename std::iterator_traits <LTermIt>::value_type,
+								typename std::iterator_traits <MTermIt>::value_type,
+								typename std::iterator_traits <RTermIt>::value_type> operation;
 							
 							// iterator category is the category with the least rank of the two expression's categories
 							typedef typename iterator_ranker
@@ -771,86 +769,85 @@ namespace stdext
 							RTermIt right_subterm_iter_;
 					};
 
-				template <typename LTermIt, typename MTermIt, typename RTermIt, template <typename, typename, typename> class TOp> class ternary_iterator2
+				template <typename LTerm, typename MTerm, typename RTerm, template <typename, typename, typename> class TOp, typename Enable2, typename Enable3, typename Enable4>
+					class chunker <ternary_term <LTerm, MTerm, RTerm, TOp>,
+						typename enable_if <exists <typename TOp <
+							typename std::iterator_traits <typename LTerm::const_chunk_iterator>::value_type,
+							typename std::iterator_traits <typename MTerm::const_chunk_iterator>::value_type,
+							typename std::iterator_traits <typename RTerm::const_chunk_iterator>::value_type>::result_type>::value>::type,
+						Enable2,
+						Enable3,
+						Enable4>
 					{
 						public:
-							typedef TOp <
-								typename std::iterator_traits <LTermIt>::value_type,
-								typename std::iterator_traits <MTermIt>::value_type,
-								typename std::iterator_traits <RTermIt>::value_type> operation;
+							typedef ternary_iterator <typename LTerm::const_chunk_iterator, typename MTerm::const_chunk_iterator, typename RTerm::const_chunk_iterator,
+								TOp> const_chunk_iterator;
 							
-							// iterator category is the category with the least rank of the two expression's categories
-							typedef typename iterator_ranker
-								<typename std::iterator_traits <LTermIt>::iterator_category,
-								typename std::iterator_traits <RTermIt>::iterator_category>::type iterator_category;
+							const_chunk_iterator chunk_begin () const
+								{
+									return const_chunk_iterator (
+										that ().left_subterm_.chunk_begin (),
+										that ().mid_subterm_.chunk_begin (),
+										that ().right_subterm_.chunk_begin ());
+								}
+								
+						private:
+							const ternary_term <LTerm, MTerm, RTerm, TOp>& that () const
+								{
+									return static_cast <const ternary_term <LTerm, MTerm, RTerm, TOp>&> (*this);
+								}
+					};
+
+				/// Expression template ternary term.
+				
+				/// @internal
+				/// This branch term applies a ternary functor to its subterms. A ternary term is const chunkable if each subterm's chunked types
+				/// are the same and there is an appropriate ternary functor on the chunked type. Such terms are declared as partial specializations
+				/// with additional members.
+				///
+				/// @param	LTerm	The left subterm type.
+				/// @param	MTerm	The middle subterm type.
+				/// @param	RTerm	The right subterm type.
+				/// @param	TOp		The ternary functor.
+				
+				template <typename LTerm, typename MTerm, typename RTerm, template <typename, typename, typename> class TOp> class ternary_term:
+					public term <typename TOp <typename LTerm::value_type, typename MTerm::value_type, typename RTerm::value_type>::result_type, ternary_term <LTerm, MTerm, RTerm, TOp> >,
+					public chunker <ternary_term <LTerm, MTerm, RTerm, TOp> >					
+					{
+						public:
+							typedef TOp <typename LTerm::value_type, typename MTerm::value_type, typename RTerm::value_type> operation;
 							
-							typedef typename std::iterator_traits <LTermIt>::difference_type difference_type;
+							/// The element value type.
 							typedef typename operation::result_type value_type;
-							typedef const value_type* pointer;
+							
+							typedef ternary_iterator <typename LTerm::const_iterator, typename MTerm::const_iterator, typename RTerm::const_iterator, TOp> const_iterator;
+							typedef ternary_iterator <typename LTerm::const_iterator, typename MTerm::const_iterator, typename RTerm::const_iterator, TOp> iterator;
+							
 							typedef value_type reference;
 							
-							ternary_iterator2 (const LTermIt& left_subterm_iter, const MTermIt& mid_subterm_iter, const RTermIt& right_subterm_iter):
-								left_subterm_iter_ (left_subterm_iter), mid_subterm_iter_ (mid_subterm_iter), right_subterm_iter_ (right_subterm_iter)
+							ternary_term (const LTerm& left_subterm, const MTerm& mid_subterm, const RTerm& right_subterm):
+								left_subterm_ (left_subterm), mid_subterm_ (mid_subterm), right_subterm_ (right_subterm)
 								{
 								}
 								
-							value_type operator* () const
-								{
-									return operation () (*left_subterm_iter_, *mid_subterm_iter_, *right_subterm_iter_);
-								}
-								
-							value_type operator[] (typename std::iterator_traits <LTermIt>::difference_type n) const
-								{
-									return operation () (left_subterm_iter_ [n], mid_subterm_iter_ [n], right_subterm_iter_ [n]);
-								}
-								
-							ternary_iterator2& operator++ ()						{ ++left_subterm_iter_; ++mid_subterm_iter_; ++right_subterm_iter_; return *this; }
-							ternary_iterator2 operator++ (int)					{ return ternary_iterator2 (left_subterm_iter_++, mid_subterm_iter_++, right_subterm_iter_++); }
-							ternary_iterator2& operator+= (difference_type n)	{ left_subterm_iter_ += n; mid_subterm_iter_ += n; right_subterm_iter_ += n; return *this; }
-		
-							ternary_iterator2& operator-- ()						{ --left_subterm_iter_; --mid_subterm_iter_; --right_subterm_iter_; return *this; }
-							ternary_iterator2 operator-- (int)					{ return ternary_iterator2 (left_subterm_iter_--, mid_subterm_iter_--, right_subterm_iter_--); }
-							ternary_iterator2& operator-= (difference_type n)	{ left_subterm_iter_ -= n; mid_subterm_iter_ -= n; right_subterm_iter_ -= n; return *this; }
-								
-							friend ternary_iterator2 operator+ (const ternary_iterator2& left, difference_type right)
-								{
-									return ternary_iterator2 (left.left_subterm_iter_ + right, left.mid_subterm_iter_ + right, left.right_subterm_iter_ + right);
-								}
-
-							friend ternary_iterator2 operator+ (difference_type left, const ternary_iterator2& right)
-								{
-									return ternary_iterator2 (left + right.left_subterm_iter_, left + right.mid_subterm_iter_, left + right.right_subterm_iter_);
-								}
-
-							friend ternary_iterator2 operator- (const ternary_iterator2& left, difference_type right)
-								{
-									return ternary_iterator2 (left.left_subterm_iter_ - right, left.mid_subterm_iter_ - right, left.right_subterm_iter_ - right);
-								}
+							// Gets the element at index @a n.
+							value_type operator[] (std::size_t index) const	{ return operation () (left_subterm_ [index], mid_subterm_ [index], right_subterm_ [index]); }
 							
-							friend difference_type operator- (const ternary_iterator2& left, const ternary_iterator2& right)
+							/// Gets the number of elements.
+							std::size_t size () const						{ return right_subterm_.size (); }
+							
+							/// Gets an iterator to the first element.
+							const_iterator begin () const
 								{
-									return left.left_subterm_iter_ - right.left_subterm_iter_;
-								}
-								
-							friend bool operator== (const ternary_iterator2& left, const ternary_iterator2& right)
-								{
-									return left.left_subterm_iter_ == right.left_subterm_iter_;
-								}
-								
-							friend bool operator!= (const ternary_iterator2& left, const ternary_iterator2& right)
-								{
-									return left.left_subterm_iter_ != right.left_subterm_iter_;
+									return const_iterator (left_subterm_.begin (), mid_subterm_.begin (), right_subterm_.begin ());
 								}
 
-							friend bool operator< (const ternary_iterator2& left, const ternary_iterator2& right)
-								{
-									return left.left_subterm_iter_ < right.left_subterm_iter_;
-								}
-														
 						private:
-							LTermIt left_subterm_iter_;
-							MTermIt mid_subterm_iter_;
-							RTermIt right_subterm_iter_;
+							const LTerm left_subterm_;
+							const MTerm mid_subterm_;
+							const RTerm right_subterm_;
+							
+							template <typename Term, typename Enable1, typename Enable2, typename Enable3, typename Enable4> friend class chunker;
 					};
 				
 			}

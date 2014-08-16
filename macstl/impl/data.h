@@ -41,7 +41,7 @@ namespace macstl
 		template <typename T1, typename T2>
 			inline T1 data_cast (const T2& lhs)
 			{
-				return T1 (static_cast <typename T1::data_type> (lhs.data ()));
+				return T1 ((typename T1::data_type) lhs.data ());
 			}
 			
 		inline char data_of (char lhs)								{ return lhs; }

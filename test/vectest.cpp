@@ -69,7 +69,7 @@ template <template <typename> class F, typename T> struct test_func <F, T,
 			}
 	};
 
-template <template <typename> class F, typename T, typename Enable = void> struct test_accum
+template <template <typename, typename> class F, typename T, typename Enable = void> struct test_func2
 	{
 		static void call (const char* name)
 			{
@@ -77,8 +77,30 @@ template <template <typename> class F, typename T, typename Enable = void> struc
 			}
 	};
 
-template <template <typename> class F, typename T> struct test_accum <F, T,
-	typename stdext::impl::enable_if <stdext::impl::exists <typename stdext::accumulator <F <T> >::result_type>::value>::type>
+template <template <typename, typename> class F, typename T> struct test_func2 <F, T,
+	typename stdext::impl::enable_if <stdext::impl::exists <typename F <T, T>::result_type>::value>::type>
+	{
+		static void call (const char* name)
+			{
+				std::cout << "\t" << name << " defined:\n";
+				unsigned int threshold = minthreshold;
+				for (unsigned int trial = 0; trial != tries; ++trial)
+					test2 <F, T> (name, threshold);
+				if (threshold == minthreshold)
+					std::cout << "\t\t" << name << " OK.\n";
+			}
+	};
+
+template <template <typename, typename> class F, typename T, typename Enable = void> struct test_accum
+	{
+		static void call (const char* name)
+			{
+				std::cout << "\t" << name << " undefined.\n";
+			}
+	};
+
+template <template <typename, typename> class F, typename T> struct test_accum <F, T,
+	typename stdext::impl::enable_if <stdext::impl::exists <typename stdext::accumulator <F <T, T> >::result_type>::value>::type>
 	{
 		static void call (const char* name)
 			{
@@ -105,49 +127,49 @@ template <typename T> struct test_type <T, typename stdext::impl::enable_if <std
 			{
 				std::cout << name << " defined:\n";
 				
-				test_accum <std::plus, T>::call ("sum");
+				test_accum <stdext::plus, T>::call ("sum");
 				test_accum <stdext::maximum, T>::call ("max");
 				test_accum <stdext::minimum, T>::call ("min");
 				
-				test_func <std::negate, T>::call ("operator-");
-				test_func <std::logical_not, T>::call ("operator!");
-				test_func <std::multiplies, T>::call ("operator*");
-				test_func <std::divides, T>::call ("operator/");
-				test_func <std::modulus, T>::call ("operator%");
-				test_func <std::plus, T>::call ("operator+");
-				test_func <std::minus, T>::call ("operator-");
-				test_func <std::equal_to, T>::call ("operator==");
-				test_func <std::not_equal_to, T>::call ("operator!=");
-				test_func <std::less, T>::call ("operator<");
-				test_func <std::greater, T>::call ("operator>");
-				test_func <std::less_equal, T>::call ("operator<=");
-				test_func <std::greater_equal, T>::call ("operator>=");
-				test_func <std::logical_and, T>::call ("operator&&");
-				test_func <std::logical_or, T>::call ("operator||");
+				test_func <stdext::negate, T>::call ("operator-");
+				test_func <stdext::logical_not, T>::call ("operator!");
+				test_func2 <stdext::multiplies, T>::call ("operator*");
+				test_func2 <stdext::divides, T>::call ("operator/");
+				test_func2 <stdext::modulus, T>::call ("operator%");
+				test_func2 <stdext::plus, T>::call ("operator+");
+				test_func2 <stdext::minus, T>::call ("operator-");
+				test_func2 <stdext::equal_to, T>::call ("operator==");
+				test_func2 <stdext::not_equal_to, T>::call ("operator!=");
+				test_func2 <stdext::less, T>::call ("operator<");
+				test_func2 <stdext::greater, T>::call ("operator>");
+				test_func2 <stdext::less_equal, T>::call ("operator<=");
+				test_func2 <stdext::greater_equal, T>::call ("operator>=");
+				test_func2 <stdext::logical_and, T>::call ("operator&&");
+				test_func2 <stdext::logical_or, T>::call ("operator||");
 	
-				test_func <stdext::bitwise_and, T>::call ("operator&");
+				test_func2 <stdext::bitwise_and, T>::call ("operator&");
 				test_func <stdext::bitwise_not, T>::call ("operator~");
-				test_func <stdext::bitwise_or, T>::call ("operator|");
-				test_func <stdext::bitwise_xor, T>::call ("operator^");
-				test_func <stdext::shift_left, T>::call ("operator<<");
-				test_func <stdext::shift_right, T>::call ("operator>>");
+				test_func2 <stdext::bitwise_or, T>::call ("operator|");
+				test_func2 <stdext::bitwise_xor, T>::call ("operator^");
+				test_func2 <stdext::shift_left, T>::call ("operator<<");
+				test_func2 <stdext::shift_right, T>::call ("operator>>");
 
 				test_func <stdext::absolute, T>::call ("abs");
 				test_func <stdext::arc_cosine, T>::call ("acos");
 				test_func <stdext::arc_sine, T>::call ("asin");
 				test_func <stdext::arc_tangent, T>::call ("atan");
-				test_func <stdext::arc_tangent2, T>::call ("atan2");
+				test_func2 <stdext::arc_tangent2, T>::call ("atan2");
 				test_func <stdext::cosine, T>::call ("cos");
 				test_func <stdext::exponent, T>::call ("exp");
 				test_func <stdext::hyperbolic_cosine, T>::call ("cosh");
 				test_func <stdext::hyperbolic_sine, T>::call ("sinh");
 				test_func <stdext::hyperbolic_tangent, T>::call ("tanh");
 				test_func <stdext::logarithm, T>::call ("log");
-				test_func <stdext::maximum, T>::call ("max");
-				test_func <stdext::minimum, T>::call ("min");
-				test_func <stdext::multiplies_high, T>::call ("mulhi");
+				test_func2 <stdext::maximum, T>::call ("max");
+				test_func2 <stdext::minimum, T>::call ("min");
+				test_func2 <stdext::multiplies_high, T>::call ("mulhi");
 			//	test_func <stdext::multiplies_plus, T>::call ("fma");
-				test_func <stdext::power, T>::call ("pow");
+				test_func2 <stdext::power, T>::call ("pow");
 				test_func <stdext::sine, T>::call ("sin");
 				test_func <stdext::square_root, T>::call ("sqrt");
 				test_func <stdext::tangent, T>::call ("tan");

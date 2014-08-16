@@ -48,7 +48,18 @@ namespace stdext
 				template <> struct chunk <float>							{ typedef macstl::vec <float, 4> type; };
 				template <> struct chunk <stdext::complex <float> >			{ typedef macstl::vec <stdext::complex <float>, 2> type; };
 				template <typename T> struct chunk <macstl::boolean <T> >	{ typedef macstl::vec <macstl::boolean <T>, 16 / sizeof (T)> type; };
-																										
+									
+				inline void* malloc_align16 (std::size_t size)
+					{
+					#if defined(__MACH__)
+						return std::malloc (size);
+					#elif defined(__linux__)
+						return ::memalign (16, size);
+					#else
+						#error "No 16-byte allocator defined."
+					#endif
+					}
+				
 				template <typename T> class valarray_base <T, typename enable_if <exists <typename array_term <T>::chunk_type>::value>::type>:
 					public array_term <T>
 					{
@@ -62,7 +73,7 @@ namespace stdext
 								{
 									// allocate enough bytes to put equivalent of n elements of T, but as aligned chunks
 									base::init (
-										reinterpret_cast <chunk_type*> (std::malloc (sizeof (chunk_type) * ((n + chunk_type::length - 1) / chunk_type::length))),
+										reinterpret_cast <chunk_type*> (malloc_align16 (sizeof (chunk_type) * ((n + chunk_type::length - 1) / chunk_type::length))),
 										n);
 								}
 
@@ -81,14 +92,16 @@ namespace stdext
 				template <> struct has_fma <macstl::vec <short, 8> >					{ enum { value = true }; };
 				template <> struct has_fma <macstl::vec <stdext::complex <float>, 2> >	{ enum { value = true }; };
 				
-				template <typename T> struct no_multiplies																				{ enum { value = true }; };
-				template <typename LTermIt, typename RTermIt> struct no_multiplies <binary_term <LTermIt, RTermIt, std::multiplies> >	{ enum { value = false }; };
+				template <typename T> struct no_multiplies																			{ enum { value = true }; };
+				template <typename LTermIt, typename RTermIt> struct no_multiplies <binary_term <LTermIt, RTermIt, multiplies> >	{ enum { value = false }; };
 
-				template <typename LLTerm, typename LRTerm, typename RTerm, typename Enable4>
-					class chunker <binary_term <binary_term <LLTerm, LRTerm, std::multiplies>, RTerm, std::plus>,
-						typename enable_if <const_rechunkable <binary_term <LLTerm, LRTerm, std::multiplies>, RTerm>::value>::type,
-						typename enable_if <exists <typename std::plus <typename std::iterator_traits <typename binary_term <LLTerm, LRTerm, std::multiplies>::const_chunk_iterator>::value_type>::result_type>::value>::type,
+				template <typename LLTerm, typename LRTerm, typename RTerm, typename Enable3, typename Enable4>
+					class chunker <binary_term <binary_term <LLTerm, LRTerm, multiplies>, RTerm, plus>,
+						typename enable_if <exists <typename plus <
+							typename std::iterator_traits <typename binary_term <LLTerm, LRTerm, multiplies>::const_chunk_iterator>::value_type,
+							typename std::iterator_traits <typename RTerm::const_chunk_iterator>::value_type>::result_type>::value>::type,
 						typename enable_if <has_fma <typename std::iterator_traits <typename RTerm::const_chunk_iterator>::value_type>::value>::type,
+						Enable3,
 						Enable4>
 					{
 						public:
@@ -104,18 +117,20 @@ namespace stdext
 								}
 								
 						private:
-							const binary_term <binary_term <LLTerm, LRTerm, std::multiplies>, RTerm, std::plus>& that () const
+							const binary_term <binary_term <LLTerm, LRTerm, multiplies>, RTerm, plus>& that () const
 								{
-									return static_cast <const binary_term <binary_term <LLTerm, LRTerm, std::multiplies>, RTerm, std::plus>&> (*this);
+									return static_cast <const binary_term <binary_term <LLTerm, LRTerm, multiplies>, RTerm, plus>&> (*this);
 								}
 					};
 
-				template <typename LTerm, typename RLTerm, typename RRTerm>
-					class chunker <binary_term <LTerm, binary_term <RLTerm, RRTerm, std::multiplies>, std::plus>,
-						typename enable_if <const_rechunkable <LTerm, binary_term <RLTerm, RRTerm, std::multiplies> >::value>::type,
-						typename enable_if <exists <typename std::plus <typename std::iterator_traits <typename LTerm::const_chunk_iterator>::value_type>::result_type>::value>::type,
+				template <typename LTerm, typename RLTerm, typename RRTerm, typename Enable4>
+					class chunker <binary_term <LTerm, binary_term <RLTerm, RRTerm, multiplies>, plus>,
+						typename enable_if <exists <typename plus <
+							typename std::iterator_traits <typename LTerm::const_chunk_iterator>::value_type,
+							typename std::iterator_traits <typename binary_term <RLTerm, RRTerm, multiplies>::const_chunk_iterator>::value_type>::result_type>::value>::type,
 						typename enable_if <has_fma <typename std::iterator_traits <typename LTerm::const_chunk_iterator>::value_type>::value>::type,
-						typename enable_if <no_multiplies <LTerm>::value>::type>
+						typename enable_if <no_multiplies <LTerm>::value>::type,
+						Enable4>
 					{
 						public:
 							typedef ternary_iterator <typename RLTerm::const_chunk_iterator, typename RRTerm::const_chunk_iterator, typename LTerm::const_chunk_iterator,
@@ -130,22 +145,23 @@ namespace stdext
 								}
 								
 						private:
-							const binary_term <LTerm, binary_term <RLTerm, RRTerm, std::multiplies>, std::plus>& that () const
+							const binary_term <LTerm, binary_term <RLTerm, RRTerm, multiplies>, plus>& that () const
 								{
-									return static_cast <const binary_term <LTerm, binary_term <RLTerm, RRTerm, std::multiplies>, std::plus>&> (*this);
+									return static_cast <const binary_term <LTerm, binary_term <RLTerm, RRTerm, multiplies>, plus>&> (*this);
 								}
 					};
 				
 				template <typename LTermIt, typename RTermIt, typename Size, typename T, typename U>
-					struct accumulate_n_dispatch <binary_iterator <LTermIt, RTermIt, std::multiplies>, Size, T, std::plus <U>,
-					typename enable_if <is_same <typename std::iterator_traits <binary_iterator <LTermIt, RTermIt, std::multiplies> >::iterator_category, std::random_access_iterator_tag>::value>::type,
+					struct accumulate_n_dispatch <binary_iterator <LTermIt, RTermIt, multiplies>, Size, T, plus <U>,
+					typename enable_if <is_same <typename std::iterator_traits <binary_iterator <LTermIt, RTermIt, multiplies> >::iterator_category, std::random_access_iterator_tag>::value>::type,
 					typename enable_if <has_fma <T>::value>::type>
 					{
-						static T call (binary_iterator <LTermIt, RTermIt, std::multiplies> first, Size n, T init, std::plus <U>)
+						static T call (binary_iterator <LTermIt, RTermIt, multiplies> first, Size n, T init, plus <U>)
 							{
 								for (std::size_t index = 0; index != n; ++index)
 									init = fma (first.left_subterm_iter_ [index], first.right_subterm_iter_ [index], init);
 								return init;
+							
 							}
 					};
 					
@@ -154,15 +170,17 @@ namespace stdext
 				template <typename T> struct has_nmsub									{ enum { value = false }; };
 				template <> struct has_nmsub <macstl::vec <float, 4> >					{ enum { value = true }; };
 
-				template <typename LTerm, typename RLTerm, typename RRTerm, typename Enable4>
-					class chunker <binary_term <LTerm, binary_term <RLTerm, RRTerm, std::multiplies>, std::minus>,
-						typename enable_if <const_rechunkable <LTerm, binary_term <RLTerm, RRTerm, std::multiplies> >::value>::type,
-						typename enable_if <exists <typename std::minus <typename std::iterator_traits <typename LTerm::const_chunk_iterator>::value_type>::result_type>::value>::type,
+				template <typename LTerm, typename RLTerm, typename RRTerm, typename Enable3, typename Enable4>
+					class chunker <binary_term <LTerm, binary_term <RLTerm, RRTerm, multiplies>, minus>,
+						typename enable_if <exists <
+							typename minus <typename std::iterator_traits <typename LTerm::const_chunk_iterator>::value_type,
+							typename std::iterator_traits <typename binary_term <RLTerm, RRTerm, multiplies>::const_chunk_iterator>::value_type>::result_type>::value>::type,
 						typename enable_if <has_nmsub <typename std::iterator_traits <typename LTerm::const_chunk_iterator>::value_type>::value>::type,
+						Enable3,
 						Enable4>
 					{
 						public:
-							typedef ternary_iterator2 <typename RLTerm::const_chunk_iterator, typename RRTerm::const_chunk_iterator, typename LTerm::const_chunk_iterator,
+							typedef ternary_iterator <typename RLTerm::const_chunk_iterator, typename RRTerm::const_chunk_iterator, typename LTerm::const_chunk_iterator,
 								macstl::altivec::nmsub_function> const_chunk_iterator;
 							
 							const_chunk_iterator chunk_begin () const
@@ -174,23 +192,89 @@ namespace stdext
 								}
 								
 						private:
-							const binary_term <LTerm, binary_term <RLTerm, RRTerm, std::multiplies>, std::minus>& that () const
+							const binary_term <LTerm, binary_term <RLTerm, RRTerm, multiplies>, minus>& that () const
 								{
-									return static_cast <const binary_term <LTerm, binary_term <RLTerm, RRTerm, std::multiplies>, std::minus>&> (*this);
+									return static_cast <const binary_term <LTerm, binary_term <RLTerm, RRTerm, multiplies>, minus>&> (*this);
 								}
 					};
 					
-				// optimize v1 & ~v2 to use altivec and complement
+				// optimize v1 / sqrt (v2) to use v1 * rsqrt (v2)
+				
+				template <typename T> struct has_rsqrt									{ enum { value = false }; };
+				template <> struct has_rsqrt <macstl::vec <float, 4> >					{ enum { value = true }; };
 
 				template <typename LTerm, typename RTerm, typename Enable3, typename Enable4>
-					class chunker <binary_term <LTerm, unary_term <RTerm, bitwise_not>, bitwise_and>,
-						typename enable_if <const_rechunkable <LTerm, unary_term <RTerm, bitwise_not> >::value>::type,
-						typename enable_if <exists <typename bitwise_and <typename std::iterator_traits <typename LTerm::const_chunk_iterator>::value_type>::result_type>::value>::type,
+					class chunker <binary_term <LTerm, unary_term <RTerm, square_root>, divides>,
+						typename enable_if <exists <
+							typename divides <typename std::iterator_traits <typename LTerm::const_chunk_iterator>::value_type,
+							typename std::iterator_traits <typename unary_term <RTerm, square_root>::const_chunk_iterator>::value_type>::result_type>::value>::type,
+						typename enable_if <has_rsqrt <typename std::iterator_traits <typename LTerm::const_chunk_iterator>::value_type>::value>::type,
 						Enable3,
 						Enable4>
 					{
 						public:
-							typedef binary_iterator2 <typename LTerm::const_chunk_iterator, typename RTerm::const_chunk_iterator, macstl::altivec::andc_function> const_chunk_iterator;
+							typedef binary_iterator <typename LTerm::const_chunk_iterator, unary_iterator <typename RTerm::const_chunk_iterator, reciprocal_square_root>, multiplies>
+								const_chunk_iterator;
+							
+							const_chunk_iterator chunk_begin () const
+								{
+									return const_chunk_iterator (
+										that ().left_subterm_.chunk_begin (),
+										unary_iterator <typename RTerm::const_chunk_iterator, reciprocal_square_root> (that ().right_subterm_.subterm_.chunk_begin ()));
+								}
+								
+						private:
+							const binary_term <LTerm, unary_term <RTerm, square_root>, divides>& that () const
+								{
+									return static_cast <const binary_term <LTerm, unary_term <RTerm, square_root>, divides>&> (*this);
+								}
+					};
+
+				// optimize (v1 / sqrt (v2)) + v3 to use fma (v1, rsqrt (v2), v3)
+				
+				template <typename LLTerm, typename LRTerm, typename RTerm, typename Enable3, typename Enable4>
+					class chunker <binary_term <binary_term <LLTerm, unary_term <LRTerm, square_root>, divides>, RTerm, plus>,
+						typename enable_if <exists <typename plus <
+							typename std::iterator_traits <typename binary_term <LLTerm, unary_term <LRTerm, square_root>, divides>::const_chunk_iterator>::value_type,
+							typename std::iterator_traits <typename RTerm::const_chunk_iterator>::value_type>::result_type>::value>::type,
+						typename enable_if <has_rsqrt <typename std::iterator_traits <typename LLTerm::const_chunk_iterator>::value_type>::value>::type,
+						Enable3,
+						Enable4>
+					{
+						public:
+							typedef ternary_iterator <
+								typename LLTerm::const_chunk_iterator, unary_iterator <typename LRTerm::const_chunk_iterator, reciprocal_square_root>, typename RTerm::const_chunk_iterator,
+								multiplies_plus> const_chunk_iterator;
+							
+							const_chunk_iterator chunk_begin () const
+								{
+									return const_chunk_iterator (
+										that ().left_subterm_.left_subterm_.chunk_begin (),
+										unary_iterator <typename RTerm::const_chunk_iterator, reciprocal_square_root> (that ().left_subterm_.right_subterm_.subterm_.chunk_begin ()),
+										that ().right_subterm_.chunk_begin ());
+								}
+								
+						private:
+							const binary_term <binary_term <LLTerm, unary_term <LRTerm, square_root>, divides>, RTerm, plus>& that () const
+								{
+									return static_cast <const binary_term <binary_term <LLTerm, unary_term <LRTerm, square_root>, divides>, RTerm, plus>&> (*this);
+								}
+					};
+
+					
+				// optimize v1 & ~v2 to use altivec and complement
+
+				template <typename LTerm, typename RTerm, typename Enable2, typename Enable3, typename Enable4>
+					class chunker <binary_term <LTerm, unary_term <RTerm, bitwise_not>, bitwise_and>,
+						typename enable_if <exists <typename bitwise_and <
+							typename std::iterator_traits <typename LTerm::const_chunk_iterator>::value_type,
+							typename std::iterator_traits <typename unary_term <RTerm, bitwise_not>::const_chunk_iterator>::value_type>::result_type>::value>::type,
+						Enable2,
+						Enable3,
+						Enable4>
+					{
+						public:
+							typedef binary_iterator <typename LTerm::const_chunk_iterator, typename RTerm::const_chunk_iterator, macstl::altivec::andc_function> const_chunk_iterator;
 							
 							const_chunk_iterator chunk_begin () const
 								{
@@ -211,12 +295,13 @@ namespace stdext
 				template <typename LTerm, typename RTerm, typename Enable3, typename Enable4>
 					class chunker <unary_term <binary_term <LTerm, RTerm, bitwise_or>, bitwise_not>,
 						typename enable_if <exists <typename binary_term <LTerm, RTerm, bitwise_or>::const_chunk_iterator>::value>::type,
-						typename enable_if <exists <typename bitwise_not <typename std::iterator_traits <typename binary_term <LTerm, RTerm, bitwise_or>::const_chunk_iterator>::value_type>::result_type>::value>::type,
+						typename enable_if <exists <typename bitwise_not <
+							typename std::iterator_traits <typename binary_term <LTerm, RTerm, bitwise_or>::const_chunk_iterator>::value_type>::result_type>::value>::type,
 						Enable3,
 						Enable4>
 					{
 						public:
-							typedef binary_iterator2 <typename LTerm::const_chunk_iterator, typename RTerm::const_chunk_iterator, macstl::altivec::nor_function> const_chunk_iterator;
+							typedef binary_iterator <typename LTerm::const_chunk_iterator, typename RTerm::const_chunk_iterator, macstl::altivec::nor_function> const_chunk_iterator;
 							
 							const_chunk_iterator chunk_begin () const
 								{
@@ -234,69 +319,69 @@ namespace stdext
 	
 				// optimizations for expressions of the form (v1 cmp v2).min () to use altivec predicates
 				
-				template <template <typename> class Func, template <typename> class BOp, typename LTermIt, typename RTermIt> struct predicator;
+				template <template <typename, typename> class Func, template <typename, typename> class BOp, typename LTermIt, typename RTermIt> struct predicator;
 				
-				template <typename LTermIt, typename RTermIt> struct predicator <stdext::minimum, std::equal_to, LTermIt, RTermIt>
+				template <typename LTermIt, typename RTermIt> struct predicator <minimum, equal_to, LTermIt, RTermIt>
 					{
-						typedef binary_iterator2 <LTermIt, RTermIt, macstl::altivec::all_eq_function> type;
+						typedef binary_iterator <LTermIt, RTermIt, macstl::altivec::all_eq_function> type;
 					};
 
-				template <typename LTermIt, typename RTermIt> struct predicator <stdext::minimum, std::not_equal_to, LTermIt, RTermIt>
+				template <typename LTermIt, typename RTermIt> struct predicator <minimum, not_equal_to, LTermIt, RTermIt>
 					{
-						typedef binary_iterator2 <LTermIt, RTermIt, macstl::altivec::all_ne_function> type;
+						typedef binary_iterator <LTermIt, RTermIt, macstl::altivec::all_ne_function> type;
 					};
 
-				template <typename LTermIt, typename RTermIt> struct predicator <stdext::minimum, std::less, LTermIt, RTermIt>
+				template <typename LTermIt, typename RTermIt> struct predicator <minimum, less, LTermIt, RTermIt>
 					{
-						typedef binary_iterator2 <LTermIt, RTermIt, macstl::altivec::all_lt_function> type;
+						typedef binary_iterator <LTermIt, RTermIt, macstl::altivec::all_lt_function> type;
 					};
 					
-				template <typename LTermIt, typename RTermIt> struct predicator <stdext::minimum, std::greater, LTermIt, RTermIt>
+				template <typename LTermIt, typename RTermIt> struct predicator <minimum, greater, LTermIt, RTermIt>
 					{
-						typedef binary_iterator2 <LTermIt, RTermIt, macstl::altivec::all_gt_function> type;
+						typedef binary_iterator <LTermIt, RTermIt, macstl::altivec::all_gt_function> type;
 					};
 					
-				template <typename LTermIt, typename RTermIt> struct predicator <stdext::minimum, std::less_equal, LTermIt, RTermIt>
+				template <typename LTermIt, typename RTermIt> struct predicator <minimum, less_equal, LTermIt, RTermIt>
 					{
-						typedef binary_iterator2 <LTermIt, RTermIt, macstl::altivec::all_le_function> type;
+						typedef binary_iterator <LTermIt, RTermIt, macstl::altivec::all_le_function> type;
 					};
 					
-				template <typename LTermIt, typename RTermIt> struct predicator <stdext::minimum, std::greater_equal, LTermIt, RTermIt>
+				template <typename LTermIt, typename RTermIt> struct predicator <minimum, greater_equal, LTermIt, RTermIt>
 					{
-						typedef binary_iterator2 <LTermIt, RTermIt, macstl::altivec::all_ge_function> type;
+						typedef binary_iterator <LTermIt, RTermIt, macstl::altivec::all_ge_function> type;
 					};
 
-				template <typename LTermIt, typename RTermIt> struct predicator <stdext::maximum, std::equal_to, LTermIt, RTermIt>
+				template <typename LTermIt, typename RTermIt> struct predicator <maximum, equal_to, LTermIt, RTermIt>
 					{
-						typedef binary_iterator2 <LTermIt, RTermIt, macstl::altivec::any_eq_function> type;
+						typedef binary_iterator <LTermIt, RTermIt, macstl::altivec::any_eq_function> type;
 					};
 
-				template <typename LTermIt, typename RTermIt> struct predicator <stdext::maximum, std::not_equal_to, LTermIt, RTermIt>
+				template <typename LTermIt, typename RTermIt> struct predicator <maximum, not_equal_to, LTermIt, RTermIt>
 					{
-						typedef binary_iterator2 <LTermIt, RTermIt, macstl::altivec::any_ne_function> type;
+						typedef binary_iterator <LTermIt, RTermIt, macstl::altivec::any_ne_function> type;
 					};
 
-				template <typename LTermIt, typename RTermIt> struct predicator <stdext::maximum, std::less, LTermIt, RTermIt>
+				template <typename LTermIt, typename RTermIt> struct predicator <maximum, less, LTermIt, RTermIt>
 					{
-						typedef binary_iterator2 <LTermIt, RTermIt, macstl::altivec::any_lt_function> type;
+						typedef binary_iterator <LTermIt, RTermIt, macstl::altivec::any_lt_function> type;
 					};
 					
-				template <typename LTermIt, typename RTermIt> struct predicator <stdext::maximum, std::greater, LTermIt, RTermIt>
+				template <typename LTermIt, typename RTermIt> struct predicator <maximum, greater, LTermIt, RTermIt>
 					{
-						typedef binary_iterator2 <LTermIt, RTermIt, macstl::altivec::any_gt_function> type;
+						typedef binary_iterator <LTermIt, RTermIt, macstl::altivec::any_gt_function> type;
 					};
 					
-				template <typename LTermIt, typename RTermIt> struct predicator <stdext::maximum, std::less_equal, LTermIt, RTermIt>
+				template <typename LTermIt, typename RTermIt> struct predicator <maximum, less_equal, LTermIt, RTermIt>
 					{
-						typedef binary_iterator2 <LTermIt, RTermIt, macstl::altivec::any_le_function> type;
+						typedef binary_iterator <LTermIt, RTermIt, macstl::altivec::any_le_function> type;
 					};
 					
-				template <typename LTermIt, typename RTermIt> struct predicator <stdext::maximum, std::greater_equal, LTermIt, RTermIt>
+				template <typename LTermIt, typename RTermIt> struct predicator <maximum, greater_equal, LTermIt, RTermIt>
 					{
-						typedef binary_iterator2 <LTermIt, RTermIt, macstl::altivec::any_ge_function> type;
+						typedef binary_iterator <LTermIt, RTermIt, macstl::altivec::any_ge_function> type;
 					};
 
-				template <template <typename> class Func, template <typename> class BOp, typename LTerm, typename RTerm>
+				template <template <typename, typename> class Func, template <typename, typename> class BOp, typename LTerm, typename RTerm>
 					struct accumulate_array_dispatch <Func, binary_term <LTerm, RTerm, BOp>,
 					typename enable_if <exists <typename binary_term <LTerm, RTerm, BOp>::const_chunk_iterator>::value>::type,
 					typename enable_if <exists <typename predicator <Func, BOp, typename LTerm::const_chunk_iterator, typename RTerm::const_chunk_iterator>::type>::value>::type>
@@ -310,7 +395,7 @@ namespace stdext
 								typename binary_term <LTerm, RTerm, BOp>::const_iterator iter = expr.begin ();
 								std::advance (iter, size - tailed);
 								
-								typedef Func <bool> function;
+								typedef Func <bool, bool> function;
 								return stdext::accumulate_n (iter, tailed, partial, function ());
 							}
 							
@@ -325,7 +410,7 @@ namespace stdext
 								bool init = *pred;
 								++pred;
 								
-								typedef Func <bool> function;
+								typedef Func <bool, bool> function;
 								return tail (expr, stdext::accumulate_n (pred, expr.size () / chunk_type::length - 1, init, function ()));
 							}
 

@@ -74,7 +74,7 @@ namespace stdext
 							//@{
 							
 							/// Sums all the elements.
-							T sum () const	{ return accumulate_array <std::plus> (that ()); }
+							T sum () const	{ return accumulate_array <stdext::plus> (that ()); }
 							
 							/// Gets the minimum element.
 							T min () const	{ return accumulate_array <stdext::minimum> (that ()); }
@@ -174,16 +174,16 @@ namespace stdext
 							
 							//@{
 																				
-							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator*=, std::multiplies)
-							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator/=, std::divides)
-							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator%=, std::modulus)
-							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator+=, std::plus)
-							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator-=, std::minus)
-							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator^=, stdext::bitwise_xor)			
-							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator&=, stdext::bitwise_and)
-							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator|=, stdext::bitwise_or)
-							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator<<=, stdext::shift_left)
-							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator>>=, stdext::shift_right)
+							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator*=, multiplies)
+							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator/=, divides)
+							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator%=, modulus)
+							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator+=, plus)
+							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator-=, minus)
+							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator^=, bitwise_xor)			
+							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator&=, bitwise_and)
+							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator|=, bitwise_or)
+							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator<<=, shift_left)
+							DEFINE_VALARRAY_CASSIGN_FUNCTION (operator>>=, shift_right)
 							
 							//@}
 														
@@ -207,57 +207,50 @@ namespace stdext
 					
 					};
 
-
-				#define DEFINE_VALARRAY_UNARY_FUNCTION(FUNC,OPER)									\
-				template <typename T, typename Term> inline const unary_term <Term, OPER> FUNC	\
-					(const term <T, Term>& lhs)																\
-					{																						\
-						return unary_term <Term, OPER> (lhs.that ());								\
+				#define DEFINE_VALARRAY_UNARY_FUNCTION(FUNC,OPER)												\
+				template <typename T, typename Term>															\
+					inline const typename impl::enable_if <														\
+					exists <typename OPER <T>::result_type>::value, unary_term <Term, OPER> >::type FUNC		\
+					(const term <T, Term>& lhs)																	\
+					{																							\
+						return unary_term <Term, OPER> (lhs.that ());											\
 					}
 
-				#define DEFINE_VALARRAY_BINARY_FUNCTION(FUNC, OPER)															\
-				template <typename T, typename LTerm, typename RTerm>														\
-					inline const binary_term <LTerm, RTerm, OPER> FUNC															\
-					(const term <T, LTerm>& lhs, const term <T, RTerm>& rhs)									\
-					{																										\
-						return binary_term <LTerm, RTerm, OPER> (lhs.that (), rhs.that ());									\
-					}																										\
-																															\
-				template <typename T, typename RTerm>																		\
-					inline const binary_term <literal_term <RTerm>, RTerm, OPER> FUNC												\
-					(const T& lhs, const term <T, RTerm>& rhs)														\
-					{																										\
-						return binary_term <literal_term <RTerm>, RTerm, OPER>												\
-							(literal_term <RTerm> (lhs, rhs.that ()), rhs.that ());											\
-					}																										\
-																															\
-				template <typename T, typename LTerm>																		\
-					inline const binary_term <LTerm, literal_term <LTerm>, OPER> FUNC												\
-					(const term <T, LTerm>& lhs, const T& rhs)														\
-					{																										\
-						return binary_term <LTerm, literal_term <LTerm>, OPER>												\
-							(lhs.that (), literal_term <LTerm> (rhs, lhs.that ()));											\
+				#define DEFINE_VALARRAY_BINARY_FUNCTION(FUNC, OPER)												\
+				template <typename T1, typename T2, typename LTerm, typename RTerm>								\
+					inline const typename impl::enable_if <exists <typename OPER <T1, T2>::result_type>::value,	\
+					binary_term <LTerm, RTerm, OPER> >::type FUNC												\
+					(const term <T1, LTerm>& lhs, const term <T2, RTerm>& rhs)									\
+					{																							\
+						return binary_term <LTerm, RTerm, OPER> (lhs.that (), rhs.that ());						\
+					}																							\
+																												\
+				template <typename T1, typename T2, typename RTerm>												\
+					inline const typename impl::enable_if <exists <typename OPER <T1, T2>::result_type>::value,	\
+					binary_term <literal_term <RTerm>, RTerm, OPER> >::type FUNC								\
+					(const T1& lhs, const term <T2, RTerm>& rhs)												\
+					{																							\
+						return binary_term <literal_term <RTerm>, RTerm, OPER>									\
+							(literal_term <RTerm> (lhs, rhs.that ()), rhs.that ());								\
+					}																							\
+																												\
+				template <typename T1, typename T2, typename LTerm>												\
+					inline const typename impl::enable_if <exists <typename OPER <T1, T2>::result_type>::value,	\
+					binary_term <LTerm, literal_term <LTerm>, OPER> >::type FUNC								\
+					(const term <T1, LTerm>& lhs, const T2& rhs)												\
+					{																							\
+						return binary_term <LTerm, literal_term <LTerm>, OPER>									\
+							(lhs.that (), literal_term <LTerm> (rhs, lhs.that ()));								\
 					}														
 					
-				// XLC doesn't like foreign namespace qualified template template params in template functions -- say that three times fast...
-				// so we bring in all the ones we need from the std namespace...
-				
-				using std::negate;
-				using std::logical_not;
-				using std::multiplies;
-				using std::divides;
-				using std::modulus;        
-				using std::plus;
-				using std::minus;
-				using std::equal_to;
-				using std::not_equal_to;
-				using std::less;
-				using std::greater;
-				using std::less_equal;
-				using std::greater_equal;
-				using std::logical_and;
-				using std::logical_or;			
-
+				#define DEFINE_VALARRAY_TERNARY_FUNCTION(FUNC, OPER)														\
+				template <typename T1, typename T2, typename T3, typename LTerm, typename MTerm, typename RTerm>			\
+					inline const ternary_term <LTerm, MTerm, RTerm, OPER> FUNC												\
+					(const term <T1, LTerm>& lhs, const term <T2, MTerm>& mhs, const term <T3, RTerm>& rhs)					\
+					{																										\
+						return ternary_term <LTerm, MTerm, RTerm, OPER> (lhs.that (), mhs.that (), rhs.that ());			\
+					}
+					
 				/// @name Unary Arithmetic
 				/// @relates term
 				/// Each returns a new term with elements of type T.
@@ -332,8 +325,12 @@ namespace stdext
 				DEFINE_VALARRAY_UNARY_FUNCTION (exp, exponent)
 				DEFINE_VALARRAY_UNARY_FUNCTION (log, logarithm)
 				DEFINE_VALARRAY_UNARY_FUNCTION (log10, logarithm10)
+				DEFINE_VALARRAY_BINARY_FUNCTION (max, maximum)
+				DEFINE_VALARRAY_BINARY_FUNCTION (min, minimum)
 				DEFINE_VALARRAY_BINARY_FUNCTION (mulhi, multiplies_high)
 				DEFINE_VALARRAY_BINARY_FUNCTION (pow, power)
+				DEFINE_VALARRAY_UNARY_FUNCTION (rsqrt, reciprocal_square_root)
+				DEFINE_VALARRAY_TERNARY_FUNCTION (select, selection)
 				DEFINE_VALARRAY_UNARY_FUNCTION (sin, sine)
 				DEFINE_VALARRAY_UNARY_FUNCTION (sinh, hyperbolic_sine)
 				DEFINE_VALARRAY_UNARY_FUNCTION (sqrt, square_root)

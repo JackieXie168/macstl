@@ -64,7 +64,6 @@
 
 #include "common.h"
 
-const std::size_t prime_caches = 100;
 const std::size_t size = 1000;
 const std::size_t tries = 100000;
 
@@ -72,13 +71,28 @@ const int step1 = 5;
 const int step2 = 6;
 const int step3 = 7;
 
+#if defined(__GNUC__)
+#define NOINLINE __attribute((noinline))
+#elif defined(_MSC_VER)
+#define NOINLINE __declspec(noinline)
+#else
+#define NOINLINE
+#endif
+
+template <typename Fn> NOINLINE void loop (Fn& fn);
+
+template <typename Fn> void loop (Fn& fn)
+	{
+		for (std::size_t j = 0; j != tries; ++j)
+			fn ();
+	}
+
 template <typename Fn> inline clock_t bench ()
 	{
 		Fn fn;
-		for (unsigned int i = 0; i != prime_caches; ++i)
-			fn ();
+
 		clock_t start = clock ();
-		for (unsigned int j = 0; j != tries; ++j)
+		for (std::size_t j = 0; j != tries; ++j)
 			fn ();
 		clock_t finish = clock ();
 		return finish - start;	
@@ -109,30 +123,12 @@ template <typename V> class polynomial
 				{
 					vr = 3.0f * v1 * v1 + 2.0f * v1 + 1.0f;
 				}
-	
+				
 		private:
 			V v1;
 			V vr;
 	};
 
-template <typename T> class polynomial <stdext::statarray <T, size> >
-	{
-		public:
-			polynomial (): v1 (), vr ()
-				{
-					seed ();
-					randomize <T> () (v1, size);
-				}
-				
-			void operator() ()
-				{
-					vr = 3.0f * v1 * v1 + 2.0f * v1 + 1.0f;
-				}
-	
-		private:
-			stdext::statarray <T, size> v1;
-			stdext::statarray <T, size> vr;
-	};
 	
 template <typename T> class polynomial <T*>
 	{
@@ -154,12 +150,11 @@ template <typename T> class polynomial <T*>
 					for (std::size_t i = 0; i != size; ++i)
 						vr [i] = 3.0f * v1 [i] * v1 [i] + 2.0f * v1 [i] + 1.0f;
 				}
-	
+
 		private:
 			T* v1;
 			T* vr;
 	};
-
 
 template <typename V> class multiply_add
 	{
@@ -176,35 +171,12 @@ template <typename V> class multiply_add
 				{
 					vr = v1 * v2 + v3;
 				}
-	
+
 		private:
 			V v1;
 			V v2;
 			V v3;
 			V vr;
-	};
-
-template <typename T> class multiply_add <stdext::statarray <T, size> >
-	{
-		public:
-			multiply_add (): v1 (), v2 (), v3 (), vr ()
-				{
-					seed ();
-					randomize <T> () (v1, size);
-					randomize <T> () (v2, size);
-					randomize <T> () (v3, size);
-				}
-				
-			void operator() ()
-				{
-					vr = v1 * v2 + v3;
-				}
-	
-		private:
-			stdext::statarray <T, size> v1;
-			stdext::statarray <T, size> v2;
-			stdext::statarray <T, size> v3;
-			stdext::statarray <T, size> vr;
 	};
 	
 template <typename T> class multiply_add <T*>
@@ -231,13 +203,16 @@ template <typename T> class multiply_add <T*>
 					for (std::size_t i = 0; i != size; ++i)
 						vr [i] = v1 [i] * v2 [i] + v3 [i];
 				}
-	
+
 		private:
 			T* v1;
 			T* v2;
 			T* v3;
 			T* vr;
 	};
+
+	
+/*
 
 template <typename V> class division
 	{
@@ -288,6 +263,8 @@ template <typename T> class division <T*>
 			T* v2;
 			T* vr;
 	};
+	
+*/
 
 template <typename V> class inner_product
 	{
@@ -303,34 +280,13 @@ template <typename V> class inner_product
 				{
 					r = (v1 * v2).sum ();
 				}
-	
+				
 		private:
 			V v1;
 			V v2;
 			typename V::value_type r;
 	};
 
-template <typename T> class inner_product <stdext::statarray <T, size> >
-	{
-		public:
-			inner_product (): v1 (), v2 ()
-				{
-					seed ();
-					randomize <T> () (v1, size);
-					randomize <T> () (v2, size);
-				}
-				
-			void operator() ()
-				{
-					r = (v1 * v2).sum ();
-				}
-	
-		private:
-			stdext::statarray <T, size> v1;
-			stdext::statarray <T, size> v2;
-			T r;
-	};
-	
 template <typename T> class inner_product <T*>
 	{
 		public:
@@ -354,15 +310,13 @@ template <typename T> class inner_product <T*>
 						r2 += v1 [i] * v2 [i];
 					r = r2;
 				}
-	
+
 		private:
 			T* v1;
 			T* v2;
-			
-		public:
-			static T r;	// prevent optimizing this away!!
+			static T r;
 	};
-
+	
 template <typename T> T inner_product <T*>::r;
 
 template <typename V> class hypotenuse
@@ -379,34 +333,13 @@ template <typename V> class hypotenuse
 				{
 					vr = sqrt (v1 * v1 + v2 * v2);
 				}
-	
+				
 		private:
 			V v1;
 			V v2;
 			V vr;
 	};
 	
-template <typename T> class hypotenuse <stdext::statarray <T, size> >
-	{
-		public:
-			hypotenuse (): v1 (), v2 (), vr ()
-				{
-					seed ();
-					randomize <T> () (v1, size);
-					randomize <T> () (v2, size);
-				}
-				
-			void operator() ()
-				{
-					vr = sqrt (v1 * v1 + v2 * v2);
-				}
-	
-		private:
-			stdext::statarray <T, size> v1;
-			stdext::statarray <T, size> v2;
-			stdext::statarray <T, size> vr;
-	};
-
 template <typename T> class hypotenuse <T*>
 	{
 		public:
@@ -429,7 +362,7 @@ template <typename T> class hypotenuse <T*>
 					for (std::size_t i = 0; i != size; ++i)
 						vr [i] = std::sqrt (v1 [i] * v1 [i] + v2 [i] * v2 [i]);
 				}
-	
+
 		private:
 			T* v1;
 			T* v2;
@@ -450,34 +383,11 @@ template <typename V> class trigonometric
 				{
 					vr = sin (v1) * cos (v2) + sin (v2) * cos (v1);
 				}
-	
+
 		private:
 			V v1;
 			V v2;
 			V vr;
-	};
-	
-
-
-template <typename T> class trigonometric <stdext::statarray <T, size> >
-	{
-		public:
-			trigonometric (): v1 (), v2 (), vr ()
-				{
-					seed ();
-					randomize <T> () (v1, size);
-					randomize <T> () (v2, size);
-				}
-				
-			void operator() ()
-				{
-					vr = sin (v1) * cos (v2) + sin (v2) * cos (v1);
-				}
-	
-		private:
-			stdext::statarray <T, size> v1;
-			stdext::statarray <T, size> v2;
-			stdext::statarray <T, size> vr;
 	};
 	
 template <typename T> class trigonometric <T*>
@@ -502,7 +412,7 @@ template <typename T> class trigonometric <T*>
 					for (std::size_t i = 0; i != size; ++i)
 						vr [i] = std::sin (v1 [i]) * std::cos (v2 [i]) + std::sin (v2 [i]) * std::cos (v1 [i]);
 				}
-	
+
 		private:
 			T* v1;
 			T* v2;
@@ -523,34 +433,11 @@ template <typename V> class power
 				{
 					vr = exp (log (v1) * v2);
 				}
-	
+
 		private:
 			V v1;
 			V v2;
 			V vr;
-	};
-	
-
-
-template <typename T> class power <stdext::statarray <T, size> >
-	{
-		public:
-			power (): v1 (), v2 (), vr ()
-				{
-					seed ();
-					randomize <T> () (v1, size);
-					randomize <T> () (v2, size);
-				}
-				
-			void operator() ()
-				{
-					vr = exp (log (v1) * v2);
-				}
-	
-		private:
-			stdext::statarray <T, size> v1;
-			stdext::statarray <T, size> v2;
-			stdext::statarray <T, size> vr;
 	};
 	
 template <typename T> class power <T*>
@@ -575,7 +462,7 @@ template <typename T> class power <T*>
 					for (std::size_t i = 0; i != size; ++i)
 						vr [i] = std::exp (std::log (v1 [i]) * v2 [i]);
 				}
-	
+
 		private:
 			T* v1;
 			T* v2;
@@ -596,34 +483,13 @@ template <typename V> class predicate
 				{
 					r = (v1 == v2).max ();
 				}
-	
+				
 		private:
 			V v1;
 			V v2;
 			bool r;
 	};
 
-template <typename T> class predicate <stdext::statarray <T, size> >
-	{
-		public:
-			predicate (): v1 (), v2 ()
-				{
-					seed ();
-					randomize <T> () (v1, size);
-					randomize <T> () (v2, size);
-				}
-				
-			void operator() ()
-				{
-					r = (v1 == v2).max ();
-				}
-	
-		private:
-			stdext::statarray <T, size> v1;
-			stdext::statarray <T, size> v2;
-			bool r;
-	};
-	
 template <typename T> class predicate <T*>
 	{
 		public:
@@ -650,17 +516,12 @@ template <typename T> class predicate <T*>
 								return;
 							}
 				}
-	
+				
 		private:
 			T* v1;
 			T* v2;
-			
-		public:
-			static bool r;	// prevent optimizing this away!!
+			bool r;
 	};
-
-template <typename T> bool predicate <T*>::r;
-
 
 template <typename V> class slicing
 	{
@@ -679,14 +540,14 @@ template <typename V> class slicing
 						+ ((const V&) v2) [std::slice (0, size, step2)]
 						+ ((const V&) v3) [std::slice (0, size, step3)];
 				}
-	
+				
 		private:
 			V v1;
 			V v2;
 			V v3;
 			V vr;
 	};
-
+	
 template <typename T> class slicing <stdext::valarray <T> >
 	{
 		public:
@@ -697,14 +558,14 @@ template <typename T> class slicing <stdext::valarray <T> >
 					randomize <T> () (v2, size * step2);
 					randomize <T> () (v3, size * step3);
 				}
-				
+								
 			void operator() ()
 				{
 					vr = v1 [stdext::slice (0, size, step1)]
 						+ v2 [stdext::slice (0, size, step2)]
 					+ v3 [stdext::slice (0, size, step3)];
 				}
-	
+				
 		private:
 			stdext::valarray <T> v1;
 			stdext::valarray <T> v2;
@@ -712,31 +573,6 @@ template <typename T> class slicing <stdext::valarray <T> >
 			stdext::valarray <T> vr;
 	};
 
-template <typename T> class slicing <stdext::statarray <T, size> >
-	{
-		public:
-			slicing (): v1 (),  v2 (),  v3 (), vr ()
-				{
-					seed ();
-					randomize <T> () (v1, size * step1);
-					randomize <T> () (v2, size * step2);
-					randomize <T> () (v3, size * step3);
-				}
-				
-			void operator() ()
-				{
-					vr = v1 [stdext::slice (0, size, step1)]
-						+ v2 [stdext::slice (0, size, step2)]
-					+ v3 [stdext::slice (0, size, step3)];
-				}
-	
-		private:
-			stdext::statarray <T, size * step1> v1;
-			stdext::statarray <T, size * step2> v2;
-			stdext::statarray <T, size * step3> v3;
-			stdext::statarray <T, size> vr;
-	};
-	
 template <typename T> class slicing <T*>
 	{
 		public:
@@ -762,7 +598,7 @@ template <typename T> class slicing <T*>
 						vr [i] = v1 [i * step1] + v2 [i * step2] + v3 [i * step3];
 						
 				}
-	
+				
 		private:
 			T* v1;
 			T* v2;
@@ -785,14 +621,18 @@ int main (int, const char *)
 			std::valarray <float>,
 			stdext::valarray <float>,
 			float*> ("inner product");
+		
 		benchmark <polynomial,
 			std::valarray <float>,
 			stdext::valarray <float>,
 			float*> ("polynomial");
+		
+		
 		benchmark <hypotenuse,
 			std::valarray <float>,
 			stdext::valarray <float>,
 			float*> ("hypotenuse");
+		
 		
 		#ifdef HAS_C99_COMPLEX
 		benchmark <multiply_add,
@@ -800,12 +640,14 @@ int main (int, const char *)
 			stdext::valarray <stdext::complex <float> >,
 			float _Complex*> ("complex multiply add");
 		#endif
+	
 		#ifndef _MSC_VER	// Visual C++ ICE's here
 		benchmark <predicate,
 			std::valarray <float>,
 			stdext::valarray <float>,
 			float*> ("predicate");
 		#endif
+		
 		
 		benchmark <slicing,
 			std::valarray <float>,
@@ -816,7 +658,7 @@ int main (int, const char *)
 			std::valarray <float>,
 			stdext::valarray <float>,
 			float*> ("power");
-		
+	
 		benchmark <trigonometric,
 			std::valarray <float>,
 			stdext::valarray <float>,

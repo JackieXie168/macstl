@@ -35,21 +35,258 @@
 #ifndef MACSTL_IMPL_VEC_ALTIVEC_H
 #define MACSTL_IMPL_VEC_ALTIVEC_H
 
+// if we #include <altivec.h>, we need to #undef some macros which conflict with C++ reserved words
+#ifdef USE_ALTIVEC_H
+#include <altivec.h>
+#undef bool
+#undef pixel
+#undef vector
+#endif
+
+// Codewarrior prefers we use __vector bool instead of __vector __bool
+#ifdef USE_CONTEXTUAL_BOOL
+#define __bool bool
+#endif
+
+namespace stdext
+	{
+		template <> struct accumulator <maximum <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> > >
+			{
+				typedef macstl::vec <unsigned char, 16> argument_type;
+				typedef unsigned char result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <> struct accumulator <maximum <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> > >
+			{
+				typedef macstl::vec <signed char, 16> argument_type;
+				typedef signed char result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+			
+		template <> struct accumulator <maximum <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> > >
+			{
+				typedef macstl::vec <unsigned short, 8> argument_type;
+				typedef unsigned short result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <> struct accumulator <maximum <macstl::vec <short, 8>, macstl::vec <short, 8> > >
+			{
+				typedef macstl::vec <short, 8> argument_type;
+				typedef short result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <> struct accumulator <maximum <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> > >
+			{
+				typedef macstl::vec <unsigned int, 4> argument_type;
+				typedef unsigned int result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <> struct accumulator <maximum <macstl::vec <int, 4>, macstl::vec <int, 4> > >
+			{
+				typedef macstl::vec <int, 4> argument_type;
+				typedef int result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <> struct accumulator <maximum <macstl::vec <float, 4>, macstl::vec <float, 4> > >
+			{
+				typedef macstl::vec <float, 4> argument_type;
+				typedef float result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <typename T, std::size_t n> struct accumulator <maximum <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> > >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
+				typedef macstl::boolean <T> result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <> struct accumulator <minimum <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> > >
+			{
+				typedef macstl::vec <unsigned char, 16> argument_type;
+				typedef unsigned char result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <> struct accumulator <minimum <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> > >
+			{
+				typedef macstl::vec <signed char, 16> argument_type;
+				typedef signed char result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <> struct accumulator <minimum <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> > >
+			{
+				typedef macstl::vec <unsigned short, 8> argument_type;
+				typedef unsigned short result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <> struct accumulator <minimum <macstl::vec <short, 8>, macstl::vec <short, 8> > >
+			{
+				typedef macstl::vec <short, 8> argument_type;
+				typedef short result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <> struct accumulator <minimum <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> > >
+			{
+				typedef macstl::vec <unsigned int, 4> argument_type;
+				typedef unsigned int result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <> struct accumulator <minimum <macstl::vec <int, 4>, macstl::vec <int, 4> > >
+			{
+				typedef macstl::vec <int, 4> argument_type;
+				typedef int result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <> struct accumulator <minimum <macstl::vec <float, 4>, macstl::vec <float, 4> > >
+			{
+				typedef macstl::vec <float, 4> argument_type;
+				typedef float result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <typename T, std::size_t n> struct accumulator <minimum <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> > >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
+				typedef macstl::boolean <T> result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+		
+		// accumulator <plus>
+
+		template <> struct accumulator <plus <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> > >
+			{
+				typedef macstl::vec <signed char, 16> argument_type;
+				typedef signed char result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <> struct accumulator <plus <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> > >
+			{
+				typedef macstl::vec <unsigned char, 16> argument_type;
+				typedef unsigned char result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <> struct accumulator <plus <macstl::vec <short, 8>, macstl::vec <short, 8> > >
+			{
+				typedef macstl::vec <short, 8> argument_type;
+				typedef short result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+			
+		template <> struct accumulator <plus <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> > >
+			{
+				typedef macstl::vec <unsigned short, 8> argument_type;
+				typedef unsigned short result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <> struct accumulator <plus <macstl::vec <int, 4>, macstl::vec <int, 4> > >
+			{
+				typedef macstl::vec <int, 4> argument_type;
+				typedef int result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+			
+		template <> struct accumulator <plus <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> > >
+			{
+				typedef macstl::vec <unsigned int, 4> argument_type;
+				typedef unsigned int result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <> struct accumulator <plus <macstl::vec <float, 4>, macstl::vec <float, 4> > >
+			{
+				typedef macstl::vec <float, 4> argument_type;
+				typedef float result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <typename T, std::size_t n> struct accumulator <plus <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> > >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
+				typedef macstl::boolean <T> result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <> struct accumulator <plus <macstl::vec <stdext::complex <float>, 2>, macstl::vec <stdext::complex <float>, 2> > >
+			{
+				typedef macstl::vec <stdext::complex <float>, 2> argument_type;
+				typedef stdext::complex <float> result_type;
+				
+				result_type operator() (const argument_type& lhs) const;
+			};
+
+		template <typename T, std::size_t n> struct cshifter <macstl::vec <T, n> >
+			{
+				typedef macstl::vec <T, n> first_argument_type;
+				typedef int second_argument_type;
+				typedef macstl::vec <T, n> result_type;
+
+				result_type operator() (const first_argument_type& lhs, second_argument_type rhs) const;
+			};
+
+		template <typename T, std::size_t n> struct shifter <macstl::vec <T, n> >
+			{
+				typedef macstl::vec <T, n> first_argument_type;
+				typedef int second_argument_type;
+				typedef macstl::vec <T, n> result_type;
+
+				result_type operator() (const first_argument_type& lhs, second_argument_type rhs) const;
+			};
+
+	}
+	
 namespace macstl
 	{
 		namespace impl
 			{
 				template <> struct data_vec <__vector unsigned char>	{ typedef vec <unsigned char, 16> type; };
 				template <> struct data_vec <__vector signed char>		{ typedef vec <signed char, 16> type; };
-				template <> struct data_vec <__vector bool char>		{ typedef vec <boolean <char>, 16> type; };
+				template <> struct data_vec <__vector __bool char>		{ typedef vec <boolean <char>, 16> type; };
 				template <> struct data_vec <__vector unsigned short>	{ typedef vec <unsigned short, 8> type; };
 				template <> struct data_vec <__vector signed short>		{ typedef vec <short, 8> type; };
-				template <> struct data_vec <__vector bool short>		{ typedef vec <boolean <short>, 8> type; };
+				template <> struct data_vec <__vector __bool short>		{ typedef vec <boolean <short>, 8> type; };
 				template <> struct data_vec <__vector unsigned int>		{ typedef vec <unsigned int, 4> type; };
 				template <> struct data_vec <__vector signed int>		{ typedef vec <int, 4> type; };
-				template <> struct data_vec <__vector bool int>			{ typedef vec <boolean <int>, 4> type; };
+				template <> struct data_vec <__vector __bool int>		{ typedef vec <boolean <int>, 4> type; };
 				template <> struct data_vec <__vector float>			{ typedef vec <float, 4> type; };
-				template <> struct data_vec <__vector pixel>			{ typedef vec <pixel, 8> type; };
+				template <> struct data_vec <__vector __pixel>			{ typedef vec <pixel, 8> type; };
 
 				template <unsigned int v0, unsigned int v1, unsigned int v2, unsigned int v3> struct generator
 					{
@@ -83,20 +320,31 @@ namespace macstl
 				#ifdef NDEBUG
 				#include "impl/generator.h"
 				#endif
+				
+				// Apple gcc 3.3 on Mac OS X 10.3: static_cast <V> (v) works but (V) v doesn't inside of a static template member function
+				// Apple gcc 4.0 on Mac OS X 10.4 (Xcode 2.0): static_cast <V> (v) doesn't work but (V) v works everywhere
+				// Apple gcc 4.0 on Mac OS X 10.4 (Xcode 2.1): static_cast <V> (v) works, (V) v works too
+				// FSF 3.x? on YDL: static_cast <V> (v) doesn't work but (V) v works everywhere
+				// thus to avoid a total mental breakdown for future legions of Altivec programmers, we define an inline function to handle static casting of vectors
+				template <typename T1, typename T2> inline T1 vector_cast (T2 vector)
+					{
+						return (T1) vector;
+					}
 			}
 			
 		#ifndef DOXYGEN
 		
-		template <> class vec <unsigned char, 16>: public impl::vec_base <__vector unsigned char, unsigned char, boolean <char> >
+		template <> class vec <unsigned char, 16>
 			{
+				DEFINE_VEC_CLASS_GUTS(__vector unsigned char,unsigned char,boolean <char>)
+							
 				public:
-					typedef unsigned char value_type;
 					typedef unsigned char init_type;
 					
 					union union_type
 						{
 							unsigned char val [16];
-							__vector unsigned char vec;
+							data_type vec;
 						};
 					
 					static vec set (
@@ -123,7 +371,7 @@ namespace macstl
 						init_type v12, init_type v13, init_type v14, init_type v15>
 						static vec set ()
 						{
-							return static_cast <__vector unsigned char> (impl::generator <
+							return impl::vector_cast <data_type> (impl::generator <
 								(v0 << 24) | (v1 << 16) | (v2 << 8) | v3,
 								(v4 << 24) | (v5 << 16) | (v6 << 8) | v7,
 								(v8 << 24) | (v9 << 16) | (v10 << 8) | v11,
@@ -136,30 +384,29 @@ namespace macstl
 							return set <v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (static_cast <__vector unsigned char> (impl::generator <0, 0, 0, 0> () ()))
+					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
 						{
 						}
 						
-					vec (__vector unsigned char data): data_ (data)
-						{
-						}
-					
-					friend class impl::vec_base <__vector unsigned char, unsigned char, boolean <char> >;
-					
-				private:
-					__vector unsigned char data_;
+					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+
+					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
+					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
 			};
 
-		template <> class vec <signed char, 16>: public impl::vec_base <__vector signed char, signed char, boolean <char> >
+		template <> class vec <signed char, 16>
 			{
+				DEFINE_VEC_CLASS_GUTS(__vector signed char,signed char,boolean <char>)
+				
 				public:
-					typedef signed char value_type;
 					typedef signed char init_type;
 					
 					union union_type
 						{
 							signed char val [16];
-							__vector signed char vec;
+							data_type vec;
 						};
 					
 					static vec set (
@@ -186,7 +433,7 @@ namespace macstl
 						init_type v12, init_type v13, init_type v14, init_type v15>
 						static vec set ()
 						{
-							return static_cast <__vector signed char> (impl::generator <
+							return impl::vector_cast <data_type> (impl::generator <
 								(((unsigned char) v0) << 24) | (((unsigned char) v1) << 16) | (((unsigned char) v2) << 8) | ((unsigned char) v3),
 								(((unsigned char) v4) << 24) | (((unsigned char) v5) << 16) | (((unsigned char) v6) << 8) | ((unsigned char) v7),
 								(((unsigned char) v8) << 24) | (((unsigned char) v9) << 16) | (((unsigned char) v10) << 8) | ((unsigned char) v11),
@@ -199,30 +446,29 @@ namespace macstl
 							return set <v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (static_cast <__vector signed char> (impl::generator <0, 0, 0, 0> () ()))
+					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
 						{
 						}
 						
-					vec (__vector signed char data): data_ (data)
-						{
-						}
-					
-					friend class impl::vec_base <__vector signed char, signed char, boolean <char> >;
-					
-				private:
-					__vector signed char data_;
+					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+
+					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
+					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
 			};
 
-		template <> class vec <boolean <char>, 16>: public impl::vec_base <__vector bool char, boolean <char>, boolean <char> >
+		template <> class vec <boolean <char>, 16>
 			{
+				DEFINE_VEC_CLASS_GUTS(__vector __bool char,boolean <char>,boolean <char>)
+				
 				public:
-					typedef boolean <char> value_type;
 					typedef bool init_type;
 					
 					union union_type
 						{
 							signed char val [16];
-							__vector bool char vec;
+							data_type vec;
 						};
 					
 					static vec set (
@@ -253,7 +499,7 @@ namespace macstl
 						init_type v12, init_type v13, init_type v14, init_type v15>
 						static vec set ()
 						{
-							return static_cast <__vector bool char> (impl::generator <
+							return impl::vector_cast <data_type> (impl::generator <
 								(v0 ? 0xFF000000U : 0) | (v1 ? 0x00FF0000U : 0) | (v2 ? 0x0000FF00U : 0) | (v3 ? 0x000000FFU : 0),
 								(v4 ? 0xFF000000U : 0) | (v5 ? 0x00FF0000U : 0) | (v6 ? 0x0000FF00U : 0) | (v7 ? 0x000000FFU : 0),
 								(v8 ? 0xFF000000U : 0) | (v9 ? 0x00FF0000U : 0) | (v10 ? 0x0000FF00U : 0) | (v11 ? 0x000000FFU : 0),
@@ -266,30 +512,29 @@ namespace macstl
 							return set <v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (static_cast <__vector bool char> (impl::generator <0, 0, 0, 0> () ()))
+					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
 						{
 						}
 						
-					vec (__vector bool char data): data_ (data)
-						{
-						}
-					
-					friend class impl::vec_base <__vector bool char, boolean <char>, boolean <char> >;
-					
-				private:
-					__vector bool char data_;
+					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+
+					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
+					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
 			};
 	
-		template <> class vec <unsigned short, 8>: public impl::vec_base <__vector unsigned short, unsigned short, boolean <short> >
+		template <> class vec <unsigned short, 8>
 			{
+				DEFINE_VEC_CLASS_GUTS(__vector unsigned short,unsigned short,boolean <short>)
+				
 				public:
-					typedef unsigned short value_type;
 					typedef unsigned short init_type;
 					
 					union union_type
 						{
 							unsigned short val [8];
-							__vector unsigned short vec;
+							data_type vec;
 						};
 					
 					static vec set (
@@ -312,7 +557,7 @@ namespace macstl
 						init_type v4, init_type v5, init_type v6, init_type v7>
 						static vec set ()
 						{
-							return static_cast <__vector unsigned short> (impl::generator <
+							return impl::vector_cast <data_type> (impl::generator <
 								(v0 << 16) | v1, (v2 << 16) | v3,
 								(v4 << 16) | v5, (v6 << 16) | v7> () ());
 						}
@@ -323,30 +568,29 @@ namespace macstl
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (static_cast <__vector unsigned short> (impl::generator <0, 0, 0, 0> () ()))
+					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
 						{
 						}
 						
-					vec (__vector unsigned short data): data_ (data)
-						{
-						}
-					
-					friend class impl::vec_base <__vector unsigned short, unsigned short, boolean <short> >;
-					
-				private:
-					__vector unsigned short data_;
+					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+
+					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
+					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
 			};
 
-		template <> class vec <short, 8>: public impl::vec_base <__vector signed short, short, boolean <short> >
+		template <> class vec <short, 8>
 			{
+				DEFINE_VEC_CLASS_GUTS(__vector signed short,short,boolean <short>)
+				
 				public:
-					typedef short value_type;
 					typedef short init_type;
 					
 					union union_type
 						{
 							short val [8];
-							__vector signed short vec;
+							data_type vec;
 						};
 					
 					static vec set (
@@ -369,7 +613,7 @@ namespace macstl
 						init_type v4, init_type v5, init_type v6, init_type v7>
 						static vec set ()
 						{
-							return static_cast <__vector signed short> (impl::generator <
+							return impl::vector_cast <data_type> (impl::generator <
 								(((unsigned short) v0) << 16) | ((unsigned short) v1), (((unsigned short) v2) << 16) | ((unsigned short) v3),
 								(((unsigned short) v4) << 16) | ((unsigned short) v5), (((unsigned short) v6) << 16) | ((unsigned short) v7)> () ());
 						}
@@ -380,30 +624,81 @@ namespace macstl
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (static_cast <__vector signed short> (impl::generator <0, 0, 0, 0> () ()))
+					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
 						{
 						}
 						
-					vec (__vector signed short data): data_ (data)
-						{
-						}
-					
-					friend class impl::vec_base <__vector signed short, short, boolean <short> >;
-					
-				private:
-					__vector signed short data_;
+					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+
+					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
+					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
 			};
 
-		template <> class vec <boolean <short>, 8>: public impl::vec_base <__vector bool short, boolean <short>, boolean <short> >
+		template <> class vec <pixel, 8>
 			{
+				DEFINE_VEC_CLASS_GUTS(__vector __pixel,unsigned short,boolean <short>)
+				
 				public:
-					typedef boolean <short> value_type;
+					typedef unsigned short init_type;
+					
+					union union_type
+						{
+							unsigned short val [8];
+							data_type vec;
+						};
+					
+					static vec set (
+						value_type v0, value_type v1, value_type v2, value_type v3,
+						value_type v4, value_type v5, value_type v6, value_type v7)
+						{
+							union_type un = {v0, v1, v2, v3, v4, v5, v6, v7};
+							return un.vec;
+						}
+						
+					static vec fill (
+						value_type v0)
+						{
+							union_type un = {v0};
+							return vec_splat (un.vec, 0);
+						}
+						
+					template <
+						init_type v0, init_type v1, init_type v2, init_type v3,
+						init_type v4, init_type v5, init_type v6, init_type v7>
+						static vec set ()
+						{
+							return impl::vector_cast <data_type> (impl::generator <
+								(v0 << 16) | v1, (v2 << 16) | v3,
+								(v4 << 16) | v5, (v6 << 16) | v7> () ());
+						}
+						
+					template <init_type v0>
+						static vec fill ()
+						{
+							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
+						}
+						
+					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
+						{
+						}
+						
+					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
+					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
+			};
+
+		template <> class vec <boolean <short>, 8>
+			{
+				DEFINE_VEC_CLASS_GUTS(__vector __bool short,boolean <short>,boolean <short>)
+				
+				public:
 					typedef bool init_type;
 					
 					union union_type
 						{
 							short val [8];
-							__vector bool short vec;
+							data_type vec;
 						};
 					
 					static vec set (
@@ -428,7 +723,7 @@ namespace macstl
 						init_type v4, init_type v5, init_type v6, init_type v7>
 						static vec set ()
 						{
-							return static_cast <__vector bool short> (impl::generator <
+							return impl::vector_cast <data_type> (impl::generator <
 								(v0 ? 0xFFFF0000U : 0) | (v1 ? 0x0000FFFFU : 0), (v2 ? 0xFFFF0000U : 0) | (v3 ? 0x0000FFFFU : 0),
 								(v4 ? 0xFFFF0000U : 0) | (v5 ? 0x0000FFFFU : 0), (v6 ? 0xFFFF0000U : 0) | (v7 ? 0x0000FFFFU : 0)> () ());
 						}
@@ -439,30 +734,29 @@ namespace macstl
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (static_cast <__vector bool short> (impl::generator <0, 0, 0, 0> () ()))
+					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
 						{
 						}
 						
-					vec (__vector bool short data): data_ (data)
-						{
-						}
-					
-					friend class impl::vec_base <__vector bool short, boolean <short>, boolean <short> >;
-					
-				private:
-					__vector bool short data_;
+					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+
+					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
+					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
 			};
 
-		template <> class vec <unsigned int, 4>: public impl::vec_base <__vector unsigned int, unsigned int, boolean <int> >
+		template <> class vec <unsigned int, 4>
 			{
+				DEFINE_VEC_CLASS_GUTS(__vector unsigned int,unsigned int, boolean <int>)
+				
 				public:
-					typedef unsigned int value_type;
 					typedef unsigned int init_type;
 					
 					union union_type
 						{
 							unsigned int val [4];
-							__vector unsigned int vec;
+							data_type vec;
 						};
 					
 					static vec set (
@@ -492,31 +786,30 @@ namespace macstl
 							return set <v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (static_cast <__vector unsigned int> (impl::generator <0, 0, 0, 0> () ()))
+					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
 						{
 						}
 						
-					vec (__vector unsigned int data): data_ (data)
-						{
-						}
-					
-					friend class impl::vec_base <__vector unsigned int, unsigned int, boolean <int> >;
-					
-				private:
-					__vector unsigned int data_;
+					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+
+					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
+					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
 			};
 
 
-		template <> class vec <int, 4>: public impl::vec_base <__vector signed int, int, boolean <int> >
+		template <> class vec <int, 4>
 			{
+				DEFINE_VEC_CLASS_GUTS(__vector signed int, int, boolean <int>)
+				
 				public:
-					typedef int value_type;
 					typedef int init_type;
 					
 					union union_type
 						{
 							int val [4];
-							__vector signed int vec;
+							data_type vec;
 						};
 					
 					static vec set (
@@ -537,7 +830,7 @@ namespace macstl
 						init_type v0, init_type v1, init_type v2, init_type v3>
 						static vec set ()
 						{
-							return static_cast <__vector signed int> (impl::generator <(int) v0, (int) v1, (int) v2, (int) v3> () ());
+							return impl::vector_cast <data_type> (impl::generator <(int) v0, (int) v1, (int) v2, (int) v3> () ());
 						}
 
 					template <init_type v0>
@@ -546,30 +839,29 @@ namespace macstl
 							return set <v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (static_cast <__vector signed int> (impl::generator <0, 0, 0, 0> () ()))
+					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
 						{
 						}
 						
-					vec (__vector signed int data): data_ (data)
-						{
-						}
-					
-					friend class impl::vec_base <__vector signed int, int, boolean <int> >;
-					
-				private:
-					__vector signed int data_;
+					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+
+					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
+					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
 			};
 
-		template <> class vec <float, 4>: public impl::vec_base <__vector float, float, boolean <int> >
+		template <> class vec <float, 4>
 			{
+				DEFINE_VEC_CLASS_GUTS(__vector float, float, boolean <int>)
+				
 				public:
-					typedef float value_type;
 					typedef unsigned int init_type;
 					
 					union union_type
 						{
 							float val [4];
-							__vector float vec;
+							data_type vec;
 						};
 					
 					static vec set (
@@ -590,7 +882,7 @@ namespace macstl
 						init_type v0, init_type v1, init_type v2, init_type v3>
 						static vec set ()
 						{
-							return static_cast <__vector float> (impl::generator <v0, v1, v2, v3> () ());
+							return impl::vector_cast <data_type> (impl::generator <v0, v1, v2, v3> () ());
 						}
 
 					template <init_type v0>
@@ -599,30 +891,29 @@ namespace macstl
 							return set <v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (static_cast <__vector float> (impl::generator <0, 0, 0, 0> () ()))
+					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
 						{
 						}
 						
-					vec (__vector float data): data_ (data)
-						{
-						}
-					
-					friend class impl::vec_base <__vector float, float, boolean <int> >;
-					
-				private:
-					__vector float data_;
+					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+
+					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
+					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
 			};
 
-		template <> class vec <boolean <int>, 4>: public impl::vec_base <__vector bool int, boolean <int>, boolean <int> >
+		template <> class vec <boolean <int>, 4>
 			{
+				DEFINE_VEC_CLASS_GUTS(__vector __bool int,boolean <int>,boolean <int>)
+				
 				public:
-					typedef boolean <int> value_type;
 					typedef bool init_type;
 					
 					union union_type
 						{
 							int val [4];
-							__vector bool int vec;
+							data_type vec;
 						};
 					
 					static vec set (
@@ -644,7 +935,7 @@ namespace macstl
 						init_type v0, init_type v1, init_type v2, init_type v3>
 						static vec set ()
 						{
-							return static_cast <__vector bool int> (impl::generator <v0 ? 0xFFFFFFFFU : 0, v1 ? 0xFFFFFFFFU : 0, v2 ? 0xFFFFFFFFU : 0, v3 ? 0xFFFFFFFFU : 0> () ());
+							return impl::vector_cast <data_type> (impl::generator <v0 ? 0xFFFFFFFFU : 0, v1 ? 0xFFFFFFFFU : 0, v2 ? 0xFFFFFFFFU : 0, v3 ? 0xFFFFFFFFU : 0> () ());
 						}
 
 					template <init_type v0>
@@ -653,30 +944,29 @@ namespace macstl
 							return set <v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (static_cast <__vector bool int> (impl::generator <0, 0, 0, 0> () ()))
+					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
 						{
 						}
 						
-					vec (__vector bool int data): data_ (data)
-						{
-						}
-					
-					friend class impl::vec_base <__vector bool int, boolean <int>, boolean <int> >;
-					
-				private:
-					__vector bool int data_;
+					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+
+					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
+					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
 			};
 
-		template <> class vec <stdext::complex <float>, 2>: public impl::vec_base <__vector float, stdext::complex <float>, boolean <long long> >
+		template <> class vec <stdext::complex <float>, 2>
 			{
+				DEFINE_VEC_CLASS_GUTS(__vector float,stdext::complex <float>,boolean <long long>)
+				
 				public:
-					typedef stdext::complex <float> value_type;
 					typedef unsigned long long init_type;
 					
 					union union_type
 						{
 							stdext::complex <float>::data_type val [2];
-							__vector float vec;
+							data_type vec;
 						};
 					
 					static vec set (
@@ -700,7 +990,7 @@ namespace macstl
 						unsigned long long v0, unsigned long long v1>
 						static vec set ()
 						{
-							return static_cast <__vector float> (impl::generator <
+							return impl::vector_cast <data_type> (impl::generator <
 								(v0 & 0xFFFFFFFF00000000ULL) >> 32, v0 & 0x00000000FFFFFFFFULL,
 								(v1 & 0xFFFFFFFF00000000ULL) >> 32, v1 & 0x00000000FFFFFFFFULL> () ());
 						}
@@ -711,30 +1001,27 @@ namespace macstl
 							return set <v0, v0> ();
 						}
 						
-					vec (): data_ (static_cast <__vector float> (impl::generator <0, 0, 0, 0> () ()))
+					vec (): data_ ((__vector float) impl::generator <0, 0, 0, 0> () ())
 						{
 						}
 						
-					vec (__vector float data): data_ (data)
-						{
-						}
-					
-					friend class impl::vec_base <__vector float, stdext::complex <float>, boolean <long long> >;
-					
-				private:
-					__vector float data_;
+					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+
+					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
+					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
 			};
 
-		template <> class vec <boolean <long long>, 2>: public impl::vec_base <__vector bool int, boolean <long long>, boolean <long long> >
+		template <> class vec <boolean <long long>, 2>
 			{
+				DEFINE_VEC_CLASS_GUTS(__vector __bool int,boolean <long long>,boolean <long long>)
+				
 				public:
-					typedef boolean <long long> value_type;
 					typedef bool init_type;
 					
 					union union_type
 						{
 							long long val [2];
-							__vector bool int vec;
+							data_type vec;
 						};
 					
 					static vec set (
@@ -755,7 +1042,7 @@ namespace macstl
 						init_type v0, init_type v1>
 						static vec set ()
 						{
-							return static_cast <__vector bool int> (impl::generator <
+							return impl::vector_cast <data_type> (impl::generator <
 								v0 ? 0xFFFFFFFFU : 0x00000000U, v0 ? 0xFFFFFFFFU : 0x00000000U,
 								v1 ? 0xFFFFFFFFU : 0x00000000U, v1 ? 0xFFFFFFFFU : 0x00000000U> () ());
 						}
@@ -766,19 +1053,18 @@ namespace macstl
 							return set <v0, v0> ();
 						}
 						
-					vec (): data_ (static_cast <__vector bool int> (impl::generator <0, 0, 0, 0> () ()))
+					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
 						{
 						}
 						
-					vec (__vector bool int data): data_ (data)
-						{
-						}
-					
-					friend class impl::vec_base <__vector bool int, boolean <long long>, boolean <long long> >;
-					
-				private:
-					__vector bool int data_;
+					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+
+					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
+					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
 			};
+
 			
 		#endif
 
@@ -1003,13 +1289,13 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 							
 						char (*type_to_kind (__vector unsigned char)) [vector_unsigned_char];
 						char (*type_to_kind (__vector signed char)) [vector_signed_char];
-						char (*type_to_kind (__vector bool char)) [vector_bool_char];
+						char (*type_to_kind (__vector __bool char)) [vector_bool_char];
 						char (*type_to_kind (__vector unsigned short)) [vector_unsigned_short];
 						char (*type_to_kind (__vector signed short)) [vector_signed_short];
-						char (*type_to_kind (__vector bool short)) [vector_bool_short];
+						char (*type_to_kind (__vector __bool short)) [vector_bool_short];
 						char (*type_to_kind (__vector unsigned int)) [vector_unsigned_int];
 						char (*type_to_kind (__vector signed int)) [vector_signed_int];
-						char (*type_to_kind (__vector bool int)) [vector_bool_int];
+						char (*type_to_kind (__vector __bool int)) [vector_bool_int];
 						char (*type_to_kind (__vector float)) [vector_float];
 						char (*type_to_kind (__vector __pixel)) [vector_pixel];
 					
@@ -1223,9 +1509,9 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 								// compute 2 (0.32) - divisor (int) * reciprocal (0.32)
 								// NOTE: divisor * reciprocal is either 0x1U 0000 xxxx OR 0x0U FFFF xxxx, so to calculate high word it is sufficient to check whether low word is "negative" 
 								vec <unsigned int, 4> divisor_reciprocal_low = multiply (divisor, divisor_reciprocal);
-								vec <unsigned int, 4> two_minus_divisor_reciprocal_low = altivec::sub ((vector unsigned int) (0), divisor_reciprocal_low);
+								vec <unsigned int, 4> two_minus_divisor_reciprocal_low = altivec::sub (vec <unsigned int, 4>::fill <0> (), divisor_reciprocal_low);
 								vec <boolean <int>, 4> two_minus_divisor_reciprocal_high =
-									altivec::cmplt (data_cast <vec <int, 4> > (divisor_reciprocal_low), (vector signed int) (1));
+									altivec::cmplt (data_cast <vec <int, 4> > (divisor_reciprocal_low), vec <int, 4>::fill <1> ());
 
 								// compute dividend (int) * reciprocal (0.32)
 								// NOTE: we ignore the low word
@@ -1239,7 +1525,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 							
 						inline vec <unsigned char, 16> select_high_half ()
 							{
-								vector unsigned int zero = (vector unsigned int) (0);
+								vec <unsigned int, 4> zero = vec <unsigned int, 4>::fill <0> ();
 								vector unsigned int sixteen = vec_splat_u32 (-16);
 								
 								return data_cast <vec <unsigned char, 16> > (altivec::mergeh (
@@ -1254,7 +1540,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 								
 								vec <unsigned char, 16> high_half = select_high_half ();
 															
-								vector unsigned short zero = (vector unsigned short) (0);
+								vec <unsigned short, 8> zero = vec <unsigned short, 8>::fill <0> ();
 								vec <unsigned short, 8> divisor_reciprocal = altivec::packs (
 									altivec::ctu <16> (reciprocal (altivec::ctf <0> (data_cast <vec <unsigned int, 4> > (altivec::mergeh (zero, divisor))))),
 									altivec::ctu <16> (reciprocal (altivec::ctf <0> (data_cast <vec <unsigned int, 4> > (altivec::mergel (zero, divisor))))));
@@ -1270,7 +1556,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 							{
 								// we use the reciprocal estimate directly to get a fairly accurate 8-bit result
 
-								vector unsigned char zero = (vector unsigned char) (0);
+								vec <unsigned char, 16> zero = vec <unsigned char, 16>::fill <0> ();
 								vec <unsigned char, 16> high_half = select_high_half ();
 
 								vec <unsigned short, 8> dividend_high = data_cast <vec <unsigned short, 8> > (altivec::mergeh (zero, dividend));
@@ -1405,1728 +1691,31 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 			}
 	}
 
-namespace std
+namespace stdext
 	{
-		// negate
-		
-		template <typename T, std::size_t n> struct negate <macstl::vec <T, n> >
-			{
-				typedef macstl::vec <T, n> argument_type;
-				typedef macstl::vec <T, n> result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::sub (argument_type::template fill <0> (), lhs);
-					}
-			};
+		// absolute
 
-		template <typename T, std::size_t n> struct negate <macstl::vec <macstl::boolean <T>, n> >
+		template <typename T, std::size_t n> struct absolute <macstl::vec <T, n> >:
+			public macstl::altivec::abs_function <macstl::vec <T, n> >
+			{
+			};
+			
+		template <> struct absolute <macstl::vec <unsigned char, 16> >;
+		template <> struct absolute <macstl::vec <unsigned short, 8> >;
+		template <> struct absolute <macstl::vec <unsigned int, 4> >;
+		template <typename T, std::size_t n> struct absolute <macstl::vec <stdext::complex <T>, n> >;	// need to define later
+		
+		template <typename T, std::size_t n> struct absolute <macstl::vec <macstl::boolean <T>, n> >
 			{
 				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-				
+
 				result_type operator() (const argument_type& lhs) const
 					{
 						return lhs;
 					}
 			};
-
-		template <> struct negate <macstl::vec <float, 4> >
-			{
-				typedef macstl::vec <float, 4> argument_type;
-				typedef macstl::vec <float, 4> result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::vxor (lhs,
-							vec <float, 4>::fill <0x80000000U> ());
-					}
-			};
-
-		template <> struct negate <macstl::vec <stdext::complex <float>, 2> >
-			{
-				typedef macstl::vec <stdext::complex <float>, 2> argument_type;
-				typedef macstl::vec <stdext::complex <float>, 2> result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						return data_cast <vec <stdext::complex <float>, 2> > (altivec::vxor (
-							data_cast <vec <float, 4> > (lhs),
-							vec <float, 4>::fill <0x80000000U> ()));
-					}
-			};
-
-		// logical_not
-		
-		template <typename T, std::size_t n> struct logical_not <macstl::vec <T, n> >
-			{
-				typedef macstl::vec <T, n> argument_type;
-				typedef typename macstl::vec <T, n>::vec_boolean result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::cmpeq (lhs, argument_type::template fill <0> ());
-					}
-			};
-
-		template <typename T, std::size_t n> struct logical_not <macstl::vec <stdext::complex <T>, n> >
-			{
-				typedef macstl::vec <stdext::complex <T>, n> argument_type;
-				typedef typename macstl::vec <stdext::complex <T>, n>::vec_boolean result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						typename vec <T, n * 2>::vec_boolean eq = altivec::cmpeq (
-							data_cast <vec <T, n * 2> > (lhs),
-							vec <T, n * 2>::template fill <0> ());
-							
-						return data_cast <result_type> (altivec::vand (eq,
-							altivec::perm (eq, eq, altivec::impl::swap_real_imag <n * 2> ())));
-					}
-			};
-
-		template <typename T, std::size_t n> struct logical_not <macstl::vec <macstl::boolean <T>, n> >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::nor (lhs, lhs);
-					}
-			};
-
-		template <> struct logical_not <macstl::vec <macstl::boolean <long long>, 2> >
-			{
-				typedef macstl::vec <macstl::boolean <long long>, 2> argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						vec <boolean <int>, 4> lhs2 = data_cast <vec <boolean <int>, 4> > (lhs);
-						return data_cast <vec <boolean <long long>, 2> > (altivec::nor (lhs2, lhs2));
-					}
-			};
-
-					
-		// multiplies
-		
-		template <> struct multiplies <macstl::vec <unsigned char, 16> >
-			{
-				typedef macstl::vec <unsigned char, 16> first_argument_type;
-				typedef macstl::vec <unsigned char, 16> second_argument_type;
-				typedef macstl::vec <unsigned char, 16> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						vec <unsigned short, 8> p1 = altivec::mule (lhs, rhs);
-						vec <unsigned short, 8> p2 = altivec::mulo (lhs, rhs);
-						return data_cast <result_type> (altivec::mergel (altivec::pack (p1, p1), altivec::pack (p2, p2)));
-					}
-			};
-
-		template <> struct multiplies <macstl::vec <signed char, 16> >
-			{
-				typedef macstl::vec <signed char, 16> first_argument_type;
-				typedef macstl::vec <signed char, 16> second_argument_type;
-				typedef macstl::vec <signed char, 16> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						vec <short, 8> p1 = altivec::mule (lhs, rhs);
-						vec <short, 8> p2 = altivec::mulo (lhs, rhs);
-						return data_cast <result_type> (altivec::mergel (altivec::pack (p1, p1), altivec::pack (p2, p2)));
-					}
-			};
-
-		template <> struct multiplies <macstl::vec <unsigned short, 8> >
-			{
-				typedef macstl::vec <unsigned short, 8> first_argument_type;
-				typedef macstl::vec <unsigned short, 8> second_argument_type;
-				typedef macstl::vec <unsigned short, 8> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::mladd (lhs, rhs, vec <unsigned short, 8>::fill <0> ());
-					}
-			};
 			
-		template <> struct multiplies <macstl::vec <short, 8> >
-			{
-				typedef macstl::vec <short, 8> first_argument_type;
-				typedef macstl::vec <short, 8> second_argument_type;
-				typedef macstl::vec <short, 8> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::mladd (lhs, rhs, vec <short, 8>::fill <0> ());
-					}
-			};
-
-		template <> struct multiplies <macstl::vec <unsigned int, 4> >
-			{
-				typedef macstl::vec <unsigned int, 4> first_argument_type;
-				typedef macstl::vec <unsigned int, 4> second_argument_type;
-				typedef macstl::vec <unsigned int, 4> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::impl::multiply (lhs, rhs);
-					}
-			};
-
-		template <> struct multiplies <macstl::vec <int, 4> >
-			{
-				typedef macstl::vec <int, 4> first_argument_type;
-				typedef macstl::vec <int, 4> second_argument_type;
-				typedef macstl::vec <int, 4> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						vec <int, 4> zero = vec <int, 4>::fill <0> ();
-						
-						// unsigned multiply
-						vec <int, 4> result = data_cast <vec <int, 4> > (
-							data_cast <vec <unsigned int, 4> > (altivec::abs (lhs)) *
-							data_cast <vec <unsigned int, 4> > (altivec::abs (rhs)));
-							
-						// if both signs negative or positive, select the unsigned result
-						// if one sign negative and the other positive, select the negative of the unsigned result
-						return altivec::sel (result, altivec::sub (zero, result), altivec::cmpgt (zero, altivec::vxor (lhs, rhs)));
-					}
-			};
-
-		template <> struct multiplies <macstl::vec <float, 4> >
-			{
-				typedef macstl::vec <float, 4> first_argument_type;
-				typedef macstl::vec <float, 4> second_argument_type;
-				typedef macstl::vec <float, 4> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::madd (lhs, rhs, vec <float, 4>::fill <0x80000000U> ()); // -0.0f
-					}
-			};
-
-		template <typename T, std::size_t n> struct multiplies <macstl::vec <macstl::boolean <T>, n> >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::vand (lhs, rhs);
-					}
-			};
-
-		template <> struct multiplies <macstl::vec <macstl::boolean <long long>, 2> >
-			{
-				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return data_cast <vec <boolean <long long>, 2> > (altivec::vand (
-							data_cast <vec <boolean <int>, 4> > (lhs),
-							data_cast <vec <boolean <int>, 4> > (rhs)));
-					}
-			};
-
-		template <> struct multiplies <macstl::vec <stdext::complex <float>, 2> >
-			{
-				typedef macstl::vec <stdext::complex <float>, 2> first_argument_type;
-				typedef macstl::vec <stdext::complex <float>, 2> second_argument_type;
-				typedef macstl::vec <stdext::complex <float>, 2> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::impl::complex_fma (lhs, rhs,
-							vec <stdext::complex <float>, 2>::fill <0x8000000080000000ULL> ());	// (-0.0f, -0.0f)
-					}
-			};
-	
-		// divides
-
-		template <> struct divides <macstl::vec <unsigned char, 16> >
-			{
-				typedef macstl::vec <unsigned char, 16> first_argument_type;
-				typedef macstl::vec <unsigned char, 16> second_argument_type;
-				typedef macstl::vec <unsigned char, 16> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						vec <unsigned char, 16> quotient = altivec::impl::estimate_divide (lhs, rhs);
-						vec <unsigned char, 16> difference = altivec::sub (lhs, quotient * rhs);
-						return altivec::add (quotient,
-							altivec::andc (vec <unsigned char, 16>::fill <1> (), altivec::cmplt (difference, rhs)));
-					}
-			};
-
-		template <> struct divides <macstl::vec <signed char, 16> >
-			{
-				typedef macstl::vec <signed char, 16> first_argument_type;
-				typedef macstl::vec <signed char, 16> second_argument_type;
-				typedef macstl::vec <signed char, 16> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-
-						vec <signed char, 16> zero = vec <signed char, 16>::fill <0> ();
-						
-						// unsigned divide
-						vec <signed char, 16> result = data_cast <vec <signed char, 16> > (
-							data_cast <vec <unsigned char, 16> > (altivec::abs (lhs)) /
-							data_cast <vec <unsigned char, 16> > (altivec::abs (rhs)));
-							
-						// if both signs negative or positive, select the unsigned result
-						// if one sign negative and the other positive, select the negative of the unsigned result
-						return altivec::sel (result, altivec::sub (zero, result), altivec::cmpgt (zero, altivec::vxor (lhs, rhs)));
-					}
-			};
-
-		template <> struct divides <macstl::vec <unsigned short, 8> >
-			{
-				typedef macstl::vec <unsigned short, 8> first_argument_type;
-				typedef macstl::vec <unsigned short, 8> second_argument_type;
-				typedef macstl::vec <unsigned short, 8> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						vec <unsigned short, 8> quotient = altivec::impl::estimate_divide (lhs, rhs);
-						vec <unsigned short, 8> difference = altivec::mladd (quotient,
-							altivec::sub (vec <unsigned short, 8>::fill <0> (), rhs), lhs);
-						
-						return altivec::add (quotient,
-							altivec::andc (vec <unsigned short, 8>::fill <1> (), altivec::cmplt (difference, rhs)));
-					}
-			};
-
-		template <> struct divides <macstl::vec <short, 8> >
-			{
-				typedef macstl::vec <short, 8> first_argument_type;
-				typedef macstl::vec <short, 8> second_argument_type;
-				typedef macstl::vec <short, 8> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-
-						vec <short, 8> zero = vec <short, 8>::fill <0> ();
-						
-						// unsigned divide
-						vec <short, 8> result = data_cast <vec <short, 8> > (
-							data_cast <vec <unsigned short, 8> > (altivec::abs (lhs)) /
-							data_cast <vec <unsigned short, 8> > (altivec::abs (rhs)));
-							
-						// if both signs negative or positive, select the unsigned result
-						// if one sign negative and the other positive, select the negative of the unsigned result
-						return altivec::sel (result, altivec::sub (zero, result), altivec::cmpgt (zero, altivec::vxor (lhs, rhs)));
-					}
-			};
-		
-		template <> struct divides <macstl::vec <unsigned int, 4> >
-			{
-				typedef macstl::vec <unsigned int, 4> first_argument_type;
-				typedef macstl::vec <unsigned int, 4> second_argument_type;
-				typedef macstl::vec <unsigned int, 4> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						const vec <unsigned int, 4> rhs2 = altivec::adds (rhs, rhs);
-						const vec <unsigned int, 4> quotient = altivec::impl::estimate_divide (lhs, rhs);
-
-						// compute lhs - quotient * rhs, then perform 3 bit division on it
-						vec <unsigned int, 4> difference = altivec::sub (lhs, quotient * rhs);
-						vec <boolean <int>, 4> unbounded2 = altivec::cmplt (difference, rhs2);
-						difference = altivec::sel (altivec::sub (difference, rhs2), difference, unbounded2);
-						vec <boolean <int>, 4> unbounded1 = altivec::cmplt (difference, rhs);
-							
-						return altivec::add (quotient, altivec::vor (
-							altivec::andc (vec <unsigned int, 4>::fill <2> (), unbounded2),
-							altivec::andc (vec <unsigned int, 4>::fill <1> (), unbounded1)));
-					}
-			};
-
-		template <> struct divides <macstl::vec <int, 4> >
-			{
-				typedef macstl::vec <int, 4> first_argument_type;
-				typedef macstl::vec <int, 4> second_argument_type;
-				typedef macstl::vec <int, 4> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-
-						vec <int, 4> zero = vec <int, 4>::fill <0> ();
-						
-						// unsigned divide
-						vec <int, 4> result = data_cast <vec <int, 4> > (
-							data_cast <vec <unsigned int, 4> > (altivec::abs (lhs)) /
-							data_cast <vec <unsigned int, 4> > (altivec::abs (rhs)));
-							
-						// if both signs negative or positive, select the unsigned result
-						// if one sign negative and the other positive, select the negative of the unsigned result
-						return altivec::sel (result, altivec::sub (zero, result), altivec::cmpgt (zero, altivec::vxor (lhs, rhs)));
-					}
-			};
-	
-		template <> struct divides <macstl::vec <float, 4> >
-			{
-				typedef macstl::vec <float, 4> first_argument_type;
-				typedef macstl::vec <float, 4> second_argument_type;
-				typedef macstl::vec <float, 4> result_type;
-
-				result_type operator() (const first_argument_type& x, const second_argument_type& y) const
-					{
-						using namespace macstl;
-						
-						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();	// -0.0f
-						const vec <float, 4> scale = vec <float, 4>::fill <0x4B000000U> ();	// scale by 2^23, converts smallest denorm into smallest norm
-						
-						const vec <boolean <int>, 4> denormal =	// check if y is a denormalized number
-							altivec::cmpeq (
-								altivec::cmpb (y, vec <float, 4>::fill <0x007FFFFFU> ()),
-								vec <int, 4>::fill <0> ());
-								
-						// do the division on the renormalized numbers
-						// NOTE: the scale is in both divisor and dividend so it will cancel out
-						return altivec::impl::divide_normal (
-							altivec::sel (x, altivec::madd (x, scale, zero), denormal),
-							altivec::sel (y, altivec::madd (y, scale, zero), denormal));
-					}
-			};
-
-		template <> struct divides <macstl::vec <stdext::complex <float>, 2> >
-			{
-				typedef macstl::vec <stdext::complex <float>, 2> first_argument_type;
-				typedef macstl::vec <stdext::complex <float>, 2> second_argument_type;
-				typedef macstl::vec <stdext::complex <float>, 2> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						const vec <unsigned char, 16> inc = altivec::lvsl (0, (int*) NULL);
-						const vec <unsigned char, 16> four = vec_splat_u8 (4);
-						const vec <unsigned char, 16> swap = altivec::vxor (inc, four);
-						
-						const vec <float, 4> zero = vec <float, 4>::fill <0> ();
-
-						const vec <float, 4> lhs2 = lhs.data ();					// a b c d
-						const vec <float, 4> rhs2 = rhs.data ();					// e f g h
-						
-						const vec <float, 4> rhs2_square = altivec::madd (rhs2, rhs2, zero);	// e2 f2 g2 h2
-						
-						const vec <float, 4> divisor = altivec::add (
-							rhs2_square,
-							altivec::perm (rhs2_square, rhs2_square, swap)						// f2 e2 h2 g2
-							);																		// e2+f2 e2+f2 g2+h2 g2+h2
-						
-						const vec <float, 4> dividend = altivec::madd (
-							altivec::perm (lhs2, lhs2, swap),			// b a d c
-							
-							altivec::vxor (
-								altivec::perm (rhs2, rhs2, altivec::vor (inc, four)),	// f f h h
-								vec <float, 4>::set <0, 0x80000000U, 0, 0x80000000U> ()),		// f -f h -h
-							
-							altivec::madd (
-								lhs2,
-								altivec::perm (rhs2, rhs2, altivec::andc (inc, four)),	// e e g g
-								zero)														// ae be cg dg
-							);																		// ae+bf be-af cg+dh dg-ch
-							
-						return (dividend / divisor).data ();										// (ae+bf)/(e2+f2) (be-af)/(e2+f2) (cg+dh)/(g2+h2) (dg-ch)/(g2+h2)
-					}
-			};
-
-		template <typename T, size_t n> struct divides <macstl::vec <macstl::boolean <T>, n> >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::vor (lhs, altivec::nor (rhs, rhs));
-					}
-			};
-
-		template <> struct divides <macstl::vec <macstl::boolean <long long>, 2> >
-			{
-				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						vec <boolean <int>, 4> rhs2 = data_cast <vec <boolean <int>, 4> > (rhs);
-						return data_cast <result_type> (altivec::vor (lhs, altivec::nor (rhs2, rhs2)));
-					}
-			};
-
-		// modulus
-
-		template <> struct modulus <macstl::vec <unsigned char, 16> >
-			{			
-				typedef macstl::vec <unsigned char, 16> first_argument_type;
-				typedef macstl::vec <unsigned char, 16> second_argument_type;
-				typedef macstl::vec <unsigned char, 16> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						vec <unsigned char, 16> quotient = altivec::impl::estimate_divide (lhs, rhs);
-
-						vec <unsigned char, 16> difference = altivec::sub (lhs, quotient * rhs);
-						return altivec::sel (altivec::sub (difference, rhs), difference, altivec::cmplt (difference, rhs));
-					}
-			};
-			
-		template <> struct modulus <macstl::vec <signed char, 16> >
-			{
-				typedef macstl::vec <signed char, 16> first_argument_type;
-				typedef macstl::vec <signed char, 16> second_argument_type;
-				typedef macstl::vec <signed char, 16> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-
-						vec <signed char, 16> zero = vec <signed char, 16>::fill <0> ();
-						
-						// unsigned modulus
-						vec <signed char, 16> result = data_cast <vec <signed char, 16> > (
-							data_cast <vec <unsigned char, 16> > (altivec::abs (lhs)) %
-							data_cast <vec <unsigned char, 16> > (altivec::abs (rhs)));
-							
-						// if lhs is negative, result is negative
-						return altivec::sel (result, altivec::sub (zero, result), altivec::cmpgt (zero, lhs));
-					}
-			};
-			
-		template <> struct modulus <macstl::vec <unsigned short, 8> >
-			{			
-				typedef macstl::vec <unsigned short, 8> first_argument_type;
-				typedef macstl::vec <unsigned short, 8> second_argument_type;
-				typedef macstl::vec <unsigned short, 8> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						vec <unsigned short, 8> quotient = altivec::impl::estimate_divide (lhs, rhs);
-
-						vec <unsigned short, 8> difference = altivec::mladd (quotient,
-							altivec::sub (vec <unsigned short, 8>::fill <0> (), rhs), lhs);
-						return altivec::sel (altivec::sub (difference, rhs), difference, altivec::cmplt (difference, rhs));
-					}
-			};
-			
-		template <> struct modulus <macstl::vec <short, 8> >
-			{
-				typedef macstl::vec <short, 8> first_argument_type;
-				typedef macstl::vec <short, 8> second_argument_type;
-				typedef macstl::vec <short, 8> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-
-						vec <short, 8> zero = vec <short, 8>::fill <0> ();
-						
-						// unsigned divide
-						vec <short, 8> result = data_cast <vec <short, 8> > (
-							data_cast <vec <unsigned short, 8> > (altivec::abs (lhs)) %
-							data_cast <vec <unsigned short, 8> > (altivec::abs (rhs)));
-							
-						// if lhs is negative, result is negative
-						return altivec::sel (result, altivec::sub (zero, result), altivec::cmpgt (zero, lhs));
-					}
-			};
-
-		template <> struct modulus <macstl::vec <unsigned int, 4> >
-			{			
-				typedef macstl::vec <unsigned int, 4> first_argument_type;
-				typedef macstl::vec <unsigned int, 4> second_argument_type;
-				typedef macstl::vec <unsigned int, 4> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						vec <unsigned int, 4> rhs2 = altivec::adds (rhs, rhs);
-						vec <unsigned int, 4> quotient = altivec::impl::estimate_divide (lhs, rhs);
-
-						// compute lhs - quotient * rhs, then perform 3 bit division on it
-						vec <unsigned int, 4> difference = altivec::sub (lhs, quotient * rhs);
-						difference = altivec::sel (altivec::sub (difference, rhs2), difference, altivec::cmplt (difference, rhs2));
-						return altivec::sel (altivec::sub (difference, rhs), difference, altivec::cmplt (difference, rhs));
-					}
-			};
-
-		template <> struct modulus <macstl::vec <int, 4> >
-			{
-				typedef macstl::vec <int, 4> first_argument_type;
-				typedef macstl::vec <int, 4> second_argument_type;
-				typedef macstl::vec <int, 4> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-
-						vec <int, 4> zero = vec <int, 4>::fill <0> ();
-						
-						// unsigned modulus
-						vec <int, 4> result = data_cast <vec <int, 4> > (
-							data_cast <vec <unsigned int, 4> > (altivec::abs (lhs)) %
-							data_cast <vec <unsigned int, 4> > (altivec::abs (rhs)));
-							
-						// if lhs is negative, result is negative
-						return altivec::sel (result, altivec::sub (zero, result), altivec::cmpgt (zero, lhs));
-					}
-			};
-
-		template <typename T, size_t n> struct modulus <macstl::vec <macstl::boolean <T>, n> >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::andc (lhs, rhs);
-					}
-			};
-
-		template <> struct modulus <macstl::vec <macstl::boolean <long long>, 2> >
-			{
-				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return data_cast <result_type> (
-							altivec::andc (data_cast <vec <boolean <int>, 4> > (lhs), data_cast <vec <boolean <int>, 4> > (rhs)));
-					}
-			};
-
-		// plus
-		
-		template <typename T, std::size_t n> struct plus <macstl::vec <T, n> >:
-			public macstl::altivec::add_function <macstl::vec <T, n>, macstl::vec <T, n> >
-			{
-			};
-
-		template <typename T, std::size_t n> struct plus <macstl::vec <macstl::boolean <T>, n> >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::vor (lhs, rhs);
-					}
-			};
-
-		template <> struct plus <macstl::vec <macstl::boolean <long long>, 2> >
-			{
-				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return data_cast <result_type> (altivec::vor (
-							data_cast <vec <boolean <int>, 4> > (lhs),
-							data_cast <vec <boolean <int>, 4> > (rhs)));
-					}
-			};
-
-		template <typename T, std::size_t n> struct plus <macstl::vec <stdext::complex <T>, n> >
-			{
-				typedef macstl::vec <stdext::complex <T>, n> first_argument_type;
-				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
-				typedef macstl::vec <stdext::complex <T>, n> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return data_cast <result_type> (altivec::add (
-							data_cast <macstl::vec <T, n * 2> > (lhs),
-							data_cast <macstl::vec <T, n * 2> > (rhs)));
-					}
-			};
-
-
-		// minus
-		
-		template <typename T, std::size_t n> struct minus <macstl::vec <T, n> >:
-			public macstl::altivec::sub_function <macstl::vec <T, n>, macstl::vec <T, n> >
-			{
-			};
-
-		template <typename T, std::size_t n> struct minus <macstl::vec <macstl::boolean <T>, n> >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::vxor (lhs, rhs);
-					}
-			};
-
-		template <> struct minus <macstl::vec <macstl::boolean <long long>, 2> >
-			{
-				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return data_cast <result_type> (altivec::vxor (
-							data_cast <vec <macstl::boolean <int>, 4> > (lhs),
-							data_cast <vec <macstl::boolean <int>, 4> > (rhs)));
-					}
-			};
-
-		template <typename T, std::size_t n> struct minus <macstl::vec <stdext::complex <T>, n> >
-			{
-				typedef macstl::vec <stdext::complex <T>, n> first_argument_type;
-				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
-				typedef macstl::vec <stdext::complex <T>, n> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return data_cast <result_type> (altivec::sub (
-							data_cast <vec <T, n * 2> > (lhs),
-							data_cast <vec <T, n * 2> > (rhs)));
-					}
-			};
-			
-		// equal_to
-
-		template <typename T, std::size_t n> struct equal_to <macstl::vec <T, n> >:
-			public macstl::altivec::cmpeq_function <macstl::vec <T, n>, macstl::vec <T, n> >
-			{
-			};
-
-		template <typename T, std::size_t n> struct equal_to <macstl::vec <macstl::boolean <T>, n> >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						result_type neq = altivec::vxor (lhs, rhs);
-						return altivec::nor (neq, neq);
-					}
-			};
-
-		template <> struct equal_to <macstl::vec <macstl::boolean <long long>, 2> >
-			{
-				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						vec <boolean <int>, 4> neq = altivec::vxor (data_cast <vec <boolean <int>, 4> > (lhs), data_cast <vec <boolean <int>, 4> > (rhs));
-						return data_cast <vec <boolean <long long>, 2> > (altivec::nor (neq, neq));
-					}
-			};
-
-		template <typename T, std::size_t n> struct equal_to <macstl::vec <stdext::complex <T>, n> >
-			{
-				typedef macstl::vec <stdext::complex <T>, n> first_argument_type;
-				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
-				typedef typename macstl::vec <stdext::complex <T>, n>::vec_boolean result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						typename vec <T, n * 2>::vec_boolean eq = altivec::cmpeq (
-							data_cast <vec <T, n * 2> > (lhs),
-							data_cast <vec <T, n * 2> > (rhs));
-							
-						return data_cast <result_type> (altivec::vand (eq,
-							altivec::perm (eq, eq, altivec::impl::swap_real_imag <n * 2> ())));
-					}
-			};
-			
-		// not_equal_to
-		
-		template <typename T, std::size_t n> struct not_equal_to <macstl::vec <T, n> >
-			{
-				typedef macstl::vec <T, n> first_argument_type;
-				typedef macstl::vec <T, n> second_argument_type;
-				typedef typename macstl::vec <T, n>::vec_boolean result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						result_type eq = altivec::cmpeq (lhs, rhs);
-						return altivec::nor (eq, eq);
-					}
-			};
-
-		template <typename T, std::size_t n> struct not_equal_to <macstl::vec <macstl::boolean <T>, n> >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::vxor (lhs, rhs);
-					}
-			};
-
-		template <> struct not_equal_to <macstl::vec <macstl::boolean <long long>, 2> >
-			{
-				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return data_cast <vec <boolean <long long>, 2> > (
-							altivec::vxor (data_cast <vec <boolean <int>, 4> > (lhs),
-							data_cast <vec <boolean <int>, 4> > (rhs)));
-					}
-			};
-
-		template <typename T, std::size_t n> struct not_equal_to <macstl::vec <stdext::complex <T>, n> >
-			{
-				typedef macstl::vec <stdext::complex <T>, n> first_argument_type;
-				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
-				typedef typename macstl::vec <stdext::complex <T>, n>::vec_boolean result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						typename vec <T, n * 2>::vec_boolean eq = altivec::cmpeq (
-							data_cast <vec <T, n * 2> > (lhs),
-							data_cast <vec <T, n * 2> > (rhs));
-							
-						return data_cast <result_type> (altivec::andc (altivec::nor (eq, eq),
-							altivec::perm (eq, eq, altivec::impl::swap_real_imag <n * 2> ())));
-					}
-			};
-
-		// less
-
-		template <typename T, std::size_t n> struct less <macstl::vec <T, n> >:
-			public macstl::altivec::cmplt_function <macstl::vec <T, n>, macstl::vec <T, n> >
-			{
-			};
-
-		template <typename T, std::size_t n> struct less <macstl::vec <macstl::boolean <T>, n> >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::andc (rhs, lhs);
-					}
-			};
-
-		template <> struct less <macstl::vec <macstl::boolean <long long>, 2> >
-			{
-				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return data_cast <vec <boolean <long long>, 2> > (altivec::andc (
-							data_cast <vec <boolean <int>, 4> > (rhs),
-							data_cast <vec <boolean <int>, 4> > (lhs)));
-					}
-			};
-
-		template <typename T, std::size_t n> struct less <macstl::vec <stdext::complex <T>, n> >;
-			
-		// greater
-		
-		template <typename T, std::size_t n> struct greater <macstl::vec <T, n> >:
-			public macstl::altivec::cmpgt_function <macstl::vec <T, n>, macstl::vec <T, n> >
-			{
-			};
-
-		template <typename T, std::size_t n> struct greater <macstl::vec <macstl::boolean <T>, n> >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::andc (lhs, rhs);
-					}
-			};
-
-		template <> struct greater <macstl::vec <macstl::boolean <long long>, 2> >
-			{
-				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return data_cast <vec <boolean <long long>, 2> > (altivec::andc (
-							data_cast <vec <boolean <int>, 4> > (lhs),
-							data_cast <vec <boolean <int>, 4> > (rhs)));
-					}
-			};
-
-		template <typename T, std::size_t n> struct greater <macstl::vec <stdext::complex <T>, n> >;
-			
-		// less_equal
-
-		template <typename T, std::size_t n> struct less_equal <macstl::vec <T, n> >
-			{
-				typedef macstl::vec <T, n> first_argument_type;
-				typedef macstl::vec <T, n> second_argument_type;
-				typedef typename macstl::vec <T, n>::vec_boolean result_type;
-						
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						result_type gt = altivec::cmpgt (lhs, rhs);
-						return altivec::nor (gt, gt);
-					}
-			};
-
-		template <> struct less_equal <macstl::vec <float, 4> >:
-			public macstl::altivec::cmple_function <macstl::vec <float, 4>, macstl::vec <float, 4> >
-			{
-			};
-
-		template <typename T, std::size_t n> struct less_equal <macstl::vec <macstl::boolean <T>, n> >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::vor (altivec::nor (lhs, lhs), rhs);
-					}
-			};
-
-		template <> struct less_equal <macstl::vec <macstl::boolean <long long>, 2> >
-			{
-				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						vec <boolean <int>, 4> lhs2 = data_cast <vec <boolean <int>, 4> > (lhs);
-						return data_cast <vec <boolean <long long>, 2> > (altivec::vor (
-							altivec::nor (lhs, lhs),
-							data_cast <vec <boolean <int>, 4> > (rhs)));
-					}
-			};
-
-		template <typename T, std::size_t n> struct less_equal <macstl::vec <stdext::complex <T>, n> >;
-
-		// greater_equal
-
-		template <typename T, std::size_t n> struct greater_equal <macstl::vec <T, n> >
-			{
-				typedef macstl::vec <T, n> first_argument_type;
-				typedef macstl::vec <T, n> second_argument_type;
-				typedef typename macstl::vec <T, n>::vec_boolean result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						result_type lt = altivec::cmplt (lhs, rhs);
-						return altivec::nor (lt, lt);
-					}
-			};
-
-		template <> struct greater_equal <macstl::vec <float, 4> >:
-			public macstl::altivec::cmpge_function <macstl::vec <float, 4>, macstl::vec <float, 4> >
-			{
-			};
-
-		template <typename T, std::size_t n> struct greater_equal <macstl::vec <macstl::boolean <T>, n> >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::vor (lhs, altivec::nor (rhs, rhs));
-					}
-			};
-
-		template <> struct greater_equal <macstl::vec <macstl::boolean <long long>, 2> >
-			{
-				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						vec <boolean <int>, 4> rhs2 = data_cast <vec <boolean <int>, 4> > (rhs);
-						return data_cast <vec <boolean <long long>, 2> > (altivec::vor (
-							data_cast <vec <boolean <int>, 4> > (lhs),
-							altivec::nor (rhs2, rhs2)));
-					}
-			};
-
-		template <typename T, std::size_t n> struct greater_equal <macstl::vec <stdext::complex <T>, n> >;
-	
-		// logical_and
-		
-		template <typename T, std::size_t n> struct logical_and <macstl::vec <T, n> >
-			{
-				typedef macstl::vec <T, n> first_argument_type;
-				typedef macstl::vec <T, n> second_argument_type;
-				typedef typename macstl::vec <T, n>::vec_boolean result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::nor (
-							altivec::cmpeq (lhs, first_argument_type::template fill <0> ()),
-							altivec::cmpeq (rhs, second_argument_type::template fill <0> ()));
-					}
-			};
-
-		template <typename T, std::size_t n> struct logical_and <macstl::vec <stdext::complex <T>, n> >
-			{
-				typedef macstl::vec <stdext::complex <T>, n> first_argument_type;
-				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
-				typedef typename macstl::vec <stdext::complex <T>, n>::vec_boolean result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-
-						typename vec <T, n * 2>::vec_boolean lhs_rhs = altivec::nor (
-							altivec::cmpeq (data_cast <vec <T, n * 2> > (lhs), vec <T, n * 2>::template fill <0> ()),
-							altivec::cmpeq (data_cast <vec <T, n * 2> > (rhs), vec <T, n * 2>::template fill <0> ()));
-						
-						return data_cast <result_type> (altivec::vand (lhs_rhs,
-							altivec::perm (lhs_rhs, lhs_rhs, altivec::impl::swap_real_imag <n * 2> ())));
-					}
-			};
-
-		template <typename T, std::size_t n> struct logical_and <macstl::vec <macstl::boolean <T>, n> >:
-			public macstl::altivec::vand_function <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
-			{
-			};
-
-		template <> struct logical_and <macstl::vec <macstl::boolean <long long>, 2> >
-			{
-				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return data_cast <vec <boolean <long long>, 2> > (altivec::vand (
-							data_cast <vec <boolean <int>, 4> > (lhs),
-							data_cast <vec <boolean <int>, 4> > (rhs)));
-					}
-			};
-
-		// logical_or
-		
-		template <typename T, std::size_t n> struct logical_or <macstl::vec <T, n> >
-			{
-				typedef macstl::vec <T, n> first_argument_type;
-				typedef macstl::vec <T, n> second_argument_type;
-				typedef typename macstl::vec <T, n>::vec_boolean result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						result_type lhs_rhs = altivec::vand (
-							altivec::cmpeq (lhs, first_argument_type::template fill <0> ()),
-							altivec::cmpeq (rhs, second_argument_type::template fill <0> ()));
-						return altivec::nor (lhs_rhs, lhs_rhs);
-					}
-			};
-
-		template <typename T, std::size_t n> struct logical_or <macstl::vec <stdext::complex <T>, n> >
-			{
-				typedef macstl::vec <stdext::complex <T>, n> first_argument_type;
-				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
-				typedef typename macstl::vec <stdext::complex <T>, n>::vec_boolean result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-
-						typename vec <T, n * 2>::vec_boolean lhs_rhs = altivec::vand (
-							altivec::cmpeq (data_cast <vec <T, n * 2> > (lhs), vec <T, n * 2>::template fill <0> ()),
-							altivec::cmpeq (data_cast <vec <T, n * 2> > (rhs), vec <T, n * 2>::template fill <0> ()));
-						typename vec <T, n * 2>::vec_boolean lhs_rhs2 = altivec::nor (lhs_rhs, lhs_rhs);
-						
-						return data_cast <result_type> (altivec::vor (lhs_rhs,
-							altivec::perm (lhs_rhs2, lhs_rhs2, altivec::impl::swap_real_imag <n * 2> ())));
-					}
-			};
-
-		template <typename T, std::size_t n> struct logical_or <macstl::vec <macstl::boolean <T>, n> >:
-			public macstl::altivec::vor_function <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
-			{
-			};
-
-		template <> struct logical_or <macstl::vec <macstl::boolean <long long>, 2> >
-			{
-				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return data_cast <vec <boolean <long long>, 2> > (altivec::vor (
-							data_cast <vec <boolean <int>, 4> > (lhs),
-							data_cast <vec <boolean <int>, 4> > (rhs)));
-					}
-			};
-
-	}
-	
-namespace stdext
-	{
-		// maximum
-
-		template <typename T, std::size_t n> struct maximum <macstl::vec <T, n> >:
-			public macstl::altivec::max_function <macstl::vec <T, n>, macstl::vec <T, n> >
-			{
-			};
-
-		template <> struct maximum <macstl::vec <float, 4> >
-			{
-				typedef macstl::vec <float, 4> first_argument_type;
-				typedef macstl::vec <float, 4> second_argument_type;
-				typedef macstl::vec <float, 4> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						#if __FINITE_MATH_ONLY__
-						return altivec::max (lhs, rhs);
-						#else
-						return altivec::sel (
-							rhs, lhs,
-							altivec::andc (altivec::cmpeq (lhs, lhs), altivec::cmplt (lhs, rhs)));
-						#endif
-					}
-			};
-			
-		template <typename T, std::size_t n> struct maximum <macstl::vec <macstl::boolean <T>, n> >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::vor (lhs, rhs);
-					}
-			};
-
-		template <> struct maximum <macstl::vec <macstl::boolean <long long>, 2> >
-			{
-				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return data_cast <vec <boolean <long long>, 2> >
-							(altivec::vor (data_cast <vec <boolean <int>, 4> > (lhs), data_cast <vec <boolean <int>, 4> > (rhs)));
-					}
-			};
-
-		template <std::size_t n> struct maximum <macstl::vec <stdext::complex <float>, n> >;
-			
-		// minimum
-
-		template <typename T, std::size_t n> struct minimum <macstl::vec <T, n> >:
-			public macstl::altivec::min_function <macstl::vec <T, n>, macstl::vec <T, n> >
-			{
-			};
-
-		template <> struct minimum <macstl::vec <float, 4> >
-			{
-				typedef macstl::vec <float, 4> first_argument_type;
-				typedef macstl::vec <float, 4> second_argument_type;
-				typedef macstl::vec <float, 4> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						#if __FINITE_MATH_ONLY__
-						return altivec::min (lhs, rhs);
-						#else
-						return altivec::sel (
-							lhs, rhs,
-							altivec::andc (altivec::cmpeq (rhs, rhs), altivec::cmplt (lhs, rhs)));
-						#endif
-					}
-			};
-			
-		template <typename T, std::size_t n> struct minimum <macstl::vec <macstl::boolean <T>, n> >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::vand (lhs, rhs);
-					}
-			};
-
-		template <> struct minimum <macstl::vec <macstl::boolean <long long>, 2> >
-			{
-				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
-
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return data_cast <vec <boolean <long long>, 2> >
-							(altivec::vand (data_cast <vec <boolean <int>, 4> > (lhs), data_cast <vec <boolean <int>, 4> > (rhs)));
-					}
-			};
-			
-		template <std::size_t n> struct minimum <macstl::vec <stdext::complex <float>, n> >;
-
-
-		// accumulator <maximum>
-
-		template <> struct accumulator <maximum <macstl::vec <unsigned char, 16> > >
-			{
-				typedef macstl::vec <unsigned char, 16> argument_type;
-				typedef unsigned char result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						vec <unsigned char, 16> result = altivec::max (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <8> ()));
-						result = altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <16> ()));
-						result = altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <32> ()));
-						return altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
-					}
-			};
-
-		template <> struct accumulator <maximum <macstl::vec <signed char, 16> > >
-			{
-				typedef macstl::vec <signed char, 16> argument_type;
-				typedef char result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						vec <signed char, 16> result = altivec::max (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <8> ()));
-						result = altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <16> ()));
-						result = altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <32> ()));
-						return altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
-					}
-			};
-
-		template <> struct accumulator <maximum <macstl::vec <unsigned short, 8> > >
-			{
-				typedef macstl::vec <unsigned short, 8> argument_type;
-				typedef unsigned short result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						vec <unsigned short, 8> result = altivec::max (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <16> ()));
-						result = altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <32> ()));
-						return altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
-					}
-			};
-
-		template <> struct accumulator <maximum <macstl::vec <short, 8> > >
-			{
-				typedef macstl::vec <short, 8> argument_type;
-				typedef short result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						vec <short, 8> result = altivec::max (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <16> ()));
-						result = altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <32> ()));
-						return altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
-					}
-			};
-
-		template <> struct accumulator <maximum <macstl::vec <unsigned int, 4> > >
-			{
-				typedef macstl::vec <unsigned int, 4> argument_type;
-				typedef unsigned int result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						vec <unsigned int, 4> result = altivec::max (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
-						return altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
-					}
-			};
-
-		template <> struct accumulator <maximum <macstl::vec <int, 4> > >
-			{
-				typedef macstl::vec <int, 4> argument_type;
-				typedef int result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						vec <int, 4> result = altivec::max (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
-						return altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
-					}
-			};
-
-		template <> struct accumulator <maximum <macstl::vec <float, 4> > >
-			{
-				typedef macstl::vec <float, 4> argument_type;
-				typedef float result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						const vec <float, 4> result = max (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
-						return max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
-					}
-			};
-
-		template <typename T, std::size_t n> struct accumulator <maximum <macstl::vec <macstl::boolean <T>, n> > >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
-				typedef macstl::boolean <T> result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::any_ne (lhs, argument_type::template fill <false> ());
-					}
-			};
-		
-		// accumulator <minimum>
-
-		template <> struct accumulator <minimum <macstl::vec <unsigned char, 16> > >
-			{
-				typedef macstl::vec <unsigned char, 16> argument_type;
-				typedef unsigned char result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						vec <unsigned char, 16> result = altivec::min (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <8> ()));
-						result = altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <16> ()));
-						result = altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <32> ()));
-						return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
-					}
-			};
-
-		template <> struct accumulator <minimum <macstl::vec <signed char, 16> > >
-			{
-				typedef macstl::vec <signed char, 16> argument_type;
-				typedef char result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						vec <signed char, 16> result = altivec::min (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <8> ()));
-						result = altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <16> ()));
-						result = altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <32> ()));
-						return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
-					}
-			};
-
-		template <> struct accumulator <minimum <macstl::vec <unsigned short, 8> > >
-			{
-				typedef macstl::vec <unsigned short, 8> argument_type;
-				typedef unsigned short result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						vec <unsigned short, 8> result = altivec::min (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <16> ()));
-						result = altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <32> ()));
-						return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
-					}
-			};
-
-		template <> struct accumulator <minimum <macstl::vec <short, 8> > >
-			{
-				typedef macstl::vec <short, 8> argument_type;
-				typedef short result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						vec <short, 8> result = altivec::min (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <16> ()));
-						result = altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <32> ()));
-						return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
-					}
-			};
-
-		template <> struct accumulator <minimum <macstl::vec <unsigned int, 4> > >
-			{
-				typedef macstl::vec <unsigned int, 4> argument_type;
-				typedef unsigned int result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						macstl::vec <unsigned int, 4> result = altivec::min (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
-						return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
-					}
-			};
-
-		template <> struct accumulator <minimum <macstl::vec <int, 4> > >
-			{
-				typedef macstl::vec <int, 4> argument_type;
-				typedef int result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						macstl::vec <int, 4> result = altivec::min (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
-						return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
-					}
-			};
-
-		template <> struct accumulator <minimum <macstl::vec <float, 4> > >
-			{
-				typedef macstl::vec <float, 4> argument_type;
-				typedef float result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						macstl::vec <float, 4> result = min (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
-						return min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
-					}
-			};
-
-		template <typename T, std::size_t n> struct accumulator <minimum <macstl::vec <macstl::boolean <T>, n> > >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
-				typedef macstl::boolean <T> result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::all_eq (lhs, argument_type::template fill <true> ());
-					}
-			};
-		
-		// accumulator <std::plus>
-
-		template <> struct accumulator <std::plus <macstl::vec <signed char, 16> > >
-			{
-				typedef macstl::vec <signed char, 16> argument_type;
-				typedef char result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						vec <int, 4> zero = vec <int, 4>::fill <0> ();
-						return data_cast <vec <signed char, 16> > (altivec::sums (
-							altivec::sum4s (lhs, zero), zero)) [15];
-					}
-			};
-
-		template <> struct accumulator <std::plus <macstl::vec <unsigned char, 16> > >
-			{
-				typedef macstl::vec <unsigned char, 16> argument_type;
-				typedef unsigned char result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						return data_cast <vec <signed char, 16> > (altivec::sums (
-							data_cast <vec <int, 4> > (altivec::sum4s (lhs, vec <unsigned int, 4>::fill <0> ())), vec <int, 4>::fill <0> ())) [15];
-					}
-			};
-
-		template <> struct accumulator <std::plus <macstl::vec <short, 8> > >
-			{
-				typedef macstl::vec <short, 8> argument_type;
-				typedef short result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						vec <int, 4> zero = vec <int, 4>::fill <0> ();
-						return altivec::sums (
-							altivec::sum4s (lhs, zero), zero) [3];
-					}
-			};
-			
-		template <> struct accumulator <std::plus <macstl::vec <unsigned short, 8> > >
-			{
-				typedef macstl::vec <unsigned short, 8> argument_type;
-				typedef unsigned short result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::sums (altivec::sum4s (
-							altivec::sub (data_cast <vec <short, 8> > (lhs), vec <short, 8>::fill <-0x8000> ()),
-							vec <int, 4>::fill <0> ()), 
-							vec <int, 4>::fill <0x40000U> ()) [3];
-					}
-			};
-
-		template <> struct accumulator <std::plus <macstl::vec <int, 4> > >
-			{
-				typedef macstl::vec <int, 4> argument_type;
-				typedef int result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						vec <int, 4> result = altivec::add (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
-						return altivec::add (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
-					}
-			};
-			
-		template <> struct accumulator <std::plus <macstl::vec <unsigned int, 4> > >
-			{
-				typedef macstl::vec <unsigned int, 4> argument_type;
-				typedef unsigned int result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						vec <unsigned int, 4> result = altivec::add (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
-						return altivec::add (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
-					}
-			};
-
-		template <> struct accumulator <std::plus <macstl::vec <float, 4> > >
-			{
-				typedef macstl::vec <float, 4> argument_type;
-				typedef float result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						vec <float, 4> result = altivec::add (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
-						return altivec::add (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
-					}
-			};
-
-		template <typename T, std::size_t n> struct accumulator <std::plus <macstl::vec <macstl::boolean <T>, n> > >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
-				typedef macstl::boolean <T> result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						return result_type (altivec::any_ne (lhs, argument_type::template fill <false> ()));
-					}
-			};
-
-		template <> struct accumulator <std::plus <macstl::vec <stdext::complex <float>, 2> > >
-			{
-				typedef macstl::vec <stdext::complex <float>, 2> argument_type;
-				typedef stdext::complex <float> result_type;
-				
-				result_type operator() (const argument_type& lhs) const
-					{
-						using namespace macstl;
-						
-						const argument_type result = data_cast <argument_type> (altivec::add (lhs,
-							altivec::slo (data_cast <vec <float, 4> > (lhs), vec <unsigned char, 16>::fill <64> ())));
-						return result [0];
-					}
-			};
-			
-		// cshifter
-
-		template <typename T, std::size_t n> struct cshifter <macstl::vec <T, n> >
-			{
-				typedef macstl::vec <T, n> first_argument_type;
-				typedef int second_argument_type;
-				typedef macstl::vec <T, n> result_type;
-
-				result_type operator() (const first_argument_type& lhs, second_argument_type rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::perm (lhs, lhs, altivec::lvsl (rhs * sizeof (typename result_type::value_type), (int*) NULL));
-					}
-			};
-
-		// shifter
-
-		template <typename T, std::size_t n> struct shifter <macstl::vec <T, n> >
-			{
-				typedef macstl::vec <T, n> first_argument_type;
-				typedef int second_argument_type;
-				typedef macstl::vec <T, n> result_type;
-
-				result_type operator() (const first_argument_type& lhs, second_argument_type rhs) const
-					{
-						using namespace macstl;
-						
-						result_type zero = result_type::template fill <0> ();
-						if (rhs >= (int) result_type::length || -rhs >= (int) result_type::length)
-							return zero;
-						else if (rhs >= 0)
-							return altivec::perm (lhs, zero, altivec::lvsl (rhs * sizeof (typename result_type::value_type), (int*) NULL));
-						else
-							return altivec::perm (zero, lhs, altivec::lvsr (-rhs * sizeof (typename result_type::value_type), (int*) NULL));
-					}
-			};
-		
 		// bitwise_not
 		
 		template <typename T, std::size_t n> struct bitwise_not <macstl::vec <T, n> >
@@ -3156,18 +1745,17 @@ namespace stdext
 					}
 			};
 
-
 		// bitwise_xor
 		
-		template <typename T, std::size_t n> struct bitwise_xor <macstl::vec <T, n> >:
+		template <typename T, std::size_t n> struct bitwise_xor <macstl::vec <T, n>, macstl::vec <T, n> >:
 			public macstl::altivec::vxor_function <macstl::vec <T, n>, macstl::vec <T, n> >
 			{
 			};
 
-		template <std::size_t n> struct bitwise_xor <macstl::vec <float, n> >;
-		template <std::size_t n> struct bitwise_xor <macstl::vec <stdext::complex <float>, n> >;
+		template <std::size_t n> struct bitwise_xor <macstl::vec <float, n>, macstl::vec <float, n> >;
+		template <std::size_t n> struct bitwise_xor <macstl::vec <stdext::complex <float>, n>, macstl::vec <stdext::complex <float>, n> >;
 		
-		template <> struct bitwise_xor <macstl::vec <macstl::boolean <long long>, 2> >
+		template <> struct bitwise_xor <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
 			{
 				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
@@ -3185,15 +1773,15 @@ namespace stdext
 
 		// bitwise_and
 		
-		template <typename T, std::size_t n> struct bitwise_and <macstl::vec <T, n> >:
+		template <typename T, std::size_t n> struct bitwise_and <macstl::vec <T, n>, macstl::vec <T, n> >:
 			public macstl::altivec::vand_function <macstl::vec <T, n>, macstl::vec <T, n> >
 			{
 			};
 
-		template <std::size_t n> struct bitwise_and <macstl::vec <float, n> >;
-		template <std::size_t n> struct bitwise_and <macstl::vec <stdext::complex <float>, n> >;
+		template <std::size_t n> struct bitwise_and <macstl::vec <float, n>, macstl::vec <float, n> >;
+		template <std::size_t n> struct bitwise_and <macstl::vec <stdext::complex <float>, n>, macstl::vec <stdext::complex <float>, n> >;
 		
-		template <> struct bitwise_and <macstl::vec <macstl::boolean <long long>, 2> >
+		template <> struct bitwise_and <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
 			{
 				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
@@ -3211,15 +1799,15 @@ namespace stdext
 			
 		// bitwise_or
 		
-		template <typename T, std::size_t n> struct bitwise_or <macstl::vec <T, n> >:
+		template <typename T, std::size_t n> struct bitwise_or <macstl::vec <T, n>, macstl::vec <T, n> >:
 			public macstl::altivec::vor_function <macstl::vec <T, n>, macstl::vec <T, n> >
 			{
 			};
 
-		template <std::size_t n> struct bitwise_or <macstl::vec <float, n> >;
-		template <std::size_t n> struct bitwise_or <macstl::vec <stdext::complex <float>, n> >;
+		template <std::size_t n> struct bitwise_or <macstl::vec <float, n>, macstl::vec <float, n> >;
+		template <std::size_t n> struct bitwise_or <macstl::vec <stdext::complex <float>, n>, macstl::vec <stdext::complex <float>, n> >;
 		
-		template <> struct bitwise_or <macstl::vec <macstl::boolean <long long>, 2> >
+		template <> struct bitwise_or <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
 			{
 				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
@@ -3235,185 +1823,6 @@ namespace stdext
 					}
 			};
 
-		// shift_left
-		
-		template <typename T, std::size_t n> struct shift_left <macstl::vec <T, n> >:
-			public macstl::altivec::sl_function <macstl::vec <T, n>, macstl::vec <T, n> >
-			{
-			};
-
-		template <> struct shift_left <macstl::vec <signed char, 16> >
-			{
-				typedef macstl::vec <signed char, 16> first_argument_type;
-				typedef macstl::vec <signed char, 16> second_argument_type;
-				typedef macstl::vec <signed char, 16> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::sl (lhs, data_cast <vec <unsigned char, 16> > (rhs)); 
-					}
-			};
-
-		template <> struct shift_left <macstl::vec <short, 8> >
-			{
-				typedef macstl::vec <short, 8> first_argument_type;
-				typedef macstl::vec <short, 8> second_argument_type;
-				typedef macstl::vec <short, 8> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::sl (lhs, data_cast <vec <unsigned short, 8> > (rhs)); 
-					}
-			};
-
-		template <> struct shift_left <macstl::vec <int, 4> >
-			{
-				typedef macstl::vec <int, 4> first_argument_type;
-				typedef macstl::vec <int, 4> second_argument_type;
-				typedef macstl::vec <int, 4> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::sl (lhs, data_cast <vec <unsigned int, 4> > (rhs)); 
-					}
-			};
-
-		template <typename T, std::size_t n> struct shift_left <macstl::vec <macstl::boolean <T>, n> >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type&) const
-					{
-						return lhs; 
-					}
-			};
-
-		template <std::size_t n> struct shift_left <macstl::vec <float, n> >;
-
-		template <typename T, std::size_t n> struct shift_left <macstl::vec <stdext::complex <T>, n> >;
-		
-		// shift_right
-
-		template <> struct shift_right <macstl::vec <unsigned char, 16> >:
-			public macstl::altivec::sr_function <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> >
-			{
-			};
-		
-		template <> struct shift_right <macstl::vec <signed char, 16> >
-			{
-				typedef macstl::vec <signed char, 16> first_argument_type;
-				typedef macstl::vec <signed char, 16> second_argument_type;
-				typedef macstl::vec <signed char, 16> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::sra (lhs, data_cast <vec <unsigned char, 16> > (rhs)); 
-					}
-			};
-
-		template <> struct shift_right <macstl::vec <unsigned short, 8> >:
-			public macstl::altivec::sr_function <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> >
-			{
-			};
-		
-		template <> struct shift_right <macstl::vec <short, 8> >
-			{
-				typedef macstl::vec <short, 8> first_argument_type;
-				typedef macstl::vec <short, 8> second_argument_type;
-				typedef macstl::vec <short, 8> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::sra (lhs, data_cast <vec <unsigned short, 8> > (rhs)); 
-					}
-			};
-
-		template <> struct shift_right <macstl::vec <unsigned int, 4> >:
-			public macstl::altivec::sr_function <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> >
-			{
-			};
-		
-		template <> struct shift_right <macstl::vec <int, 4> >
-			{
-				typedef macstl::vec <int, 4> first_argument_type;
-				typedef macstl::vec <int, 4> second_argument_type;
-				typedef macstl::vec <int, 4> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::sra (lhs, data_cast <vec <unsigned int, 4> > (rhs)); 
-					}
-			};
-			
-		template <typename T, std::size_t n> struct shift_right <macstl::vec <macstl::boolean <T>, n> >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return altivec::andc (lhs, rhs); 
-					}
-			};
-
-		template <> struct shift_right <macstl::vec <macstl::boolean <long long>, 2> >
-			{
-				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
-				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
-				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
-					{
-						using namespace macstl;
-						
-						return data_cast <vec <boolean <long long>, 2> >
-							(altivec::andc (data_cast <vec <boolean <int>, 4> > (lhs), data_cast <vec <boolean <int>, 4> > (rhs))); 
-					}
-			};
-
-		template <typename T, std::size_t n> struct shift_right <macstl::vec <stdext::complex <T>, n> >;
-		
-
-		// absolute
-
-		template <typename T, std::size_t n> struct absolute <macstl::vec <T, n> >:
-			public macstl::altivec::abs_function <macstl::vec <T, n> >
-			{
-			};
-			
-		template <> struct absolute <macstl::vec <unsigned char, 16> >;
-		template <> struct absolute <macstl::vec <unsigned short, 8> >;
-		template <> struct absolute <macstl::vec <unsigned int, 4> >;
-		template <typename T, std::size_t n> struct absolute <macstl::vec <stdext::complex <T>, n> >;	// need to define later
-		
-		template <typename T, std::size_t n> struct absolute <macstl::vec <macstl::boolean <T>, n> >
-			{
-				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
-				typedef macstl::vec <macstl::boolean <T>, n> result_type;
-
-				result_type operator() (const argument_type& lhs) const
-					{
-						return lhs;
-					}
-			};
-			
 		// cosine
 
 		template <> struct cosine <macstl::vec <float, 4> >
@@ -3445,6 +1854,73 @@ namespace stdext
 					}	
 			};
 			
+		// cshifter
+
+		template <typename T, std::size_t n> inline macstl::vec <T, n>
+			cshifter <macstl::vec <T, n> >::operator() (const macstl::vec <T, n>& lhs, int rhs) const
+			{
+				using namespace macstl;
+				
+				return data_cast <result_type> (
+					altivec::perm (lhs.data (), lhs.data (), altivec::lvsl (rhs * sizeof (typename result_type::value_type), (int*) NULL)));
+			}
+
+		// equal_to
+
+		template <typename T, std::size_t n> struct equal_to <macstl::vec <T, n>, macstl::vec <T, n> >:
+			public macstl::altivec::cmpeq_function <macstl::vec <T, n>, macstl::vec <T, n> >
+			{
+			};
+
+		template <typename T, std::size_t n> struct equal_to <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						result_type neq = altivec::vxor (lhs, rhs);
+						return altivec::nor (neq, neq);
+					}
+			};
+
+		template <> struct equal_to <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
+			{
+				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						vec <boolean <int>, 4> neq = altivec::vxor (data_cast <vec <boolean <int>, 4> > (lhs), data_cast <vec <boolean <int>, 4> > (rhs));
+						return data_cast <vec <boolean <long long>, 2> > (altivec::nor (neq, neq));
+					}
+			};
+
+		template <typename T, std::size_t n> struct equal_to <macstl::vec <stdext::complex <T>, n>, macstl::vec <stdext::complex <T>, n> >
+			{
+				typedef macstl::vec <stdext::complex <T>, n> first_argument_type;
+				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
+				typedef typename macstl::vec <stdext::complex <T>, n>::vec_boolean result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						typename vec <T, n * 2>::vec_boolean eq = altivec::cmpeq (
+							data_cast <vec <T, n * 2> > (lhs),
+							data_cast <vec <T, n * 2> > (rhs));
+							
+						return data_cast <result_type> (altivec::vand (eq,
+							altivec::perm (eq, eq, altivec::impl::swap_real_imag <n * 2> ())));
+					}
+			};
+
 		// exponent
 		template <> struct exponent <macstl::vec <float, 4> >
 			{
@@ -3539,6 +2015,1415 @@ namespace stdext
 					}
 			};
 
+
+		// greater
+		
+		template <typename T, std::size_t n> struct greater <macstl::vec <T, n>, macstl::vec <T, n> >:
+			public macstl::altivec::cmpgt_function <macstl::vec <T, n>, macstl::vec <T, n> >
+			{
+			};
+
+		template <typename T, std::size_t n> struct greater <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::andc (lhs, rhs);
+					}
+			};
+
+		template <> struct greater <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
+			{
+				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <vec <boolean <long long>, 2> > (altivec::andc (
+							data_cast <vec <boolean <int>, 4> > (lhs),
+							data_cast <vec <boolean <int>, 4> > (rhs)));
+					}
+			};
+
+		template <typename T, std::size_t n> struct greater <macstl::vec <stdext::complex <T>, n>, macstl::vec <stdext::complex <T>, n> >;
+			
+		// greater_equal
+
+		template <typename T, std::size_t n> struct greater_equal <macstl::vec <T, n>, macstl::vec <T, n> >
+			{
+				typedef macstl::vec <T, n> first_argument_type;
+				typedef macstl::vec <T, n> second_argument_type;
+				typedef typename macstl::vec <T, n>::vec_boolean result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						result_type lt = altivec::cmplt (lhs, rhs);
+						return altivec::nor (lt, lt);
+					}
+			};
+
+		template <> struct greater_equal <macstl::vec <float, 4>, macstl::vec <float, 4> >:
+			public macstl::altivec::cmpge_function <macstl::vec <float, 4>, macstl::vec <float, 4> >
+			{
+			};
+
+		template <typename T, std::size_t n> struct greater_equal <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::vor (lhs, altivec::nor (rhs, rhs));
+					}
+			};
+
+		template <> struct greater_equal <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
+			{
+				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						vec <boolean <int>, 4> rhs2 = data_cast <vec <boolean <int>, 4> > (rhs);
+						return data_cast <vec <boolean <long long>, 2> > (altivec::vor (
+							data_cast <vec <boolean <int>, 4> > (lhs),
+							altivec::nor (rhs2, rhs2)));
+					}
+			};
+
+		template <typename T, std::size_t n> struct greater_equal <macstl::vec <stdext::complex <T>, n>, macstl::vec <stdext::complex <T>, n> >;
+	
+
+		// less
+
+		template <typename T, std::size_t n> struct less <macstl::vec <T, n>, macstl::vec <T, n> >:
+			public macstl::altivec::cmplt_function <macstl::vec <T, n>, macstl::vec <T, n> >
+			{
+			};
+
+		template <typename T, std::size_t n> struct less <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::andc (rhs, lhs);
+					}
+			};
+
+		template <> struct less <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
+			{
+				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <vec <boolean <long long>, 2> > (altivec::andc (
+							data_cast <vec <boolean <int>, 4> > (rhs),
+							data_cast <vec <boolean <int>, 4> > (lhs)));
+					}
+			};
+
+		template <typename T, std::size_t n> struct less <macstl::vec <stdext::complex <T>, n>, macstl::vec <stdext::complex <T>, n> >;
+
+		// less_equal
+
+		template <typename T, std::size_t n> struct less_equal <macstl::vec <T, n>, macstl::vec <T, n> >
+			{
+				typedef macstl::vec <T, n> first_argument_type;
+				typedef macstl::vec <T, n> second_argument_type;
+				typedef typename macstl::vec <T, n>::vec_boolean result_type;
+						
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						result_type gt = altivec::cmpgt (lhs, rhs);
+						return altivec::nor (gt, gt);
+					}
+			};
+
+		template <> struct less_equal <macstl::vec <float, 4>, macstl::vec <float, 4> >:
+			public macstl::altivec::cmple_function <macstl::vec <float, 4>, macstl::vec <float, 4> >
+			{
+			};
+
+		template <typename T, std::size_t n> struct less_equal <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::vor (altivec::nor (lhs, lhs), rhs);
+					}
+			};
+
+		template <> struct less_equal <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
+			{
+				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						vec <boolean <int>, 4> lhs2 = data_cast <vec <boolean <int>, 4> > (lhs);
+						return data_cast <vec <boolean <long long>, 2> > (altivec::vor (
+							altivec::nor (lhs, lhs),
+							data_cast <vec <boolean <int>, 4> > (rhs)));
+					}
+			};
+
+		template <typename T, std::size_t n> struct less_equal <macstl::vec <stdext::complex <T>, n>, macstl::vec <stdext::complex <T>, n> >;
+
+		// logical_and
+		
+		template <typename T, std::size_t n> struct logical_and <macstl::vec <T, n>, macstl::vec <T, n> >
+			{
+				typedef macstl::vec <T, n> first_argument_type;
+				typedef macstl::vec <T, n> second_argument_type;
+				typedef typename macstl::vec <T, n>::vec_boolean result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::nor (
+							altivec::cmpeq (lhs, first_argument_type::template fill <0> ()),
+							altivec::cmpeq (rhs, second_argument_type::template fill <0> ()));
+					}
+			};
+
+		template <typename T, std::size_t n> struct logical_and <macstl::vec <stdext::complex <T>, n>, macstl::vec <stdext::complex <T>, n> >
+			{
+				typedef macstl::vec <stdext::complex <T>, n> first_argument_type;
+				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
+				typedef typename macstl::vec <stdext::complex <T>, n>::vec_boolean result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+
+						typename vec <T, n * 2>::vec_boolean lhs_rhs = altivec::nor (
+							altivec::cmpeq (data_cast <vec <T, n * 2> > (lhs), vec <T, n * 2>::template fill <0> ()),
+							altivec::cmpeq (data_cast <vec <T, n * 2> > (rhs), vec <T, n * 2>::template fill <0> ()));
+						
+						return data_cast <result_type> (altivec::vand (lhs_rhs,
+							altivec::perm (lhs_rhs, lhs_rhs, altivec::impl::swap_real_imag <n * 2> ())));
+					}
+			};
+
+		template <typename T, std::size_t n> struct logical_and <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >:
+			public macstl::altivec::vand_function <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
+			{
+			};
+
+		template <> struct logical_and <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
+			{
+				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <vec <boolean <long long>, 2> > (altivec::vand (
+							data_cast <vec <boolean <int>, 4> > (lhs),
+							data_cast <vec <boolean <int>, 4> > (rhs)));
+					}
+			};
+
+		// logical_not
+		
+		template <typename T, std::size_t n> struct logical_not <macstl::vec <T, n> >
+			{
+				typedef macstl::vec <T, n> argument_type;
+				typedef typename macstl::vec <T, n>::vec_boolean result_type;
+				
+				result_type operator() (const argument_type& lhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::cmpeq (lhs, argument_type::template fill <0> ());
+					}
+			};
+
+		template <typename T, std::size_t n> struct logical_not <macstl::vec <stdext::complex <T>, n> >
+			{
+				typedef macstl::vec <stdext::complex <T>, n> argument_type;
+				typedef typename macstl::vec <stdext::complex <T>, n>::vec_boolean result_type;
+				
+				result_type operator() (const argument_type& lhs) const
+					{
+						using namespace macstl;
+						
+						typename vec <T, n * 2>::vec_boolean eq = altivec::cmpeq (
+							data_cast <vec <T, n * 2> > (lhs),
+							vec <T, n * 2>::template fill <0> ());
+							
+						return data_cast <result_type> (altivec::vand (eq,
+							altivec::perm (eq, eq, altivec::impl::swap_real_imag <n * 2> ())));
+					}
+			};
+
+		template <typename T, std::size_t n> struct logical_not <macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+				
+				result_type operator() (const argument_type& lhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::nor (lhs, lhs);
+					}
+			};
+
+		template <> struct logical_not <macstl::vec <macstl::boolean <long long>, 2> >
+			{
+				typedef macstl::vec <macstl::boolean <long long>, 2> argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
+				
+				result_type operator() (const argument_type& lhs) const
+					{
+						using namespace macstl;
+						
+						vec <boolean <int>, 4> lhs2 = data_cast <vec <boolean <int>, 4> > (lhs);
+						return data_cast <vec <boolean <long long>, 2> > (altivec::nor (lhs2, lhs2));
+					}
+			};
+
+		// logical_or
+		
+		template <typename T, std::size_t n> struct logical_or <macstl::vec <T, n>, macstl::vec <T, n> >
+			{
+				typedef macstl::vec <T, n> first_argument_type;
+				typedef macstl::vec <T, n> second_argument_type;
+				typedef typename macstl::vec <T, n>::vec_boolean result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						result_type lhs_rhs = altivec::vand (
+							altivec::cmpeq (lhs, first_argument_type::template fill <0> ()),
+							altivec::cmpeq (rhs, second_argument_type::template fill <0> ()));
+						return altivec::nor (lhs_rhs, lhs_rhs);
+					}
+			};
+
+		template <typename T, std::size_t n> struct logical_or <macstl::vec <stdext::complex <T>, n>, macstl::vec <stdext::complex <T>, n> >
+			{
+				typedef macstl::vec <stdext::complex <T>, n> first_argument_type;
+				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
+				typedef typename macstl::vec <stdext::complex <T>, n>::vec_boolean result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+
+						typename vec <T, n * 2>::vec_boolean lhs_rhs = altivec::vand (
+							altivec::cmpeq (data_cast <vec <T, n * 2> > (lhs), vec <T, n * 2>::template fill <0> ()),
+							altivec::cmpeq (data_cast <vec <T, n * 2> > (rhs), vec <T, n * 2>::template fill <0> ()));
+						typename vec <T, n * 2>::vec_boolean lhs_rhs2 = altivec::nor (lhs_rhs, lhs_rhs);
+						
+						return data_cast <result_type> (altivec::vor (lhs_rhs,
+							altivec::perm (lhs_rhs2, lhs_rhs2, altivec::impl::swap_real_imag <n * 2> ())));
+					}
+			};
+
+		template <typename T, std::size_t n> struct logical_or <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >:
+			public macstl::altivec::vor_function <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
+			{
+			};
+
+		template <> struct logical_or <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
+			{
+				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <vec <boolean <long long>, 2> > (altivec::vor (
+							data_cast <vec <boolean <int>, 4> > (lhs),
+							data_cast <vec <boolean <int>, 4> > (rhs)));
+					}
+			};
+						
+		// maximum
+
+		template <typename T, std::size_t n> struct maximum <macstl::vec <T, n>, macstl::vec <T, n> >:
+			public macstl::altivec::max_function <macstl::vec <T, n>, macstl::vec <T, n> >
+			{
+			};
+
+		template <> struct maximum <macstl::vec <float, 4>, macstl::vec <float, 4> >
+			{
+				typedef macstl::vec <float, 4> first_argument_type;
+				typedef macstl::vec <float, 4> second_argument_type;
+				typedef macstl::vec <float, 4> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						#if __FINITE_MATH_ONLY__
+						return altivec::max (lhs, rhs);
+						#else
+						return altivec::sel (
+							rhs, lhs,
+							altivec::andc (altivec::cmpeq (lhs, lhs), altivec::cmplt (lhs, rhs)));
+						#endif
+					}
+			};
+			
+		template <typename T, std::size_t n> struct maximum <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::vor (lhs, rhs);
+					}
+			};
+
+		template <> struct maximum <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
+			{
+				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <vec <boolean <long long>, 2> >
+							(altivec::vor (data_cast <vec <boolean <int>, 4> > (lhs), data_cast <vec <boolean <int>, 4> > (rhs)));
+					}
+			};
+
+		template <std::size_t n> struct maximum <macstl::vec <stdext::complex <float>, n>, macstl::vec <stdext::complex <float>, n> >;
+			
+		// minimum
+
+		template <typename T, std::size_t n> struct minimum <macstl::vec <T, n>, macstl::vec <T, n> >:
+			public macstl::altivec::min_function <macstl::vec <T, n>, macstl::vec <T, n> >
+			{
+			};
+
+		template <> struct minimum <macstl::vec <float, 4>, macstl::vec <float, 4> >
+			{
+				typedef macstl::vec <float, 4> first_argument_type;
+				typedef macstl::vec <float, 4> second_argument_type;
+				typedef macstl::vec <float, 4> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						#if __FINITE_MATH_ONLY__
+						return altivec::min (lhs, rhs);
+						#else
+						return altivec::sel (
+							lhs, rhs,
+							altivec::andc (altivec::cmpeq (rhs, rhs), altivec::cmplt (lhs, rhs)));
+						#endif
+					}
+			};
+			
+		template <typename T, std::size_t n> struct minimum <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::vand (lhs, rhs);
+					}
+			};
+
+		template <> struct minimum <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
+			{
+				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <vec <boolean <long long>, 2> >
+							(altivec::vand (data_cast <vec <boolean <int>, 4> > (lhs), data_cast <vec <boolean <int>, 4> > (rhs)));
+					}
+			};
+			
+		template <std::size_t n> struct minimum <macstl::vec <stdext::complex <float>, n>, macstl::vec <stdext::complex <float>, n> >;
+
+		// minus
+		
+		template <typename T, std::size_t n> struct minus <macstl::vec <T, n>, macstl::vec <T, n> >:
+			public macstl::altivec::sub_function <macstl::vec <T, n>, macstl::vec <T, n> >
+			{
+			};
+
+		template <typename T, std::size_t n> struct minus <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::vxor (lhs, rhs);
+					}
+			};
+
+		template <> struct minus <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
+			{
+				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <result_type> (altivec::vxor (
+							data_cast <vec <macstl::boolean <int>, 4> > (lhs),
+							data_cast <vec <macstl::boolean <int>, 4> > (rhs)));
+					}
+			};
+
+		template <typename T, std::size_t n> struct minus <macstl::vec <stdext::complex <T>, n>, macstl::vec <stdext::complex <T>, n> >
+			{
+				typedef macstl::vec <stdext::complex <T>, n> first_argument_type;
+				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
+				typedef macstl::vec <stdext::complex <T>, n> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <result_type> (altivec::sub (
+							data_cast <vec <T, n * 2> > (lhs),
+							data_cast <vec <T, n * 2> > (rhs)));
+					}
+			};
+			
+		// multiplies
+		
+		template <> struct multiplies <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> >
+			{
+				typedef macstl::vec <unsigned char, 16> first_argument_type;
+				typedef macstl::vec <unsigned char, 16> second_argument_type;
+				typedef macstl::vec <unsigned char, 16> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						vec <unsigned short, 8> p1 = altivec::mule (lhs, rhs);
+						vec <unsigned short, 8> p2 = altivec::mulo (lhs, rhs);
+						return data_cast <result_type> (altivec::mergel (altivec::pack (p1, p1), altivec::pack (p2, p2)));
+					}
+			};
+
+		template <> struct multiplies <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> >
+			{
+				typedef macstl::vec <signed char, 16> first_argument_type;
+				typedef macstl::vec <signed char, 16> second_argument_type;
+				typedef macstl::vec <signed char, 16> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						vec <short, 8> p1 = altivec::mule (lhs, rhs);
+						vec <short, 8> p2 = altivec::mulo (lhs, rhs);
+						return data_cast <result_type> (altivec::mergel (altivec::pack (p1, p1), altivec::pack (p2, p2)));
+					}
+			};
+
+		template <> struct multiplies <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> >
+			{
+				typedef macstl::vec <unsigned short, 8> first_argument_type;
+				typedef macstl::vec <unsigned short, 8> second_argument_type;
+				typedef macstl::vec <unsigned short, 8> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::mladd (lhs, rhs, vec <unsigned short, 8>::fill <0> ());
+					}
+			};
+			
+		template <> struct multiplies <macstl::vec <short, 8>, macstl::vec <short, 8> >
+			{
+				typedef macstl::vec <short, 8> first_argument_type;
+				typedef macstl::vec <short, 8> second_argument_type;
+				typedef macstl::vec <short, 8> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::mladd (lhs, rhs, vec <short, 8>::fill <0> ());
+					}
+			};
+
+		template <> struct multiplies <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> >
+			{
+				typedef macstl::vec <unsigned int, 4> first_argument_type;
+				typedef macstl::vec <unsigned int, 4> second_argument_type;
+				typedef macstl::vec <unsigned int, 4> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::impl::multiply (lhs, rhs);
+					}
+			};
+
+		template <> struct multiplies <macstl::vec <int, 4>, macstl::vec <int, 4> >
+			{
+				typedef macstl::vec <int, 4> first_argument_type;
+				typedef macstl::vec <int, 4> second_argument_type;
+				typedef macstl::vec <int, 4> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						vec <int, 4> zero = vec <int, 4>::fill <0> ();
+						
+						// unsigned multiply
+						vec <int, 4> result = data_cast <vec <int, 4> > (
+							data_cast <vec <unsigned int, 4> > (altivec::abs (lhs)) *
+							data_cast <vec <unsigned int, 4> > (altivec::abs (rhs)));
+							
+						// if both signs negative or positive, select the unsigned result
+						// if one sign negative and the other positive, select the negative of the unsigned result
+						return altivec::sel (result, altivec::sub (zero, result), altivec::cmpgt (zero, altivec::vxor (lhs, rhs)));
+					}
+			};
+
+		template <> struct multiplies <macstl::vec <float, 4>, macstl::vec <float, 4> >
+			{
+				typedef macstl::vec <float, 4> first_argument_type;
+				typedef macstl::vec <float, 4> second_argument_type;
+				typedef macstl::vec <float, 4> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::madd (lhs, rhs, vec <float, 4>::fill <0x80000000U> ()); // -0.0f
+					}
+			};
+
+		template <typename T, std::size_t n> struct multiplies <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::vand (lhs, rhs);
+					}
+			};
+
+		template <> struct multiplies <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
+			{
+				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <vec <boolean <long long>, 2> > (altivec::vand (
+							data_cast <vec <boolean <int>, 4> > (lhs),
+							data_cast <vec <boolean <int>, 4> > (rhs)));
+					}
+			};
+
+		template <> struct multiplies <macstl::vec <stdext::complex <float>, 2>, macstl::vec <stdext::complex <float>, 2> >
+			{
+				typedef macstl::vec <stdext::complex <float>, 2> first_argument_type;
+				typedef macstl::vec <stdext::complex <float>, 2> second_argument_type;
+				typedef macstl::vec <stdext::complex <float>, 2> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::impl::complex_fma (lhs, rhs,
+							vec <stdext::complex <float>, 2>::fill <0x8000000080000000ULL> ());	// (-0.0f, -0.0f)
+					}
+			};
+
+		// divides
+
+		template <> struct divides <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> >
+			{
+				typedef macstl::vec <unsigned char, 16> first_argument_type;
+				typedef macstl::vec <unsigned char, 16> second_argument_type;
+				typedef macstl::vec <unsigned char, 16> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						vec <unsigned char, 16> quotient = altivec::impl::estimate_divide (lhs, rhs);
+						vec <unsigned char, 16> difference = altivec::sub (lhs, quotient * rhs);
+						return altivec::add (quotient,
+							altivec::andc (vec <unsigned char, 16>::fill <1> (), altivec::cmplt (difference, rhs)));
+					}
+			};
+
+		template <> struct divides <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> >
+			{
+				typedef macstl::vec <signed char, 16> first_argument_type;
+				typedef macstl::vec <signed char, 16> second_argument_type;
+				typedef macstl::vec <signed char, 16> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+
+						vec <signed char, 16> zero = vec <signed char, 16>::fill <0> ();
+						
+						// unsigned divide
+						vec <signed char, 16> result = data_cast <vec <signed char, 16> > (
+							data_cast <vec <unsigned char, 16> > (altivec::abs (lhs)) /
+							data_cast <vec <unsigned char, 16> > (altivec::abs (rhs)));
+							
+						// if both signs negative or positive, select the unsigned result
+						// if one sign negative and the other positive, select the negative of the unsigned result
+						return altivec::sel (result, altivec::sub (zero, result), altivec::cmpgt (zero, altivec::vxor (lhs, rhs)));
+					}
+			};
+
+		template <> struct divides <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> >
+			{
+				typedef macstl::vec <unsigned short, 8> first_argument_type;
+				typedef macstl::vec <unsigned short, 8> second_argument_type;
+				typedef macstl::vec <unsigned short, 8> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						vec <unsigned short, 8> quotient = altivec::impl::estimate_divide (lhs, rhs);
+						vec <unsigned short, 8> difference = altivec::mladd (quotient,
+							altivec::sub (vec <unsigned short, 8>::fill <0> (), rhs), lhs);
+						
+						return altivec::add (quotient,
+							altivec::andc (vec <unsigned short, 8>::fill <1> (), altivec::cmplt (difference, rhs)));
+					}
+			};
+
+		template <> struct divides <macstl::vec <short, 8>, macstl::vec <short, 8> >
+			{
+				typedef macstl::vec <short, 8> first_argument_type;
+				typedef macstl::vec <short, 8> second_argument_type;
+				typedef macstl::vec <short, 8> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+
+						vec <short, 8> zero = vec <short, 8>::fill <0> ();
+						
+						// unsigned divide
+						vec <short, 8> result = data_cast <vec <short, 8> > (
+							data_cast <vec <unsigned short, 8> > (altivec::abs (lhs)) /
+							data_cast <vec <unsigned short, 8> > (altivec::abs (rhs)));
+							
+						// if both signs negative or positive, select the unsigned result
+						// if one sign negative and the other positive, select the negative of the unsigned result
+						return altivec::sel (result, altivec::sub (zero, result), altivec::cmpgt (zero, altivec::vxor (lhs, rhs)));
+					}
+			};
+		
+		template <> struct divides <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> >
+			{
+				typedef macstl::vec <unsigned int, 4> first_argument_type;
+				typedef macstl::vec <unsigned int, 4> second_argument_type;
+				typedef macstl::vec <unsigned int, 4> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						const vec <unsigned int, 4> rhs2 = altivec::adds (rhs, rhs);
+						const vec <unsigned int, 4> quotient = altivec::impl::estimate_divide (lhs, rhs);
+
+						// compute lhs - quotient * rhs, then perform 3 bit division on it
+						vec <unsigned int, 4> difference = altivec::sub (lhs, quotient * rhs);
+						vec <boolean <int>, 4> unbounded2 = altivec::cmplt (difference, rhs2);
+						difference = altivec::sel (altivec::sub (difference, rhs2), difference, unbounded2);
+						vec <boolean <int>, 4> unbounded1 = altivec::cmplt (difference, rhs);
+							
+						return altivec::add (quotient, altivec::vor (
+							altivec::andc (vec <unsigned int, 4>::fill <2> (), unbounded2),
+							altivec::andc (vec <unsigned int, 4>::fill <1> (), unbounded1)));
+					}
+			};
+
+		template <> struct divides <macstl::vec <int, 4>, macstl::vec <int, 4> >
+			{
+				typedef macstl::vec <int, 4> first_argument_type;
+				typedef macstl::vec <int, 4> second_argument_type;
+				typedef macstl::vec <int, 4> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+
+						vec <int, 4> zero = vec <int, 4>::fill <0> ();
+						
+						// unsigned divide
+						vec <int, 4> result = data_cast <vec <int, 4> > (
+							data_cast <vec <unsigned int, 4> > (altivec::abs (lhs)) /
+							data_cast <vec <unsigned int, 4> > (altivec::abs (rhs)));
+							
+						// if both signs negative or positive, select the unsigned result
+						// if one sign negative and the other positive, select the negative of the unsigned result
+						return altivec::sel (result, altivec::sub (zero, result), altivec::cmpgt (zero, altivec::vxor (lhs, rhs)));
+					}
+			};
+	
+		template <> struct divides <macstl::vec <float, 4>, macstl::vec <float, 4> >
+			{
+				typedef macstl::vec <float, 4> first_argument_type;
+				typedef macstl::vec <float, 4> second_argument_type;
+				typedef macstl::vec <float, 4> result_type;
+
+				result_type operator() (const first_argument_type& x, const second_argument_type& y) const
+					{
+						using namespace macstl;
+						
+						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();	// -0.0f
+						const vec <float, 4> scale = vec <float, 4>::fill <0x4B000000U> ();	// scale by 2^23, converts smallest denorm into smallest norm
+						
+						const vec <boolean <int>, 4> denormal =	// check if y is a denormalized number
+							altivec::cmpeq (
+								altivec::cmpb (y, vec <float, 4>::fill <0x007FFFFFU> ()),
+								vec <int, 4>::fill <0> ());
+								
+						// do the division on the renormalized numbers
+						// NOTE: the scale is in both divisor and dividend so it will cancel out
+						return altivec::impl::divide_normal (
+							altivec::sel (x, altivec::madd (x, scale, zero), denormal),
+							altivec::sel (y, altivec::madd (y, scale, zero), denormal));
+					}
+			};
+
+		template <> struct divides <macstl::vec <stdext::complex <float>, 2>, macstl::vec <stdext::complex <float>, 2> >
+			{
+				typedef macstl::vec <stdext::complex <float>, 2> first_argument_type;
+				typedef macstl::vec <stdext::complex <float>, 2> second_argument_type;
+				typedef macstl::vec <stdext::complex <float>, 2> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						const vec <unsigned char, 16> inc = altivec::lvsl (0, (int*) NULL);
+						const vec <unsigned char, 16> four = vec_splat_u8 (4);
+						const vec <unsigned char, 16> swap = altivec::vxor (inc, four);
+						
+						const vec <float, 4> zero = vec <float, 4>::fill <0> ();
+
+						const vec <float, 4> lhs2 = lhs.data ();					// a b c d
+						const vec <float, 4> rhs2 = rhs.data ();					// e f g h
+						
+						const vec <float, 4> rhs2_square = altivec::madd (rhs2, rhs2, zero);	// e2 f2 g2 h2
+						
+						const vec <float, 4> divisor = altivec::add (
+							rhs2_square,
+							altivec::perm (rhs2_square, rhs2_square, swap)						// f2 e2 h2 g2
+							);																		// e2+f2 e2+f2 g2+h2 g2+h2
+						
+						const vec <float, 4> dividend = altivec::madd (
+							altivec::perm (lhs2, lhs2, swap),			// b a d c
+							
+							altivec::vxor (
+								altivec::perm (rhs2, rhs2, altivec::vor (inc, four)),	// f f h h
+								vec <float, 4>::set <0, 0x80000000U, 0, 0x80000000U> ()),		// f -f h -h
+							
+							altivec::madd (
+								lhs2,
+								altivec::perm (rhs2, rhs2, altivec::andc (inc, four)),	// e e g g
+								zero)														// ae be cg dg
+							);																		// ae+bf be-af cg+dh dg-ch
+							
+						return (dividend / divisor).data ();										// (ae+bf)/(e2+f2) (be-af)/(e2+f2) (cg+dh)/(g2+h2) (dg-ch)/(g2+h2)
+					}
+			};
+
+		template <typename T, size_t n> struct divides <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::vor (lhs, altivec::nor (rhs, rhs));
+					}
+			};
+
+		template <> struct divides <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
+			{
+				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						vec <boolean <int>, 4> rhs2 = data_cast <vec <boolean <int>, 4> > (rhs);
+						return data_cast <result_type> (altivec::vor (lhs, altivec::nor (rhs2, rhs2)));
+					}
+			};
+
+		// modulus
+
+		template <> struct modulus <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> >
+			{			
+				typedef macstl::vec <unsigned char, 16> first_argument_type;
+				typedef macstl::vec <unsigned char, 16> second_argument_type;
+				typedef macstl::vec <unsigned char, 16> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						vec <unsigned char, 16> quotient = altivec::impl::estimate_divide (lhs, rhs);
+
+						vec <unsigned char, 16> difference = altivec::sub (lhs, quotient * rhs);
+						return altivec::sel (altivec::sub (difference, rhs), difference, altivec::cmplt (difference, rhs));
+					}
+			};
+			
+		template <> struct modulus <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> >
+			{
+				typedef macstl::vec <signed char, 16> first_argument_type;
+				typedef macstl::vec <signed char, 16> second_argument_type;
+				typedef macstl::vec <signed char, 16> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+
+						vec <signed char, 16> zero = vec <signed char, 16>::fill <0> ();
+						
+						// unsigned modulus
+						vec <signed char, 16> result = data_cast <vec <signed char, 16> > (
+							data_cast <vec <unsigned char, 16> > (altivec::abs (lhs)) %
+							data_cast <vec <unsigned char, 16> > (altivec::abs (rhs)));
+							
+						// if lhs is negative, result is negative
+						return altivec::sel (result, altivec::sub (zero, result), altivec::cmpgt (zero, lhs));
+					}
+			};
+			
+		template <> struct modulus <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> >
+			{			
+				typedef macstl::vec <unsigned short, 8> first_argument_type;
+				typedef macstl::vec <unsigned short, 8> second_argument_type;
+				typedef macstl::vec <unsigned short, 8> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						vec <unsigned short, 8> quotient = altivec::impl::estimate_divide (lhs, rhs);
+
+						vec <unsigned short, 8> difference = altivec::mladd (quotient,
+							altivec::sub (vec <unsigned short, 8>::fill <0> (), rhs), lhs);
+						return altivec::sel (altivec::sub (difference, rhs), difference, altivec::cmplt (difference, rhs));
+					}
+			};
+			
+		template <> struct modulus <macstl::vec <short, 8>, macstl::vec <short, 8> >
+			{
+				typedef macstl::vec <short, 8> first_argument_type;
+				typedef macstl::vec <short, 8> second_argument_type;
+				typedef macstl::vec <short, 8> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+
+						vec <short, 8> zero = vec <short, 8>::fill <0> ();
+						
+						// unsigned divide
+						vec <short, 8> result = data_cast <vec <short, 8> > (
+							data_cast <vec <unsigned short, 8> > (altivec::abs (lhs)) %
+							data_cast <vec <unsigned short, 8> > (altivec::abs (rhs)));
+							
+						// if lhs is negative, result is negative
+						return altivec::sel (result, altivec::sub (zero, result), altivec::cmpgt (zero, lhs));
+					}
+			};
+
+		template <> struct modulus <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> >
+			{			
+				typedef macstl::vec <unsigned int, 4> first_argument_type;
+				typedef macstl::vec <unsigned int, 4> second_argument_type;
+				typedef macstl::vec <unsigned int, 4> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						vec <unsigned int, 4> rhs2 = altivec::adds (rhs, rhs);
+						vec <unsigned int, 4> quotient = altivec::impl::estimate_divide (lhs, rhs);
+
+						// compute lhs - quotient * rhs, then perform 3 bit division on it
+						vec <unsigned int, 4> difference = altivec::sub (lhs, quotient * rhs);
+						difference = altivec::sel (altivec::sub (difference, rhs2), difference, altivec::cmplt (difference, rhs2));
+						return altivec::sel (altivec::sub (difference, rhs), difference, altivec::cmplt (difference, rhs));
+					}
+			};
+
+		template <> struct modulus <macstl::vec <int, 4>, macstl::vec <int, 4> >
+			{
+				typedef macstl::vec <int, 4> first_argument_type;
+				typedef macstl::vec <int, 4> second_argument_type;
+				typedef macstl::vec <int, 4> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+
+						vec <int, 4> zero = vec <int, 4>::fill <0> ();
+						
+						// unsigned modulus
+						vec <int, 4> result = data_cast <vec <int, 4> > (
+							data_cast <vec <unsigned int, 4> > (altivec::abs (lhs)) %
+							data_cast <vec <unsigned int, 4> > (altivec::abs (rhs)));
+							
+						// if lhs is negative, result is negative
+						return altivec::sel (result, altivec::sub (zero, result), altivec::cmpgt (zero, lhs));
+					}
+			};
+
+		template <typename T, size_t n> struct modulus <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::andc (lhs, rhs);
+					}
+			};
+
+		template <> struct modulus <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
+			{
+				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <result_type> (
+							altivec::andc (data_cast <vec <boolean <int>, 4> > (lhs), data_cast <vec <boolean <int>, 4> > (rhs)));
+					}
+			};
+
+	
+		// negate
+		
+		template <typename T, std::size_t n> struct negate <macstl::vec <T, n> >
+			{
+				typedef macstl::vec <T, n> argument_type;
+				typedef macstl::vec <T, n> result_type;
+				
+				result_type operator() (const argument_type& lhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::sub (argument_type::template fill <0> (), lhs);
+					}
+			};
+
+		template <typename T, std::size_t n> struct negate <macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+				
+				result_type operator() (const argument_type& lhs) const
+					{
+						return lhs;
+					}
+			};
+
+		template <> struct negate <macstl::vec <float, 4> >
+			{
+				typedef macstl::vec <float, 4> argument_type;
+				typedef macstl::vec <float, 4> result_type;
+				
+				result_type operator() (const argument_type& lhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::vxor (lhs,
+							vec <float, 4>::fill <0x80000000U> ());
+					}
+			};
+
+		template <> struct negate <macstl::vec <stdext::complex <float>, 2> >
+			{
+				typedef macstl::vec <stdext::complex <float>, 2> argument_type;
+				typedef macstl::vec <stdext::complex <float>, 2> result_type;
+				
+				result_type operator() (const argument_type& lhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <vec <stdext::complex <float>, 2> > (altivec::vxor (
+							data_cast <vec <float, 4> > (lhs),
+							vec <float, 4>::fill <0x80000000U> ()));
+					}
+			};
+
+		// not_equal_to
+		
+		template <typename T, std::size_t n> struct not_equal_to <macstl::vec <T, n>, macstl::vec <T, n> >
+			{
+				typedef macstl::vec <T, n> first_argument_type;
+				typedef macstl::vec <T, n> second_argument_type;
+				typedef typename macstl::vec <T, n>::vec_boolean result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						result_type eq = altivec::cmpeq (lhs, rhs);
+						return altivec::nor (eq, eq);
+					}
+			};
+
+		template <typename T, std::size_t n> struct not_equal_to <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::vxor (lhs, rhs);
+					}
+			};
+
+		template <> struct not_equal_to <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
+			{
+				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <vec <boolean <long long>, 2> > (
+							altivec::vxor (data_cast <vec <boolean <int>, 4> > (lhs),
+							data_cast <vec <boolean <int>, 4> > (rhs)));
+					}
+			};
+
+		template <typename T, std::size_t n> struct not_equal_to <macstl::vec <stdext::complex <T>, n>, macstl::vec <stdext::complex <T>, n> >
+			{
+				typedef macstl::vec <stdext::complex <T>, n> first_argument_type;
+				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
+				typedef typename macstl::vec <stdext::complex <T>, n>::vec_boolean result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						typename vec <T, n * 2>::vec_boolean eq = altivec::cmpeq (
+							data_cast <vec <T, n * 2> > (lhs),
+							data_cast <vec <T, n * 2> > (rhs));
+							
+						return data_cast <result_type> (altivec::andc (altivec::nor (eq, eq),
+							altivec::perm (eq, eq, altivec::impl::swap_real_imag <n * 2> ())));
+					}
+			};
+
+		// plus
+		
+		template <typename T, std::size_t n> struct plus <macstl::vec <T, n>, macstl::vec <T, n> >:
+			public macstl::altivec::add_function <macstl::vec <T, n>, macstl::vec <T, n> >
+			{
+			};
+
+		template <typename T, std::size_t n> struct plus <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::vor (lhs, rhs);
+					}
+			};
+
+		template <> struct plus <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
+			{
+				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <result_type> (altivec::vor (
+							data_cast <vec <boolean <int>, 4> > (lhs),
+							data_cast <vec <boolean <int>, 4> > (rhs)));
+					}
+			};
+
+		template <typename T, std::size_t n> struct plus <macstl::vec <stdext::complex <T>, n>, macstl::vec <stdext::complex <T>, n> >
+			{
+				typedef macstl::vec <stdext::complex <T>, n> first_argument_type;
+				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
+				typedef macstl::vec <stdext::complex <T>, n> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <result_type> (altivec::add (
+							data_cast <macstl::vec <T, n * 2> > (lhs),
+							data_cast <macstl::vec <T, n * 2> > (rhs)));
+					}
+			};
+
+		// shift_left
+		
+		template <typename T, std::size_t n> struct shift_left <macstl::vec <T, n>, macstl::vec <T, n> >:
+			public macstl::altivec::sl_function <macstl::vec <T, n>, macstl::vec <T, n> >
+			{
+			};
+
+		template <> struct shift_left <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> >
+			{
+				typedef macstl::vec <signed char, 16> first_argument_type;
+				typedef macstl::vec <signed char, 16> second_argument_type;
+				typedef macstl::vec <signed char, 16> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::sl (lhs, data_cast <vec <unsigned char, 16> > (rhs)); 
+					}
+			};
+
+		template <> struct shift_left <macstl::vec <short, 8>, macstl::vec <short, 8> >
+			{
+				typedef macstl::vec <short, 8> first_argument_type;
+				typedef macstl::vec <short, 8> second_argument_type;
+				typedef macstl::vec <short, 8> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::sl (lhs, data_cast <vec <unsigned short, 8> > (rhs)); 
+					}
+			};
+
+		template <> struct shift_left <macstl::vec <int, 4>, macstl::vec <int, 4> >
+			{
+				typedef macstl::vec <int, 4> first_argument_type;
+				typedef macstl::vec <int, 4> second_argument_type;
+				typedef macstl::vec <int, 4> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::sl (lhs, data_cast <vec <unsigned int, 4> > (rhs)); 
+					}
+			};
+
+		template <typename T, std::size_t n> struct shift_left <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type&) const
+					{
+						return lhs; 
+					}
+			};
+
+		template <std::size_t n> struct shift_left <macstl::vec <float, n>, macstl::vec <float, n> >;
+
+		template <typename T, std::size_t n> struct shift_left <macstl::vec <stdext::complex <T>, n>, macstl::vec <stdext::complex <T>, n> >;
+		
+		// shift_right
+
+		template <> struct shift_right <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> >:
+			public macstl::altivec::sr_function <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> >
+			{
+			};
+		
+		template <> struct shift_right <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> >
+			{
+				typedef macstl::vec <signed char, 16> first_argument_type;
+				typedef macstl::vec <signed char, 16> second_argument_type;
+				typedef macstl::vec <signed char, 16> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::sra (lhs, data_cast <vec <unsigned char, 16> > (rhs)); 
+					}
+			};
+
+		template <> struct shift_right <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> >:
+			public macstl::altivec::sr_function <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> >
+			{
+			};
+		
+		template <> struct shift_right <macstl::vec <short, 8>, macstl::vec <short, 8> >
+			{
+				typedef macstl::vec <short, 8> first_argument_type;
+				typedef macstl::vec <short, 8> second_argument_type;
+				typedef macstl::vec <short, 8> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::sra (lhs, data_cast <vec <unsigned short, 8> > (rhs)); 
+					}
+			};
+
+		template <> struct shift_right <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> >:
+			public macstl::altivec::sr_function <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> >
+			{
+			};
+		
+		template <> struct shift_right <macstl::vec <int, 4>, macstl::vec <int, 4> >
+			{
+				typedef macstl::vec <int, 4> first_argument_type;
+				typedef macstl::vec <int, 4> second_argument_type;
+				typedef macstl::vec <int, 4> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::sra (lhs, data_cast <vec <unsigned int, 4> > (rhs)); 
+					}
+			};
+			
+		template <typename T, std::size_t n> struct shift_right <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::andc (lhs, rhs); 
+					}
+			};
+
+		template <> struct shift_right <macstl::vec <macstl::boolean <long long>, 2>, macstl::vec <macstl::boolean <long long>, 2> >
+			{
+				typedef macstl::vec <macstl::boolean <long long>, 2> first_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
+				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <vec <boolean <long long>, 2> >
+							(altivec::andc (data_cast <vec <boolean <int>, 4> > (lhs), data_cast <vec <boolean <int>, 4> > (rhs))); 
+					}
+			};
+
+		template <typename T, std::size_t n> struct shift_right <macstl::vec <stdext::complex <T>, n>, macstl::vec <stdext::complex <T>, n> >;
+		
+
+			
 		// logarithm
 
 		template <> struct logarithm <macstl::vec <float, 4> >
@@ -3721,7 +3606,7 @@ namespace stdext
 			
 		// multiplies_high
 				
-		template <> struct multiplies_high <macstl::vec <unsigned char, 16> >
+		template <> struct multiplies_high <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> >
 			{
 				typedef macstl::vec <unsigned char, 16> first_argument_type;
 				typedef macstl::vec <unsigned char, 16> second_argument_type;
@@ -3738,7 +3623,7 @@ namespace stdext
 					}
 			};
 
-		template <> struct multiplies_high <macstl::vec <signed char, 16> >
+		template <> struct multiplies_high <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> >
 			{
 				typedef macstl::vec <signed char, 16> first_argument_type;
 				typedef macstl::vec <signed char, 16> second_argument_type;
@@ -3755,7 +3640,7 @@ namespace stdext
 					}
 			};
 
-		template <> struct multiplies_high <macstl::vec <unsigned short, 8> >
+		template <> struct multiplies_high <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> >
 			{
 				typedef macstl::vec <unsigned short, 8> first_argument_type;
 				typedef macstl::vec <unsigned short, 8> second_argument_type;
@@ -3772,7 +3657,7 @@ namespace stdext
 					}
 			};
 			
-		template <> struct multiplies_high <macstl::vec <short, 8> >
+		template <> struct multiplies_high <macstl::vec <short, 8>, macstl::vec <short, 8> >
 			{
 				typedef macstl::vec <short, 8> first_argument_type;
 				typedef macstl::vec <short, 8> second_argument_type;
@@ -3791,7 +3676,7 @@ namespace stdext
  					}
 			};
 			
-		template <typename T, std::size_t n> struct multiplies_high <macstl::vec <macstl::boolean <T>, n> >
+		template <typename T, std::size_t n> struct multiplies_high <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> >
 			{
 				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
@@ -3805,22 +3690,22 @@ namespace stdext
 						
 		// multiplies_plus
 
-		template <> struct multiplies_plus <macstl::vec <unsigned short, 8> >:
+		template <> struct multiplies_plus <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> >:
 			public macstl::altivec::mladd_function <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> >
 			{
 			};
 
-		template <> struct multiplies_plus <macstl::vec <short, 8> >:
+		template <> struct multiplies_plus <macstl::vec <short, 8>, macstl::vec <short, 8>, macstl::vec <short, 8> >:
 			public macstl::altivec::mladd_function <macstl::vec <short, 8>, macstl::vec <short, 8>, macstl::vec <short, 8> >
 			{
 			};
 
-		template <> struct multiplies_plus <macstl::vec <float, 4> >:
+		template <> struct multiplies_plus <macstl::vec <float, 4>, macstl::vec <float, 4>, macstl::vec <float, 4> >:
 			public macstl::altivec::madd_function <macstl::vec <float, 4>, macstl::vec <float, 4>, macstl::vec <float, 4> >
 			{
 			};
 
-		template <> struct multiplies_plus <macstl::vec <stdext::complex <float>, 2> >
+		template <> struct multiplies_plus <macstl::vec <stdext::complex <float>, 2>, macstl::vec <stdext::complex <float>, 2>, macstl::vec <stdext::complex <float>, 2> >
 			{
 				typedef macstl::vec <stdext::complex <float>, 2> first_argument_type;
 				typedef macstl::vec <stdext::complex <float>, 2> second_argument_type;
@@ -3861,15 +3746,93 @@ namespace stdext
 								altivec::cmpeq (rhs_half, altivec::trunc (rhs_half))),
 							vec <float, 4>::fill <0x7FFFFFFFU> (),	// nan
 							altivec::andc (altivec::cmple (lhs, zero), altivec::cmpeq (rhs, rhs_int)));
-							
-						/*
-						std::cout << "lhs = " << lhs << "; log2 = " << log2 (lhs) << "\n";
-						std::cout << "x = " << altivec::madd (log2 (lhs), rhs, vec <float, 4>::fill <0x80000000U> ()) << "\n";
-						std::cout << "exp2 = " << exp2 (vec <float, 4> ((__vector float) (1.0/0.0))) << "\n";
-						return exp2 (altivec::madd (log2 (lhs), rhs, vec <float, 4>::fill <0x80000000U> ()));
-						*/
 					}
 			};
+			
+		// reciprocal_square_root
+		
+		template <> struct reciprocal_square_root <macstl::vec <float, 4> >
+			{
+				typedef macstl::vec <float, 4> argument_type;
+				typedef macstl::vec <float, 4> result_type;
+
+				result_type operator() (const argument_type& lhs) const
+					{
+						using namespace macstl;
+						
+						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();	// -0.0f
+						const vec <float, 4> one = vec <float, 4>::fill <0x3F800000U> (); // 1.0f
+						const vec <float, 4> max_denormal = vec <float, 4>::fill <0x007FFFFFU> ();
+						const vec <float, 4> scale = vec <float, 4>::fill <0x4B800000U> ();	// scale by 2^24, converts smallest denorm into smallest norm
+						
+						const vec <boolean <int>, 4> denormal =	// check if lhs is a denormalized number
+							altivec::cmpeq (
+								altivec::cmpb (lhs, max_denormal),
+								vec <int, 4>::fill <0> ());
+								
+						const vec <float, 4> scaled_lhs = altivec::sel (lhs, altivec::madd (lhs, scale, zero), denormal);
+						
+						const vec <float, 4> estimate = altivec::rsqrte (scaled_lhs);
+						const vec <float, 4> partial = altivec::nmsub (scaled_lhs, altivec::madd (estimate, estimate, zero), one); // 1.0f
+						
+						const vec <float, 4> result = altivec::madd (
+							altivec::sel (partial, one,
+								// if +/-0 or +inf, choose arbitrary finite number (1) instead of partial result (which would be nan)
+								#if __FINITE_MATH_ONLY__
+								altivec::cmpeq (
+									lhs, zero)
+								#else
+								altivec::vor (
+									altivec::cmpeq (
+										lhs, zero),
+									altivec::cmpeq (
+										lhs, vec <float, 4>::fill <0x7F800000U> ()))
+								#endif
+							),
+							altivec::madd (estimate, vec <float, 4>::fill <0x3F000000U> (), zero),	// 0.5f
+							estimate);
+							
+						return altivec::madd (result,
+							altivec::sel (one, vec <float, 4>::fill <0x45800000> (), denormal), // if denormal, scale back by 2^12
+							zero);
+					}
+			};
+
+		// selection
+
+		template <typename T, std::size_t n> struct selection <macstl::vec <typename macstl::vec <T, n>::boolean_type, n>, macstl::vec <T, n>, macstl::vec <T, n> >
+			{
+				typedef typename macstl::vec <T, n>::vec_boolean first_argument_type;
+				typedef macstl::vec <T, n> second_argument_type;
+				typedef macstl::vec <T, n> third_argument_type;
+				typedef macstl::vec <T, n> result_type;
+
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& mhs, const third_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return altivec::sel (rhs, mhs, lhs);
+					}
+			};
+
+		// shifter
+
+		template <typename T, std::size_t n> inline macstl::vec <T, n>
+			shifter <macstl::vec <T, n> >::operator() (const macstl::vec <T, n>& lhs, int rhs) const
+			{
+				using namespace macstl;
+				
+				typename result_type::data_type zero = result_type::template fill <0> ().data ();
+				if (rhs >= (int) result_type::length || -rhs >= (int) result_type::length)
+					return zero;
+				else if (rhs >= 0)
+					return data_cast <result_type> (
+						altivec::perm (lhs.data (), zero, altivec::lvsl (rhs * sizeof (typename result_type::value_type), (int*) NULL)));
+				else
+					return data_cast <result_type> (
+						altivec::perm (zero, lhs.data (), altivec::lvsr (-rhs * sizeof (typename result_type::value_type), (int*) NULL)));
+			}
+		
 			
 		// sine
 
@@ -4001,6 +3964,231 @@ namespace stdext
 					
 			};
 	
+			// accumulator <maximum>
+
+		inline unsigned char accumulator <maximum <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> > >::operator() (const macstl::vec <unsigned char, 16>& lhs) const
+			{
+				using namespace macstl;
+				
+				vec <unsigned char, 16> result = altivec::max (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <8> ()));
+				result = altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <16> ()));
+				result = altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <32> ()));
+				return altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
+			}
+
+
+		inline signed char accumulator <maximum <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> > >::operator() (const macstl::vec <signed char, 16>& lhs) const
+			{
+				using namespace macstl;
+						
+				vec <signed char, 16> result = altivec::max (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <8> ()));
+				result = altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <16> ()));
+				result = altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <32> ()));
+				return altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
+			};
+
+		inline unsigned short accumulator <maximum <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> > >::operator() (const macstl::vec <unsigned short, 8>& lhs) const
+			{
+				using namespace macstl;
+				
+				vec <unsigned short, 8> result = altivec::max (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <16> ()));
+				result = altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <32> ()));
+				return altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
+			}
+	
+
+		inline short accumulator <maximum <macstl::vec <short, 8>, macstl::vec <short, 8> > >::operator() (const macstl::vec <short, 8>& lhs) const
+			{
+				using namespace macstl;
+				
+				vec <short, 8> result = altivec::max (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <16> ()));
+				result = altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <32> ()));
+				return altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
+			}
+
+		inline unsigned int accumulator <maximum <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> > >::operator() (const macstl::vec <unsigned int, 4>& lhs) const
+			{
+				using namespace macstl;
+				
+				vec <unsigned int, 4> result = altivec::max (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
+				return altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
+			}
+
+		inline int accumulator <maximum <macstl::vec <int, 4>, macstl::vec <int, 4> > >::operator() (const macstl::vec <int, 4>& lhs) const
+			{
+				using namespace macstl;
+				
+				vec <int, 4> result = altivec::max (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
+				return altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
+			}
+
+		inline float accumulator <maximum <macstl::vec <float, 4>, macstl::vec <float, 4> > >::operator() (const macstl::vec <float, 4>& lhs) const
+			{
+				using namespace macstl;
+				
+				const vec <float, 4> result = max (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
+				return max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
+			}
+
+		template <typename T, std::size_t n> inline macstl::boolean <T>
+			accumulator <maximum <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> > >::operator() (const macstl::vec <macstl::boolean <T>, n>& lhs) const
+			{
+				using namespace macstl;
+				
+				return altivec::any_ne (lhs, argument_type::template fill <false> ());
+			}
+		
+		// accumulator <minimum>
+
+		inline unsigned char accumulator <minimum <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> > >::operator() (const macstl::vec <unsigned char, 16>& lhs) const
+			{
+				using namespace macstl;
+				
+				vec <unsigned char, 16> result = altivec::min (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <8> ()));
+				result = altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <16> ()));
+				result = altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <32> ()));
+				return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
+			}
+
+		inline signed char accumulator <minimum <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> > >::operator() (const macstl::vec <signed char, 16>& lhs) const
+			{
+				using namespace macstl;
+				
+				vec <signed char, 16> result = altivec::min (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <8> ()));
+				result = altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <16> ()));
+				result = altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <32> ()));
+				return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
+			}
+
+		inline unsigned short accumulator <minimum <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> > >::operator() (const macstl::vec <unsigned short, 8>& lhs) const
+			{
+				using namespace macstl;
+				
+				vec <unsigned short, 8> result = altivec::min (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <16> ()));
+				result = altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <32> ()));
+				return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
+			}
+
+		inline short accumulator <minimum <macstl::vec <short, 8>, macstl::vec <short, 8> > >::operator() (const macstl::vec <short, 8>& lhs) const
+			{
+				using namespace macstl;
+				
+				vec <short, 8> result = altivec::min (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <16> ()));
+				result = altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <32> ()));
+				return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
+			}
+
+		inline unsigned int accumulator <minimum <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> > >::operator() (const macstl::vec <unsigned int, 4>& lhs) const
+			{
+				using namespace macstl;
+						
+				macstl::vec <unsigned int, 4> result = altivec::min (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
+				return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
+			}
+
+		inline int accumulator <minimum <macstl::vec <int, 4>, macstl::vec <int, 4> > >::operator() (const macstl::vec <int, 4>& lhs) const
+			{
+				using namespace macstl;
+				
+				macstl::vec <int, 4> result = altivec::min (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
+				return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
+			}
+
+		inline float accumulator <minimum <macstl::vec <float, 4>, macstl::vec <float, 4> > >::operator() (const macstl::vec <float, 4>& lhs) const
+			{
+				using namespace macstl;
+						
+				macstl::vec <float, 4> result = min (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
+				return min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
+			}
+
+		template <typename T, std::size_t n> inline macstl::boolean <T>
+			accumulator <minimum <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> > >::operator() (const macstl::vec <macstl::boolean <T>, n>& lhs) const
+			{
+				using namespace macstl;
+						
+				return altivec::all_eq (lhs, argument_type::template fill <true> ());
+			}
+		
+		// accumulator <plus>
+
+		inline unsigned char accumulator <plus <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> > >::operator() (const macstl::vec <unsigned char, 16>& lhs) const
+			{
+				using namespace macstl;
+				
+				return data_cast <vec <unsigned char, 16> > (altivec::sums (
+					data_cast <vec <int, 4> > (altivec::sum4s (lhs, vec <unsigned int, 4>::fill <0> ())), vec <int, 4>::fill <0> ())) [15];
+			}
+
+		inline signed char accumulator <plus <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> > >::operator() (const macstl::vec <signed char, 16>& lhs) const
+			{
+				using namespace macstl;
+				
+				return data_cast <vec <signed char, 16> > (altivec::sums (
+					altivec::sum4s (lhs, vec <int, 4>::fill <0> ()), vec <int, 4>::fill <0> ())) [15];
+			}
+
+		inline unsigned short accumulator <plus <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> > >::operator() (const macstl::vec <unsigned short, 8>& lhs) const
+			{
+				using namespace macstl;
+				
+				vec <int, 4> zero = vec <int, 4>::fill <0> ();
+				return altivec::sums (
+					altivec::sum4s (data_cast <vec <signed short, 8> > (lhs), zero), zero) [3];
+			}
+			
+		inline short accumulator <plus <macstl::vec <short, 8>, macstl::vec <short, 8> > >::operator() (const macstl::vec <short, 8>& lhs) const
+			{
+				using namespace macstl;
+				
+				return altivec::sums (altivec::sum4s (
+					altivec::sub (data_cast <vec <short, 8> > (lhs), vec <short, 8>::fill <-0x8000> ()),
+					vec <int, 4>::fill <0> ()), 
+					vec <int, 4>::fill <0x40000U> ()) [3];
+			}
+
+		inline unsigned int accumulator <plus <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> > >::operator() (const macstl::vec <unsigned int, 4>& lhs) const
+			{
+				using namespace macstl;
+						
+				vec <unsigned int, 4> result = altivec::add (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
+				return altivec::add (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
+			}
+
+		inline int accumulator <plus <macstl::vec <int, 4>, macstl::vec <int, 4> > >::operator() (const macstl::vec <int, 4>& lhs) const
+			{
+				using namespace macstl;
+						
+				vec <int, 4> result = altivec::add (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
+				return altivec::add (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
+			}
+			
+		inline float accumulator <plus <macstl::vec <float, 4>, macstl::vec <float, 4> > >::operator() (const macstl::vec <float, 4>& lhs) const
+			{
+				using namespace macstl;
+				
+				vec <float, 4> result = altivec::add (lhs, altivec::slo (lhs, vec <unsigned char, 16>::fill <32> ()));
+				return altivec::add (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
+			}
+
+		template <typename T, std::size_t n> inline macstl::boolean <T>
+			accumulator <plus <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> > >::operator() (const macstl::vec <macstl::boolean <T>, n>& lhs) const
+			{
+				using namespace macstl;
+				
+				return result_type (altivec::any_ne (lhs, argument_type::template fill <false> ()));
+			}
+
+		inline stdext::complex <float> accumulator <plus <macstl::vec <stdext::complex <float>, 2>, macstl::vec <stdext::complex <float>, 2> > >::operator() (const macstl::vec <stdext::complex <float>, 2>& lhs) const
+			{
+				using namespace macstl;
+				
+				const argument_type result = data_cast <argument_type> (altivec::add (lhs,
+					altivec::slo (data_cast <vec <float, 4> > (lhs), vec <unsigned char, 16>::fill <64> ())));
+				return result [0];
+			}
+
+
 	}
 	
 #endif

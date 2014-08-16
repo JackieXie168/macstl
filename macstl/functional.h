@@ -93,76 +93,15 @@ namespace stdext
 				return __mulhwu (lhs, rhs);
 			}
 
-
 		#endif
 
-		template <typename T> struct identity: public std::unary_function <T, T>
+		inline float rsqrt (float lhs)
 			{
-				T operator() (const T& x) const	
-					{
-						return x;
-					}
-			};
-		
-		template <typename T> struct bitwise_not: public std::unary_function <T, T>
-			{
-				T operator() (const T& x) const	
-					{
-						return ~x;
-					}
-			};
+				return 1.0 / std::sqrt ((double) lhs);	// note, we use double precision here so that the double op should be accurate...
+			}
 			
-		template <typename T> struct bitwise_and: public std::binary_function <T, T, T>
-			{
-				T operator() (const T& x, const T& y) const
-					{
-						return x & y;
-					}
-			};
-		
-		template <typename T> struct bitwise_or: public std::binary_function <T, T, T>
-			{
-				T operator() (const T& x, const T& y) const
-					{
-						return x | y;
-					}
-			};
-			
-		template <typename T> struct bitwise_xor: public std::binary_function <T, T, T>
-			{
-				T operator() (const T& x, const T& y) const
-					{
-						return x ^ y;
-					}
-			};
-		
-		template <typename T> struct multiplies_high: public std::binary_function <T, T, T>
-			{
-				T operator() (const T& x, const T& y) const
-					{
-						return mulhi (x, y);
-					}
-			};
+		// absolute
 
-		template <typename T> struct multiplies_plus;
-
-		template <typename T> struct shift_left: public std::binary_function <T, T, T>
-			{
-				T operator() (const T& x, const T& y) const
-					{
-						return x << y;
-					}
-			};
-		
-		template <typename T> struct shift_right: public std::binary_function <T, T, T>
-			{
-				T operator() (const T& x, const T& y) const
-					{
-						return x >> y;
-					}
-			};
-
-				
 		template <typename T> struct absolute: public std::unary_function <T, T>
 			{
 				T operator() (const T& lhs) const
@@ -180,6 +119,8 @@ namespace stdext
 						return acos (lhs);
 					}
 			};
+			
+		// arc_sine
 
 		template <typename T> struct arc_sine: public std::unary_function <T, T>
 			{
@@ -189,6 +130,8 @@ namespace stdext
 						return asin (lhs);
 					}
 			};
+			
+		// arc_tangent
 
 		template <typename T> struct arc_tangent: public std::unary_function <T, T>
 			{
@@ -199,7 +142,11 @@ namespace stdext
 					}
 			};
 			
-		template <typename T> struct arc_tangent2: public std::binary_function <T, T, T>
+		// arc_tangent2
+			
+		template <typename T1, typename T2 = T1> struct arc_tangent2;
+		
+		template <typename T> struct arc_tangent2 <T, T>: public std::binary_function <T, T, T>
 			{
 				T operator() (const T& lhs, const T& rhs) const
 					{
@@ -207,6 +154,54 @@ namespace stdext
 						return atan2 (lhs, rhs);
 					}
 			};
+						
+		// bitwise_and
+
+		template <typename T1, typename T2 = T1> struct bitwise_and;
+		
+		template <typename T> struct bitwise_and <T, T>: public std::binary_function <T, T, T>
+			{
+				T operator() (const T& x, const T& y) const
+					{
+						return x & y;
+					}
+			};
+			
+		// bitwise_not
+		
+		template <typename T> struct bitwise_not: public std::unary_function <T, T>
+			{
+				T operator() (const T& x) const	
+					{
+						return ~x;
+					}
+			};
+			
+		// bitwise_or
+		
+		template <typename T1, typename T2 = T1> struct bitwise_or;
+		
+		template <typename T> struct bitwise_or <T, T>: public std::binary_function <T, T, T>
+			{
+				T operator() (const T& x, const T& y) const
+					{
+						return x | y;
+					}
+			};
+		
+		// bitwise_xor
+		
+		template <typename T1, typename T2 = T1> struct bitwise_xor;
+		
+		template <typename T> struct bitwise_xor <T, T>: public std::binary_function <T, T, T>
+			{
+				T operator() (const T& x, const T& y) const
+					{
+						return x ^ y;
+					}
+			};
+			
+		// cosine
 			
 		template <typename T> struct cosine: public std::unary_function <T, T>
 			{
@@ -217,6 +212,32 @@ namespace stdext
 					}
 			};
 			
+		// divides
+			
+		template <typename T1, typename T2 = T1> struct divides;
+		
+		template <typename T> struct divides <T, T>: public std::binary_function <T, T, T>
+			{
+				T operator() (const T& x, const T& y) const
+					{
+						return x / y;
+					}
+			};
+			
+		// equal_to
+
+		template <typename T1, typename T2 = T1> struct equal_to;
+		
+		template <typename T> struct equal_to <T, T>: public std::binary_function <T, T, bool>
+			{
+				bool operator() (const T& x, const T& y) const
+					{
+						return x == y;
+					}
+			};
+			
+		// exponent
+
 		template <typename T> struct exponent: public std::unary_function <T, T>
 			{
 				T operator() (const T& lhs) const
@@ -226,6 +247,8 @@ namespace stdext
 					}
 			};
 
+		// exponent2
+		
 		template <typename T> struct exponent2: public std::unary_function <T, T>
 			{
 				T operator() (const T& lhs) const
@@ -233,6 +256,32 @@ namespace stdext
 						return exp2 (lhs);
 					}
 			};
+						
+		// greater
+			
+		template <typename T1, typename T2 = T1> struct greater;
+		
+		template <typename T> struct greater <T, T>: public std::binary_function <T, T, bool>
+			{
+				bool operator() (const T& x, const T& y) const
+					{
+						return x > y;
+					}
+			};
+			
+		// greater_equal
+
+		template <typename T1, typename T2 = T1> struct greater_equal;
+		
+		template <typename T> struct greater_equal <T, T>: public std::binary_function <T, T, bool>
+			{
+				bool operator() (const T& x, const T& y) const
+					{
+						return x >= y;
+					}
+			};
+
+		// hyperbolic_cosine
 			
 		template <typename T> struct hyperbolic_cosine: public std::unary_function <T, T>
 			{
@@ -243,6 +292,8 @@ namespace stdext
 					}
 			};
 
+		// hyperbolic_sine
+		
 		template <typename T> struct hyperbolic_sine: public std::unary_function <T, T>
 			{
 				T operator() (const T& lhs) const
@@ -252,6 +303,8 @@ namespace stdext
 					}
 			};
 
+		// hyperbolic_tangent
+		
 		template <typename T> struct hyperbolic_tangent: public std::unary_function <T, T>
 			{
 				T operator() (const T& lhs) const
@@ -261,6 +314,42 @@ namespace stdext
 					}
 			};
 
+		// identity
+
+		template <typename T> struct identity: public std::unary_function <T, T>
+			{
+				T operator() (const T& x) const	
+					{
+						return x;
+					}
+			};
+			
+		// less
+
+		template <typename T1, typename T2 = T1> struct less;
+		
+		template <typename T> struct less <T, T>: public std::binary_function <T, T, bool>
+			{
+				bool operator() (const T& x, const T& y) const
+					{
+						return x < y;
+					}
+			};
+			
+		// less_equal
+
+		template <typename T1, typename T2 = T1> struct less_equal;
+		
+		template <typename T> struct less_equal <T, T>: public std::binary_function <T, T, bool>
+			{
+				bool operator() (const T& x, const T& y) const
+					{
+						return x <= y;
+					}
+			};
+			
+		// logarithm
+		
 		template <typename T> struct logarithm: public std::unary_function <T, T>
 			{
 				T operator() (const T& lhs) const
@@ -270,6 +359,8 @@ namespace stdext
 					}
 			};
 
+		// logarithm2
+		
 		template <typename T> struct logarithm2: public std::unary_function <T, T>
 			{
 				T operator() (const T& lhs) const
@@ -278,6 +369,8 @@ namespace stdext
 					}
 			};
 
+		// logarithm10
+		
 		template <typename T> struct logarithm10: public std::unary_function <T, T>
 			{
 				T operator() (const T& lhs) const
@@ -287,7 +380,46 @@ namespace stdext
 					}
 			};
 
-		template <typename T> struct maximum: public std::binary_function <T, T, T>
+			
+		// logical_and
+
+		template <typename T1, typename T2 = T1> struct logical_and;
+		
+		template <typename T> struct logical_and <T, T>: public std::binary_function <T, T, bool>
+			{
+				bool operator() (const T& x, const T& y) const
+					{
+						return x && y;
+					}
+			};
+			
+		// logical_not
+
+		template <typename T> struct logical_not: public std::unary_function <T, bool>
+			{
+				bool operator() (const T& x) const
+					{
+						return !x;
+					}
+			};
+
+		// logical_or
+		
+		template <typename T1, typename T2 = T1> struct logical_or;
+		
+		template <typename T> struct logical_or <T, T>: public std::binary_function <T, T, bool>
+			{
+				bool operator() (const T& x, const T& y) const
+					{
+						return x || y;
+					}
+			};
+			
+		// maximum
+
+		template <typename T1, typename T2 = T1> struct maximum;
+		
+		template <typename T> struct maximum <T, T>: public std::binary_function <T, T, T>
 			{
 				T operator() (const T& lhs, const T& rhs) const
 					{
@@ -297,7 +429,7 @@ namespace stdext
 
 		#if !__FINITE_MATH_ONLY__
 		
-		template <> struct maximum <float>: public std::binary_function <float, float, float>
+		template <> struct maximum <float, float>: public std::binary_function <float, float, float>
 			{
 				float operator() (float lhs, float rhs) const
 					{
@@ -305,7 +437,7 @@ namespace stdext
 					}
 			};
 
-		template <> struct maximum <double>: public std::binary_function <double, double, double>
+		template <> struct maximum <double, double>: public std::binary_function <double, double, double>
 			{
 				double operator() (double lhs, double rhs) const
 					{
@@ -314,8 +446,12 @@ namespace stdext
 			};
 			
 		#endif
-			
-		template <typename T> struct minimum: public std::binary_function <T, T, T>
+		
+		// minimum
+		
+		template <typename T1, typename T2 = T1> struct minimum;
+		
+		template <typename T> struct minimum <T, T>: public std::binary_function <T, T, T>
 			{
 				T operator() (const T& lhs, const T& rhs) const
 					{
@@ -325,7 +461,7 @@ namespace stdext
 		
 		#if !__FINITE_MATH_ONLY__
 
-		template <> struct minimum <float>: public std::binary_function <float, float, float>
+		template <> struct minimum <float, float>: public std::binary_function <float, float, float>
 			{
 				float operator() (float lhs, float rhs) const
 					{
@@ -333,7 +469,7 @@ namespace stdext
 					}
 			};
 
-		template <> struct minimum <double>: public std::binary_function <double, double, double>
+		template <> struct minimum <double, double>: public std::binary_function <double, double, double>
 			{
 				double operator() (double lhs, double rhs) const
 					{
@@ -342,8 +478,86 @@ namespace stdext
 			};
 			
 		#endif
+						
+		// minus
+
+		template <typename T1, typename T2 = T1> struct minus;
+		
+		template <typename T> struct minus <T, T>: public std::binary_function <T, T, T>
+			{
+				T operator() (const T& x, const T& y) const
+					{
+						return x - y;
+					}
+			};
 			
-		template <typename T> struct power: public std::binary_function <T, T, T>
+		// modulus
+
+		template <typename T1, typename T2 = T1> struct modulus;
+		
+		template <typename T> struct modulus <T, T>: public std::binary_function <T, T, T>
+			{
+				T operator() (const T& x, const T& y) const
+					{
+						return x % y;
+					}
+			};
+			
+		// multiplies
+
+		template <typename T1, typename T2 = T1> struct multiplies;
+		
+		template <typename T> struct multiplies <T, T>: public std::binary_function <T, T, T>
+			{
+				T operator() (const T& x, const T& y) const
+					{
+						return x * y;
+					}
+			};
+			
+		// multiplies_high
+					
+		template <typename T1, typename T2 = T1> struct multiplies_high;
+		
+		template <typename T> struct multiplies_high <T, T>: public std::binary_function <T, T, T>
+			{
+				T operator() (const T& x, const T& y) const
+					{
+						return mulhi (x, y);
+					}
+			};
+			
+		// multiplies_plus
+
+		template <typename T1, typename T2 = T1, typename T3 = T2> struct multiplies_plus;
+
+		// negate
+		
+		template <typename T> struct negate: public std::unary_function <T, T>
+			{
+				T operator() (const T& x) const
+					{
+						return -x;
+					}
+			};
+
+		// not_equal_to
+		
+		template <typename T1, typename T2 = T1> struct not_equal_to;
+		
+		template <typename T> struct not_equal_to <T, T>: public std::binary_function <T, T, bool>
+			{
+				bool operator() (const T& x, const T& y) const
+					{
+						return x != y;
+					}
+			};
+			
+		// power
+		
+		template <typename T1, typename T2 = T1> struct power;
+		
+		template <typename T> struct power <T, T>: public std::binary_function <T, T, T>
 			{
 				T operator() (const T& lhs, const T& rhs) const
 					{
@@ -351,6 +565,71 @@ namespace stdext
 						return pow (lhs, rhs);
 					}
 			};
+
+		// plus
+		
+		template <typename T1, typename T2 = T1> struct plus;
+		
+		template <typename T> struct plus <T, T>: public std::binary_function <T, T, T>
+			{
+				T operator() (const T& x, const T& y) const
+					{
+						return x + y;
+					}
+			};
+			
+		// reciprocal_square_root
+		
+		template <typename T> struct reciprocal_square_root: public std::unary_function <T, T>
+			{
+				T operator() (const T& lhs) const
+					{
+						return rsqrt (lhs);
+					}
+			};
+
+		// selection
+		
+		template <typename T1, typename T2 = T1, typename T3 = T2> struct selection;
+		
+		template <typename T> struct selection <bool, T, T>
+			{
+				typedef bool first_argument_type;
+				typedef T second_argument_type;
+				typedef T third_argument_type;
+				typedef T result_type;
+				
+				T operator() (bool x, const T& y, const T& z) const
+					{
+						return x ? y : z;
+					}
+			};
+
+		// shift_left
+		
+		template <typename T1, typename T2 = T1> struct shift_left;
+		
+		template <typename T> struct shift_left <T, T>: public std::binary_function <T, T, T>
+			{
+				T operator() (const T& x, const T& y) const
+					{
+						return x << y;
+					}
+			};
+		
+		// shift_right
+		
+		template <typename T1, typename T2 = T1> struct shift_right;
+		
+		template <typename T> struct shift_right <T, T>: public std::binary_function <T, T, T>
+			{
+				T operator() (const T& x, const T& y) const
+					{
+						return x >> y;
+					}
+			};
+			
+		// sine
 			
 		template <typename T> struct sine: public std::unary_function <T, T>
 			{
@@ -360,6 +639,8 @@ namespace stdext
 						return sin (lhs);
 					}
 			};
+			
+		// square_root
 
 		template <typename T> struct square_root: public std::unary_function <T, T>
 			{
@@ -369,6 +650,8 @@ namespace stdext
 						return sqrt (lhs);
 					}
 			};
+			
+		// tangent
 
 		template <typename T> struct tangent: public std::unary_function <T, T>
 			{

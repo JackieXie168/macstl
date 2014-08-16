@@ -59,13 +59,14 @@ namespace stdext
 					public array_term <T>
 					{
 						public:
+							typedef array_term <T> base;
 							typedef typename array_term <T>::chunk_type chunk_type;
 							
 							/** Constructs with space for @a n elements. */
 							valarray_base (std::size_t n)
 								{
 									// allocate enough bytes to put equivalent of n elements of T, but as aligned chunks
-									init (
+									base::init (
 										reinterpret_cast <chunk_type*> (_mm_malloc (sizeof (chunk_type) * ((n + chunk_type::length - 1) / chunk_type::length),
 											sizeof (typename chunk <T>::type))),
 										n);
@@ -74,7 +75,7 @@ namespace stdext
 							/** Destructs entire array. */
 							~valarray_base ()
 								{
-									_mm_free (data_);
+									_mm_free (base::data_);
 								}
 					};
 			}

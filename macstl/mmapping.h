@@ -37,6 +37,7 @@
 
 #include <cstddef>
 #include <new>
+#include <stdexcept>
 
 #include "impl/config.h"
 

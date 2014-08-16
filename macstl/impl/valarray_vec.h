@@ -57,7 +57,7 @@ namespace stdext
 						public:
 							typedef V chunk_type;
 							
-							typedef typename std::random_access_iterator_tag iterator_category;
+							typedef std::random_access_iterator_tag iterator_category;
 							typedef typename chunk_type::value_type value_type; 
 							typedef std::ptrdiff_t difference_type;
 							typedef const value_type* pointer;
@@ -162,7 +162,7 @@ namespace stdext
 						public:
 							typedef const V chunk_type;
 							
-							typedef typename std::random_access_iterator_tag iterator_category;
+							typedef std::random_access_iterator_tag iterator_category;
 							typedef typename chunk_type::value_type value_type;
 							typedef std::ptrdiff_t difference_type;
 							typedef const value_type* pointer;

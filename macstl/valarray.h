@@ -61,7 +61,8 @@ namespace stdext
 				template <typename Term> class literal_term;
 				template <typename Term, template <typename> class UOp> class unary_term;					
 				template <typename Term, typename Fn> class apply_term;					
-				template <typename LTerm, typename RTerm, template <typename> class BOp> class binary_term;
+				template <typename LTerm, typename RTerm, template <typename, typename> class BOp> class binary_term;
+				template <typename LTerm, typename MTerm, typename RTerm, template <typename, typename, typename> class TOp> class ternary_term;
 		
 				template <typename Term> class shift_term;
 				template <typename Term> class cshift_term;

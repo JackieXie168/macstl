@@ -38,6 +38,9 @@
 #ifdef __GNUC__
 	#define HAS_C99_COMPLEX
 	#define USE_C99_VEC_INIT_IN_TEMPL
+	#if __APPLE_CC__ <= 1
+		#define USE_ALTIVEC_H		// use the altivec.h header to define intrinsics
+	#endif
 #endif
 
 #ifdef _MSC_VER
@@ -54,9 +57,10 @@
 	#pragma inline_depth(512)
 	#pragma inline_max_size(16384)
 	#pragma inline_max_total_size(16384)
+	#define USE_CONTEXTUAL_BOOL
 #endif
 
-#if defined(__APPLE__) || defined(__UNIX__)
+#if defined(__APPLE__) || defined(__UNIX__) || defined(__linux__)
 	#define HAS_MMAP
 #endif
 

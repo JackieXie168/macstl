@@ -56,20 +56,7 @@ namespace stdext
 							typename std::iterator_traits <typename Expr1::chunk_iterator>::value_type,
 							typename std::iterator_traits <typename Expr1::const_chunk_iterator>::value_type>::value };
 					};
-
-				template <typename Expr1, typename Expr2, typename Enable = void> struct const_rechunkable
-					{
-						enum { value = false };
-					};
-
-				template <typename Expr1, typename Expr2> struct const_rechunkable <Expr1, Expr2,
-					typename enable_if <exists <typename Expr1::const_chunk_iterator>::value != 0 && exists <typename Expr2::const_chunk_iterator>::value != 0>::type>
-					{
-						enum { value = is_same <
-							typename std::iterator_traits <typename Expr1::const_chunk_iterator>::value_type,
-							typename std::iterator_traits <typename Expr1::const_chunk_iterator>::value_type>::value };
-					};
-					
+										
 				// these versions of the std algorithms take valarray expressions (which expose begin (), size () and possibly chunked
 				// versions of these members) instead of iterators, and assume that underlying value types are all "valarrayable" i.e.
 				// that destruction + copy construction = assignment. This allows dispatching on whether the type has a trivial destructor,
@@ -82,22 +69,22 @@ namespace stdext
 				
 				// accumulate_array
 				
-				template <template <typename> class Func, typename Expr>
+				template <template <typename, typename> class Func, typename Expr>
 					typename Expr::value_type accumulate_array (const Expr& expr);
 
-				template <template <typename> class Func, typename Expr, typename Enable1 = void, typename Enable2 = void> struct accumulate_array_dispatch
+				template <template <typename, typename> class Func, typename Expr, typename Enable1 = void, typename Enable2 = void> struct accumulate_array_dispatch
 					{
 						static typename Expr::value_type call (const Expr& expr)
 							{
 								typename Expr::const_iterator iter = expr.begin ();
 								typename std::iterator_traits <typename Expr::const_iterator>::value_type init = *iter;
 								++iter;
-								typedef Func <typename Expr::value_type> function;
+								typedef Func <typename Expr::value_type, typename Expr::value_type> function;
 								return stdext::accumulate_n (iter, expr.size () - 1, init, function ());
 							}
 					};
 					
-				template <template <typename> class Func, typename Expr, typename Enable2> struct accumulate_array_dispatch <Func, Expr,
+				template <template <typename, typename> class Func, typename Expr, typename Enable2> struct accumulate_array_dispatch <Func, Expr,
 					typename enable_if <exists <typename Expr::const_chunk_iterator>::value>::type, Enable2>
 					{
 						static typename Expr::value_type tail (const Expr& expr, typename Expr::value_type partial)
@@ -109,7 +96,7 @@ namespace stdext
 								typename Expr::const_iterator iter = expr.begin ();
 								std::advance (iter, size - tailed);
 								
-								typedef Func <typename Expr::value_type> function;
+								typedef Func <typename Expr::value_type, typename Expr::value_type> function;
 								return stdext::accumulate_n (iter, tailed, partial, function ());
 							}
 
@@ -121,14 +108,14 @@ namespace stdext
 								chunk_type init = *iter;
 								++iter;
 								
-								typedef Func <chunk_type> function;
+								typedef Func <chunk_type, chunk_type> function;
 								return tail (expr,
-									macstl::data_of (stdext::accumulator <Func <chunk_type> > () (stdext::accumulate_n (iter,
+									macstl::data_of (stdext::accumulator <function> () (stdext::accumulate_n (iter,
 										expr.size () / chunk_type::length - 1, init, function ()))));
 							}
 					};
 					
-				template <template <typename> class Func, typename Expr>
+				template <template <typename, typename> class Func, typename Expr>
 					inline typename Expr::value_type accumulate_array (const Expr& expr)
 					{
 						return accumulate_array_dispatch <Func, Expr>::call (expr);

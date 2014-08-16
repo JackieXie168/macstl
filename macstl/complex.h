@@ -404,7 +404,7 @@ namespace stdext
 
 							friend bool operator! (const complex <T>& z)
 								{
-									return !z.data ();
+									return z.data () == complex <T> ();
 								}
 
 							friend bool operator== (const complex <T>& lhs, const complex <T>& rhs)	

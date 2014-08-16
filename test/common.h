@@ -174,7 +174,7 @@ void seed ()
 	
 // validate -- pass through most arguments unmolested
 	
-template <template <typename> class Op, typename T> struct validate_lhs
+template <template <typename> class Op, typename T> struct validate
 	{
 		T operator() (const T& lhs) const
 			{
@@ -182,7 +182,15 @@ template <template <typename> class Op, typename T> struct validate_lhs
 			}
 	};
 
-template <template <typename> class Op, typename T> struct validate_rhs
+template <template <typename, typename> class Op, typename T> struct validate_lhs
+	{
+		T operator() (const T& lhs) const
+			{
+				return lhs;
+			}
+	};
+
+template <template <typename, typename> class Op, typename T> struct validate_rhs
 	{
 		T operator() (const T& rhs) const
 			{
@@ -190,7 +198,7 @@ template <template <typename> class Op, typename T> struct validate_rhs
 			}
 	};
 	
-template <typename T> struct validate_rhs <std::divides, T>
+template <typename T> struct validate_rhs <stdext::divides, T>
 	{
 		T operator() (const T& rhs) const
 			{
@@ -257,7 +265,7 @@ float reduce (float x)
 		return (float) fmod ((double) x, pow (2.0, 20.0));
 	}
 
-template <> struct validate_lhs <stdext::sine, float>
+template <> struct validate <stdext::sine, float>
 	{
 		float operator () (float lhs) const
 			{
@@ -265,7 +273,7 @@ template <> struct validate_lhs <stdext::sine, float>
 			}
 	};
 
-template <> struct validate_lhs <stdext::cosine, float>
+template <> struct validate <stdext::cosine, float>
 	{
 		float operator () (float lhs) const
 			{
@@ -273,7 +281,7 @@ template <> struct validate_lhs <stdext::cosine, float>
 			}
 	};
 
-template <> struct validate_lhs <stdext::tangent, float>
+template <> struct validate <stdext::tangent, float>
 	{
 		float operator () (float lhs) const
 			{
@@ -313,14 +321,14 @@ template <typename T> struct randomize <macstl::boolean <T> >
 // test
 
 template <template <typename> class UOp, typename T> inline void test
-	(const char* op, unsigned int& threshold, typename UOp <T>::argument_type* = NULL)
+	(const char* op, unsigned int& threshold)
 	{
 		T lhs;
 		
 		randomize <typename T::value_type> () (lhs, T::length);
 				
 		for (std::size_t i = 0; i != T::length; ++i)
-			lhs [i] = validate_lhs <UOp, typename T::value_type> () (lhs [i]);
+			lhs [i] = validate <UOp, typename T::value_type> () (lhs [i]);
 					
 		typedef UOp <T> vector_operation;
 		typename vector_operation::result_type result = vector_operation () (lhs);
@@ -344,9 +352,8 @@ template <template <typename> class UOp, typename T> inline void test
 			}
 	}
 
-	
-template <template <typename> class BOp, typename T> inline void test
-	(const char* op, unsigned int& threshold, typename BOp <T>::first_argument_type* = NULL)
+template <template <typename, typename> class BOp, typename T> inline void test2
+	(const char* op, unsigned int& threshold)
 	{
 		T lhs, rhs;
 
@@ -357,7 +364,7 @@ template <template <typename> class BOp, typename T> inline void test
 		for (std::size_t j = 0; j != T::length; ++j)
 			rhs [j] = validate_rhs <BOp, typename T::value_type> () (rhs [j]);
 		
-		typedef BOp <T> vector_operation;
+		typedef BOp <T, T> vector_operation;
 		typename vector_operation::result_type result = vector_operation () (lhs, rhs);
 		
 		#if defined(__MMX__) || defined(__SSE__) || defined(__SSE2__)
@@ -366,7 +373,7 @@ template <template <typename> class BOp, typename T> inline void test
 		
 		for (std::size_t k = 0; k != T::length; ++k)
 			{
-				typedef BOp <typename T::value_type> scalar_operation;
+				typedef BOp <typename T::value_type, typename T::value_type> scalar_operation;
 				typename scalar_operation::result_type r = scalar_operation () (lhs [k], rhs [k]);
 				unsigned int diff = difference ((typename vector_operation::result_type::value_type) result [k], r);
 				if (diff > threshold)
@@ -380,21 +387,21 @@ template <template <typename> class BOp, typename T> inline void test
 			}
 	}
 	
-template <template <typename> class BOp, typename T> inline void test_acc
+template <template <typename, typename> class BOp, typename T> inline void test_acc
 	(const char* op, unsigned int& threshold)
 	{
 		T lhs;
 		
 		randomize <typename T::value_type> () (lhs, T::length);
 									
-		typename T::value_type result = stdext::accumulator <BOp <T> > () (lhs);
+		typename T::value_type result = stdext::accumulator <BOp <T, T> > () (lhs);
 
 		#if defined(__MMX__) || defined(__SSE__) || defined(__SSE2__)
 		macstl::mmx::empty ();	// empty out MMX state after possible use of MMX
 		#endif
 		
 		typename T::value_type accum = lhs [0];
-		typedef BOp <typename T::value_type> scalar_operation;
+		typedef BOp <typename T::value_type, typename T::value_type> scalar_operation;
 		for (std::size_t i = 1; i != T::length; ++i)
 			accum = scalar_operation () (accum, lhs [i]);
 		

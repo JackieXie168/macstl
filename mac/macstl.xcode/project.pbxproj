@@ -35,8 +35,8 @@
 			buildSettings = {
 			};
 			buildStyles = (
-				4F0BB7ED011F40E904CA0E50,
-				D83AF78907997BF600AE05D6,
+				D833C974084875B100CA44B3,
+				D833C982084876F100CA44B3,
 			);
 			hasScannedForEncodings = 1;
 			isa = PBXProject;
@@ -97,32 +97,6 @@
 //082
 //083
 //084
-//4F0
-//4F1
-//4F2
-//4F3
-//4F4
-		4F0BB7ED011F40E904CA0E50 = {
-			buildSettings = {
-				DEAD_CODE_STRIPPING = YES;
-				GCC_ALTIVEC_EXTENSIONS = YES;
-				GCC_DYNAMIC_NO_PIC = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_CPU = G5;
-				GCC_MODEL_PPC64 = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				OTHER_CPLUSPLUSFLAGS = "-falign-loops=16 -falign-jumps=16 -falign-functions=16 -finline-limit=50000 -fstrict-aliasing -mpowerpc-gpopt";
-				ZERO_LINK = NO;
-			};
-			isa = PBXBuildStyle;
-			name = "Optimized for G5";
-		};
-//4F0
-//4F1
-//4F2
-//4F3
-//4F4
 //8D0
 //8D1
 //8D2
@@ -686,7 +660,23 @@
 				);
 			};
 		};
-		D83AF78907997BF600AE05D6 = {
+		D833C974084875B100CA44B3 = {
+			buildSettings = {
+				DEAD_CODE_STRIPPING = YES;
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_CPU = G5;
+				GCC_MODEL_PPC64 = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				OTHER_CPLUSPLUSFLAGS = "-falign-loops=16 -falign-jumps=16 -falign-functions=16 -finline-limit=10000 -fstrict-aliasing -funroll-loops -mpowerpc-gpopt";
+				ZERO_LINK = NO;
+			};
+			isa = PBXBuildStyle;
+			name = "Optimized for G5";
+		};
+		D833C982084876F100CA44B3 = {
 			buildSettings = {
 				DEAD_CODE_STRIPPING = YES;
 				GCC_ALTIVEC_EXTENSIONS = YES;
@@ -1642,7 +1632,7 @@
 			);
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
-				OTHER_CFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = "-finline-limit=10000 --param large-function-growth=50000 --param inline-unit-growth=50000";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = benchmark;

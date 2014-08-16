@@ -38,7 +38,7 @@
 #include "common.h"
 
 #ifndef OPERATION
-#define OPERATION stdext::sine
+#define OPERATION stdext::reciprocal_square_root
 #endif
 
 // make 16-byte vec the default since TYPE cannot contain any commas...

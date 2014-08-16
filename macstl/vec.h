@@ -66,7 +66,7 @@ namespace macstl
 		///
 		/// @see	macstl::altivec, macstl::mmx
 		
-		template <typename T, std::size_t n> class vec: public impl::vec_base <D, T, B>
+		template <typename T, std::size_t n> class vec
 			{
 				public:
 					/// Type used for static initialization. Usually the same as the value type, but may vary due to C++ template non-type parameter restrictions.
@@ -116,139 +116,35 @@ namespace macstl
 namespace stdext
 	{
 		template <typename F> struct accumulator;
-		template <typename T> struct shifter;
 		template <typename T> struct cshifter;
+		template <typename T> struct shifter;
 	}
 	
 namespace macstl
 	{
 		namespace impl
 			{
-				#define DEFINE_VEC_COMMON_CASSIGN_FUNCTION(FN,OP)											\
-				vec_value& FN (const vec_value& lhs)	{ return that () = that () OP lhs; }
-
-				/// Base for vec class.
-				
-				/// @internal
-				/// This class defines all the common member and friend functions for vec,
-				/// an interface similar to valarray.
-				///
-				/// @param	D	Raw vector data type e.g. __vector unsigned int (Altivec) or __m128i (SSE2).
-				/// @param	T	Scalar element type e.g. unsigned int.
-				/// @param	B	Scalar element type for logical function results e.g. boolean <int>.
-				///
-				/// @note	Uses the Barton-Nackman trick to expose friend functions, so that you can use raw data types
-				///			interchangeably with the vector object. Operators are only defined for the vector when they are
-				///			defined for the element types, e.g. operator~ is not defined for vec <float, 4> since operator~
-				///			is not defined for float.
-				
-				template <typename D, typename T, typename B> class vec_base
+				template <typename V> class vec_reference
 					{
 						public:
-							/// Raw vector data type.
-							typedef D data_type;
-							
-							/// Scalar element type.
-							typedef T value_type;
-							
-							/// Scalar element type for logical function results.
-							typedef B boolean_type;
-
-							/// Number of elements.
-							static const size_t length = sizeof (data_type) / sizeof (value_type);
-
-							/// Object vector data type for logical function results.
-							typedef vec <B, length> vec_boolean;
-							
-							/// Object vector data type. This should be the subclass.
-							typedef vec <T, length> vec_value;
-							
-							/// Proxy for accessing and changing vec elements.
-							
-							/// vec_base::operator[] returns this so that elements can be mutated in an alias-safe manner.
-							/// This pessimizes element-by-element access, of course.
-							
-							class reference
+							vec_reference& operator= (typename V::value_type lhs)
 								{
-									public:
-										/// Stores the referenced element @a lhs.
-										reference& operator= (value_type lhs)
-											{
-												reinterpret_cast <typename vec_value::union_type*> (data_)->val [index_] = data_of (lhs);
-												return *this;
-											}
-											
-										/// Returns the referenced element @a lhs.
-										operator value_type () const
-											{
-												return reinterpret_cast <typename vec_value::union_type*> (data_)->val [index_];
-											}
-											
-										friend class vec_base;
-								
-									private:
-										reference (data_type* data, std::size_t index): data_ (data), index_ (index)
-											{
-											}
-											
-										data_type* const data_;
-										const std::size_t index_;
-								};
-								
-							/// Gets a reference to the element at index @a i.
-							reference operator[] (std::size_t i)
-								{
-									return reference (&that ().data_, i);
+									reinterpret_cast <typename V::union_type*> (data_)->val [index_] = data_of (lhs);
+									return *this;
 								}
 								
-							/// Assigns the raw data @a lhs.
-							void operator= (data_type lhs)		{ that ().data_ = lhs; }
-							
-							/// @name Computed Assignments
-							
-							/// @{
-							DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator*=,*)
-							DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator/=,/)
-							DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator%=,%)
-							DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator+=,+)
-							DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator-=,-)
-							DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator^=,^)
-							DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator&=,&)
-							DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator|=,|)
-							DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator<<=,<<)
-							DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator>>=,>>)
-							/// @}
-							
-							/// Gets the raw vector data.
-							data_type data () const		{ return that ().data_; }
-							
-							/// Gets the number of elements. Same as length.
-							static std::size_t size ()		{ return length; }
-								
-							/// Gets the element at index @a i.
-							value_type operator[] (std::size_t i) const
+							operator typename V::value_type () const
 								{
-									return value_type (reinterpret_cast <const typename vec_value::union_type&> (that ().data_).val [i]);
+									return reinterpret_cast <typename V::union_type*> (data_)->val [index_];
 								}
 								
-							/// Gets the maximum element.
-							value_type max () const { return stdext::accumulator <stdext::maximum <vec_value> > () (that ()); }
-							
-							/// Gets the minium element.
-							value_type min () const { return stdext::accumulator <stdext::minimum <vec_value> > () (that ()); }
-							
-							/// Gets the sum of all elements.
-							value_type sum () const { return stdext::accumulator <std::plus <vec_value> > () (that ()); }
-							
-							/// Shifts all elements left by i places.
-							const vec_value shift (int i) const		{ return stdext::shifter <vec_value> () (that (), i); }
-							
-							/// Shifts all elements circularly left by i places.
-							const vec_value cshift (int i) const	{ return stdext::cshifter <vec_value> () (that (), i); }
-																		
+							vec_reference (typename V::data_type* data, std::size_t index): data_ (data), index_ (index)
+								{
+								}
+								
 						private:
-							vec_value& that ()				{ return static_cast <vec_value&> (*this); }
-							const vec_value& that () const	{ return static_cast <const vec_value&> (*this); }
+							typename V::data_type* const data_;
+							const std::size_t index_;
 					};
 
 				template <typename T> struct data_vec
@@ -354,61 +250,119 @@ namespace stdext
 			}
 	}
 	
-#define DEFINE_VEC_COMMON_UNARY_FUNCTION(FN,NS,FTR)																		\
-																														\
-namespace NS																											\
-	{																													\
-		template <typename T, std::size_t n> struct FTR <macstl::vec <T, n> >;												\
-	}																													\
-																														\
-namespace macstl																										\
-	{																													\
-		template <typename T> inline const typename stdext::impl::enable_if <											\
-			impl::is_vec <typename impl::data_vec <T>::type>::value,													\
-			typename NS::FTR <typename impl::data_vec <T>::type>::result_type>::type FN									\
-			(const T& lhs)																								\
-			{																											\
-				return NS::FTR <typename impl::data_vec <T>::type> () (lhs);											\
-			}																											\
+#define DEFINE_VEC_CLASS_GUTS(VEC,VAL,BOO)														\
+																								\
+public:																							\
+	typedef VEC data_type;																		\
+	typedef VAL value_type;																		\
+	typedef BOO boolean_type;																	\
+																								\
+	static const size_t length = sizeof (data_type) / sizeof (value_type);						\
+																								\
+	typedef vec <BOO, length> vec_boolean;														\
+	typedef impl::vec_reference <vec> reference;												\
+																								\
+	vec (data_type data): data_ (data)	{ }														\
+	void operator= (data_type lhs)		{ data_ = lhs; }										\
+	data_type data () const				{ return data_; }										\
+	static std::size_t size ()			{ return length; }										\
+																								\
+	value_type operator[] (std::size_t i) const													\
+		{																						\
+			return value_type (reinterpret_cast <const union_type&> (data_).val [i]);			\
+		}																						\
+																								\
+	reference operator[] (std::size_t i)														\
+		{																						\
+			return reference (&data_, i);														\
+		}																						\
+																								\
+private:																						\
+	data_type data_;
+	
+#define DEFINE_VEC_COMMON_UNARY_FUNCTION(FN,FTR)															\
+																											\
+namespace stdext																							\
+	{																										\
+		template <typename T, std::size_t n> struct FTR <macstl::vec <T, n> >;								\
+	}																										\
+																											\
+namespace macstl																							\
+	{																										\
+		template <typename T> inline const typename stdext::impl::enable_if <								\
+			impl::is_vec <typename impl::data_vec <T>::type>::value,										\
+			typename stdext::FTR <typename impl::data_vec <T>::type>::result_type>::type FN					\
+			(const T& lhs)																					\
+			{																								\
+				return stdext::FTR <typename impl::data_vec <T>::type> () (lhs);							\
+			}																								\
 	}
 
-#define DEFINE_VEC_COMMON_BINARY_FUNCTION(FN,NS,FTR)																	\
-																														\
-namespace NS																											\
-	{																													\
-		template <typename T, std::size_t n> struct FTR <macstl::vec <T, n> >;												\
-	}																													\
-																														\
-namespace macstl																										\
-	{																													\
-		template <typename T1, typename T2> inline const typename stdext::impl::enable_if <								\
-			impl::is_vec <typename impl::data_vec <T1>::type>::value != 0												\
-			&& stdext::impl::is_same <typename impl::data_vec <T1>::type, typename impl::data_vec <T2>::type>::value != 0,	\
-			typename NS::FTR <typename impl::data_vec <T1>::type>::result_type>::type FN								\
-			(const T1& lhs, const T2& rhs)																				\
-			{																											\
-				return NS::FTR <typename impl::data_vec <T1>::type> () (lhs, rhs);										\
-			}																											\
+#define DEFINE_VEC_COMMON_BINARY_FUNCTION(FN,FTR)															\
+																											\
+namespace stdext																							\
+	{																										\
+		template <typename T1, std::size_t n1, typename T2, std::size_t n2>									\
+			struct FTR <macstl::vec <T1, n1>, macstl::vec <T2, n2> >;										\
+		template <typename T, std::size_t n>																\
+			struct FTR <macstl::vec <T, n>, macstl::vec <T, n> >;											\
+	}																										\
+																											\
+namespace macstl																							\
+	{																										\
+		template <typename T1, typename T2> inline const typename stdext::impl::enable_if <					\
+			impl::is_vec <typename impl::data_vec <T1>::type>::value != 0									\
+			&& impl::is_vec <typename impl::data_vec <T2>::type>::value != 0,								\
+			typename stdext::FTR <																			\
+				typename impl::data_vec <T1>::type,															\
+				typename impl::data_vec <T2>::type>::result_type>::type FN									\
+			(const T1& lhs, const T2& rhs)																	\
+			{																								\
+				return stdext::FTR <																		\
+					typename impl::data_vec <T1>::type,														\
+					typename impl::data_vec <T2>::type> () (lhs, rhs);										\
+			}																								\
 	}
 
-#define DEFINE_VEC_COMMON_TERNARY_FUNCTION(FN,NS,FTR)																	\
-																														\
-namespace NS																											\
-	{																													\
-		template <typename T, std::size_t n> struct FTR <macstl::vec <T, n> >;												\
-	}																													\
-																														\
-namespace macstl																										\
-	{																													\
-		template <typename T1, typename T2, typename T3> inline const typename stdext::impl::enable_if <				\
-			impl::is_vec <typename impl::data_vec <T1>::type>::value != 0												\
-			&& stdext::impl::is_same <typename impl::data_vec <T1>::type, typename impl::data_vec <T2>::type>::value != 0		\
-			&& stdext::impl::is_same <typename impl::data_vec <T2>::type, typename impl::data_vec <T3>::type>::value != 0,	\
-			typename NS::FTR <typename impl::data_vec <T1>::type>::result_type>::type FN								\
-			(const T1& lhs, const T2& mhs, const T3& rhs)																\
-			{																											\
-				return NS::FTR <typename impl::data_vec <T1>::type> () (lhs, mhs, rhs);									\
-			}																											\
+#define DEFINE_VEC_COMMON_TERNARY_FUNCTION(FN,FTR)															\
+																											\
+namespace stdext																							\
+	{																										\
+		template <typename T1, std::size_t n1, typename T2, std::size_t n2, typename T3, std::size_t n3>	\
+			struct FTR <macstl::vec <T1, n1>, macstl::vec <T2, n2>, macstl::vec <T3, n3> >;					\
+		template <typename T, std::size_t n>																\
+			struct FTR <macstl::vec <T, n>, macstl::vec <T, n>, macstl::vec <T, n> >;						\
+	}																										\
+																											\
+namespace macstl																							\
+	{																										\
+		template <typename T1, typename T2, typename T3> inline const typename stdext::impl::enable_if <	\
+			impl::is_vec <typename impl::data_vec <T1>::type>::value != 0									\
+			&& impl::is_vec <typename impl::data_vec <T2>::type>::value != 0								\
+			&& impl::is_vec <typename impl::data_vec <T3>::type>::value != 0,								\
+			typename stdext::FTR <																			\
+				typename impl::data_vec <T1>::type,															\
+				typename impl::data_vec <T2>::type,															\
+				typename impl::data_vec <T3>::type>::result_type>::type FN									\
+			(const T1& lhs, const T2& mhs, const T3& rhs)													\
+			{																								\
+				return stdext::FTR <																		\
+					typename impl::data_vec <T1>::type,														\
+					typename impl::data_vec <T2>::type,														\
+					typename impl::data_vec <T3>::type> () (lhs, mhs, rhs);									\
+			}																								\
+	}
+	
+#define DEFINE_VEC_COMMON_CASSIGN_FUNCTION(FN,FTR)															\
+																											\
+namespace macstl																							\
+	{																										\
+		template <typename T1, typename T2, std::size_t n> inline const typename stdext::impl::enable_if <	\
+			impl::is_vec <typename impl::data_vec <T2>::type>::value != 0,									\
+			vec <T1, n>&>::type FN (vec <T1, n>& lhs, const T2& rhs)										\
+			{																								\
+				return lhs = stdext::FTR <vec <T1, n>, typename impl::data_vec <T2> > () (lhs, rhs);		\
+			}																								\
 	}
 
 /// @name Unary Arithmetic
@@ -416,9 +370,9 @@ namespace macstl																										\
 /// Each returns a new vector with elements of type T.
 
 //@{
-DEFINE_VEC_COMMON_UNARY_FUNCTION(operator+,stdext,identity)
-DEFINE_VEC_COMMON_UNARY_FUNCTION(operator+,std,negate)
-DEFINE_VEC_COMMON_UNARY_FUNCTION(operator~,stdext,bitwise_not)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(operator+,identity)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(operator+,negate)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(operator~,bitwise_not)
 //@}
 
 /// @name Unary Logic
@@ -426,7 +380,7 @@ DEFINE_VEC_COMMON_UNARY_FUNCTION(operator~,stdext,bitwise_not)
 /// Each returns a new vector with boolean elements.
 
 //@{
-DEFINE_VEC_COMMON_UNARY_FUNCTION(operator!,std,logical_not)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(operator!,logical_not)
 //@}
 
 /// @name Binary Arithmetic
@@ -434,30 +388,30 @@ DEFINE_VEC_COMMON_UNARY_FUNCTION(operator!,std,logical_not)
 /// Each returns a new vector with elements of type T. You can also use a raw vector for either lhs or rhs.
 
 //@{
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator*,std,multiplies)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator/,std,divides)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator%,std,modulus)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator+,std,plus)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator-,std,minus)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator^,stdext,bitwise_xor)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator-,stdext,bitwise_and)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator-,stdext,bitwise_or)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator<<,stdext,shift_left)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator>>,stdext,shift_right)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator*,multiplies)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator/,divides)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator%,modulus)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator+,plus)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator-,minus)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator^,bitwise_xor)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator-,bitwise_and)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator-,bitwise_or)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator<<,shift_left)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator>>,shift_right)
 //@}
 
 /// @name Binary Logic
 /// @relates macstl::vec
 /// Each returns a new vector with boolean elements. You can also use a raw vector for either lhs or rhs.
 //@{
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator==,std,equal_to)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator!=,std,not_equal_to)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator<,std,less)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator>,std,greater)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator<=,std,less_equal)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator>=,std,greater_equal)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator&&,std,logical_and)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(operator||,std,logical_or)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator==,equal_to)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator!=,not_equal_to)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator<,less)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator>,greater)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator<=,less_equal)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator>=,greater_equal)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator&&,logical_and)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(operator||,logical_or)
 //@}
 
 /// @name Transcendentals
@@ -465,29 +419,48 @@ DEFINE_VEC_COMMON_BINARY_FUNCTION(operator||,std,logical_or)
 /// Each returns a new vector with elements of type T. You can also use a raw vector for either lhs or rhs.
 
 //@{
-DEFINE_VEC_COMMON_UNARY_FUNCTION(abs,stdext,absolute)
-DEFINE_VEC_COMMON_UNARY_FUNCTION(acos,stdext,arc_cosine)
-DEFINE_VEC_COMMON_UNARY_FUNCTION(asin,stdext,arc_sine)
-DEFINE_VEC_COMMON_UNARY_FUNCTION(atan,stdext,arc_tangent)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(atan2,stdext,arc_tangent2)
-DEFINE_VEC_COMMON_UNARY_FUNCTION(cos,stdext,cosine)
-DEFINE_VEC_COMMON_UNARY_FUNCTION(cosh,stdext,hyperbolic_cosine)
-DEFINE_VEC_COMMON_UNARY_FUNCTION(exp,stdext,exponent)
-DEFINE_VEC_COMMON_UNARY_FUNCTION(exp2,stdext,exponent2)
-DEFINE_VEC_COMMON_TERNARY_FUNCTION(fma,stdext,multiplies_plus)
-DEFINE_VEC_COMMON_UNARY_FUNCTION(log,stdext,logarithm)
-DEFINE_VEC_COMMON_UNARY_FUNCTION(log2,stdext,logarithm2)
-DEFINE_VEC_COMMON_UNARY_FUNCTION(log10,stdext,logarithm10)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(max,stdext,maximum)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(min,stdext,minimum)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(mulhi,stdext,multiplies_high)
-DEFINE_VEC_COMMON_BINARY_FUNCTION(pow,stdext,power)
-DEFINE_VEC_COMMON_UNARY_FUNCTION(sin,stdext,sine)
-DEFINE_VEC_COMMON_UNARY_FUNCTION(sinh,stdext,hyperbolic_sine)
-DEFINE_VEC_COMMON_UNARY_FUNCTION(sqrt,stdext,square_root)
-DEFINE_VEC_COMMON_UNARY_FUNCTION(tan,stdext,tangent)
-DEFINE_VEC_COMMON_UNARY_FUNCTION(tanh,stdext,hyperbolic_tangent)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(abs,absolute)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(acos,arc_cosine)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(asin,arc_sine)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(atan,arc_tangent)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(atan2,arc_tangent2)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(cos,cosine)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(cosh,hyperbolic_cosine)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(exp,exponent)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(exp2,exponent2)
+DEFINE_VEC_COMMON_TERNARY_FUNCTION(fma,multiplies_plus)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(log,logarithm)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(log2,logarithm2)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(log10,logarithm10)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(max,maximum)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(min,minimum)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(mulhi,multiplies_high)
+DEFINE_VEC_COMMON_BINARY_FUNCTION(pow,power)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(rsqrt,reciprocal_square_root)
+DEFINE_VEC_COMMON_TERNARY_FUNCTION(select,selection)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(sin,sine)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(sinh,hyperbolic_sine)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(sqrt,square_root)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(tan,tangent)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(tanh,hyperbolic_tangent)
 //@}
+
+/// @name Computed Assignments
+/// @relates macstl::vec
+
+/// @{
+DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator*=,multiplies)
+DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator/=,divides)
+DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator%=,modulus)
+DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator+=,plus)
+DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator-=,minus)
+DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator^=,bitwise_xor)
+DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator&=,bitwise_and)
+DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator|=,bitwise_or)
+DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator<<=,shift_left)
+DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator>>=,shift_right)
+/// @}
+
 
 #define DEFINE_VEC_PLATFORM_UNARY_FUNCTION(FN,DESC)														\
 																									\

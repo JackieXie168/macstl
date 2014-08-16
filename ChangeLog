@@ -1,5 +1,20 @@
 Release history
 
+0.3	28 Jun 2005	
+	．Added support for Apple gcc 4.0 on Mac OS X 10.4.
+	．Added support for FSF gcc 3.4 on Yellow Dog Linux [MLe*].
+	．Improved vec design and performance.
+	．Added support for Xcode 2.1 and Universal Binaries (Intel/PowerPC).
+	．Added differently typed arguments for vec and valarray functions.
+	．Added select function for vec and valarray [JTe].
+	．Fixed undefined __bool and test template template parameters for Codewarrior.
+	．Added macstlizer script and header; added SSE2 integer shift intrinsics.
+	．Improved macstlizer script; added vec <pixel, 8> for Altivec, SSE/SSE2 memory intrinsics.
+	．Added binary min and max for valarray [ILi].
+	．Fixed vector cast error in template static member functions for Apple gcc 3.3 on Mac OS X 10.3.
+	．Added rsqrt function for vec and valarray; added optimizations for valarray expressions: v1 / sqrt (v2) and v1 / sqrt (v2) + v3 [ABr].
+	．Fixed missing #include in macstlizer script.
+
 0.2.2	28 Mar 2005	
 	．Fixed error when linking more than 1 object file, template function should be inline [KHe].
 	．Added mulhi function for vec and valarray [MSh].
