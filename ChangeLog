@@ -1,5 +1,21 @@
 Release history
 
+0.2	31 Jan 2005	
+	．Added portable SIMD classes: partial support for MMX/SSE/SSE2/SSE3, standard initialization syntax.
+	．Added high-performance transcendental functions: exp, log, sin, cos, tan.
+	．Added fused multiply-add optimization for valarrays.
+	．Added complex number arithmetic.
+	．Added fast integer division and modulus.
+	．Added adapters for Core Foundation and Foundation classes for STL.
+	．Added memory mapped containers.
+	．Updated 400+ VPERM constants.
+	．Updated Mach specialized vector.
+	．Updated COM server implementation.
+	．Updated and added many more unit tests and benchmarks.
+	．Changed licensing terms.
+	．Now supported on Apple Xcode 1.5 + gcc 3.3, Metrowerks CodeWarrior 9.3 and Microsoft Visual C++ .NET 2003.
+	．… many other fixes and improvements.
+
 0.1.5	3 Nov 2003	
 	．Now builds with Xcode 1.0 [*CBe].
 	．Fixed altivec functions not compiling in gcc 3.1: “tree_list not supported by dump_expr” [JLWi].
