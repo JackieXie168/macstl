@@ -44,6 +44,7 @@ namespace macstl
 		namespace altivec
 			{
 				DEFINE_VEC_PLATFORM_UNARY_FUNCTION(abs,absolute value)
+				DEFINE_VEC_PLATFORM_UNARY_FUNCTION(abss,absolute value saturated)
 				DEFINE_VEC_PLATFORM_BINARY_FUNCTION(add,add modulo)
 				DEFINE_VEC_PLATFORM_BINARY_FUNCTION(adds,add saturated)
 				DEFINE_VEC_PLATFORM_BINARY_FUNCTION(all_eq,compare all equal-to)
@@ -85,17 +86,43 @@ namespace macstl
 				DEFINE_VEC_PLATFORM_UNARY_FUNCTION(unpackl,unpack low)		
 				DEFINE_VEC_PLATFORM_BINARY_FUNCTION(vxor,bitwise XOR)
 				
-				template <typename T, std::size_t n> struct abs_function <vec <T, n> >
+				// vec_abs
+					
+				template <> struct abs_function <vec <signed char, 16> >
 					{
-						typedef vec <T, n> argument_type;
-						typedef vec <T, n> result_type;
+						typedef vec <signed char, 16> argument_type;
+						typedef vec <signed char, 16> result_type;
 						
 						result_type operator() (const argument_type& lhs)
 							{
-								return mmx::max (lhs, mmx::sub (argument_type::template fill <0> (), lhs));
+								vec <boolean <char>, 16> gt = mmx::cmpgt (argument_type::fill <0> (), lhs);
+								return mmx::sub (mmx::vxor (lhs, gt), data_cast <result_type> (lhs));
 							}
 					};
-					
+
+				template <> struct abs_function <vec <short, 8> >
+					{
+						typedef vec <short, 8> argument_type;
+						typedef vec <short, 8> result_type;
+						
+						result_type operator() (const argument_type& lhs)
+							{
+								return mmx:max (lhs, mmx::sub (argument_type::fill <0> (), lhs));
+							}
+					};
+
+				template <> struct abs_function <vec <int, 4> >
+					{
+						typedef vec <int, 4> argument_type;
+						typedef vec <int, 4> result_type;
+						
+						result_type operator() (const argument_type& lhs)
+							{
+								vec <int, 4> sr = mmx::srai <31> (lhs);
+								return mmx::sub (mmx::vxor (lhs, sr), sr);
+							}
+					};
+
 				template <> struct abs_function <vec <float, 4> >
 					{
 						typedef vec <float, 4> argument_type;
@@ -106,16 +133,47 @@ namespace macstl
 								return mmx::vand (lhs, argument_type::fill <0x7FFFFFFFU> ());
 							}
 					};
+
+				// vec_abss
+
+				template <> struct abss_function <vec <signed char, 16> >
+					{
+						typedef vec <signed char, 16> argument_type;
+						typedef vec <signed char, 16> result_type;
+						
+						result_type operator() (const argument_type& lhs)
+							{
+								vec <boolean <char>, 16> gt = mmx::cmpgt (argument_type::fill <0> (), lhs);
+								return mmx::subs (mmx::vxor (lhs, gt), data_cast <result_type> (lhs));
+							}
+					};
+
+				template <> struct abss_function <vec <short, 8> >
+					{
+						typedef vec <short, 8> argument_type;
+						typedef vec <short, 8> result_type;
+						
+						result_type operator() (const argument_type& lhs)
+							{
+								return mmx:max (lhs, mmx::subs (argument_type::fill <0> (), lhs));
+							}
+					};
+					
+				// vec_add
 					
 				template <typename T, std::size_t n> struct add_function <vec <T, n>, vec <T, n> >:
 					public mmx::add_function <vec <T, n>, vec <T, n> >
 					{
 					};
+					
+				// vec_adds
 
 				template <typename T, std::size_t n> struct adds_function <vec <T, n>, vec <T, n> >:
 					public mmx::adds_function <vec <T, n>, vec <T, n> >
 					{
 					};
+					
+				// vec_all_eq
 						
 				template <typename T, std::size_t n> struct all_eq_function <vec <T, n>, vec <T, n> >
 					{
@@ -140,6 +198,8 @@ namespace macstl
 								return mmx::movemask (mmx::cmpeq (lhs, rhs)) == 15;
 							}
 					};
+					
+				// vec_all_ne
 
 				template <typename T, std::size_t n> struct all_ne_function <vec <T, n>, vec <T, n> >
 					{
@@ -165,11 +225,15 @@ namespace macstl
 							}
 					};
 
+				// vec_and
+				
 				template <typename T, std::size_t n> struct vand_function <vec <T, n>, vec <T, n> >:
 					public mmx::vand_function <vec <T, n>, vec <T, n> >
 					{
 					};
 
+				// vec_andc
+				
 				template <typename T, std::size_t n> struct andc_function <vec <T, n>, vec <T, n> >
 					{
 						typedef vec <T, n> first_argument_type;
@@ -182,6 +246,8 @@ namespace macstl
 							}
 					};
 
+				// vec_any_eq
+				
 				template <typename T, std::size_t n> struct any_eq_function <vec <T, n>, vec <T, n> >
 					{
 						typedef vec <T, n> first_argument_type;
@@ -206,6 +272,8 @@ namespace macstl
 							}
 					};
 
+				// vec_any_ne
+				
 				template <typename T, std::size_t n> struct any_ne_function <vec <T, n>, vec <T, n> >
 					{
 						typedef vec <T, n> first_argument_type;
@@ -230,17 +298,29 @@ namespace macstl
 							}
 					};
 
+				// vec_avg
+				
 				template <typename T, std::size_t n> struct avg_function <vec <T, n>, vec <T, n> >:
 					public mmx::avg_function <vec <T, n>, vec <T, n> >
 					{
 					};
 
+				// vec_cmpeq
+				
+				template <typename T, std::size_t n> struct cmpeq_function <vec <T, n>, vec <T, n> >:
+					public mmx::cmpeq_function <vec <T, n>, vec <T, n> >
+					{
+					};
 
+				// vec_cmpge
+				
 				template <> struct cmpge_function <vec <float, 4>, vec <float, 4> >:
 					public mmx::cmpge_function <vec <float, 4>, vec <float, 4> >
 					{
 					};
 
+				// vec_cmpgt
+				
 				template <> struct cmpgt_function <macstl::vec <float, 4>, macstl::vec <float, 4> >:
 					public macstl::mmx::cmpgt_function <macstl::vec <float, 4>, macstl::vec <float, 4> >
 					{
@@ -317,12 +397,15 @@ namespace macstl
 					{
 					};
 
+				// vec_cmple
+				
 				template <> struct cmple_function <vec <float, 4>, vec <float, 4> >:
 					public mmx::cmple_function <vec <float, 4>, vec <float, 4> >
 					{
 					};
 
-
+				// vec_cmplt
+				
 				template <> struct cmplt_function <macstl::vec <float, 4>, macstl::vec <float, 4> >:
 					public macstl::mmx::cmplt_function <macstl::vec <float, 4>, macstl::vec <float, 4> >
 					{
@@ -398,7 +481,9 @@ namespace macstl
 					public macstl::mmx::cmplt_function <macstl::vec <int, 4>, macstl::vec <int, 4> >
 					{
 					};
-					
+				
+				// vec_ctf
+				
 				template <typename T, std::size_t n> struct ctf_function <0, vec <T, n> >
 					{
 						typedef vec <T, n> argument_type;
@@ -410,6 +495,8 @@ namespace macstl
 							}
 					};
 
+				// vec_ld
+				
 				template <typename T> struct ld_function <int, const T*>
 					{
 						typedef int first_argument_type;
@@ -436,6 +523,8 @@ namespace macstl
 
 				#ifndef MACSTLIZER_NEED_PRECISE_TRANSLATION
 				
+				// vec_madd
+				
 				template <> struct madd_function <vec <float, 4>, vec <float, 4> >
 					{
 						typedef vec <float, 4> first_argument_type;
@@ -451,26 +540,114 @@ namespace macstl
 					
 				#endif
 
+				// vec_max
+				
 				template <typename T, std::size_t n> struct max_function <vec <T, n>, vec <T, n> >:
 					public mmx::max_function <vec <T, n>, vec <T, n> >
 					{
 					};
 
+				template <> struct max_function <vec <signed char, 16>, vec <signed char, 16> >
+					{
+						typedef vec <signed char, 16> virst_argument_type;
+						typedef vec <signed char, 16> second_argument_type;
+						typedef vec <signed char, 16> result_type;
+						
+						result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs)
+							{
+								const vec <boolean <char>, 16> gt = mmx::cmpgt (lhs, rhs);
+								return mmx::vor (mmx::andnot (gt, rhs), mmx::vand (gt, lhs));
+							}
+					};
+
+				template <> struct max_function <vec <short, 8>, vec <short, 8> >
+					{
+						typedef vec <short, 8> virst_argument_type;
+						typedef vec <short, 8> second_argument_type;
+						typedef vec <short, 8> result_type;
+						
+						result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs)
+							{
+								const vec <boolean <short>, 8> gt = mmx::cmpgt (lhs, rhs);
+								return mmx::vor (mmx::andnot (gt, rhs), mmx::vand (gt, lhs));
+							}
+					};
+
+				template <> struct max_function <vec <int, 4>, vec <int, 4> >
+					{
+						typedef vec <int, 4> virst_argument_type;
+						typedef vec <int, 4> second_argument_type;
+						typedef vec <int, 4> result_type;
+						
+						result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs)
+							{
+								const vec <boolean <int>, 4> gt = mmx::cmpgt (lhs, rhs);
+								return mmx::vor (mmx::andnot (gt, rhs), mmx::vand (gt, lhs));
+							}
+					};
+
+				// vec_mergeh
+				
 				template <typename T, std::size_t n> struct mergeh_function <vec <T, n>, vec <T, n> >:
 					public mmx::unpacklo_function <vec <T, n>, vec <T, n> >
 					{
 					};
-					
+				
+				// vec_mergel
+				
 				template <typename T, std::size_t n> struct mergel_function <vec <T, n>, vec <T, n> >:
 					public mmx::unpackhi_function <vec <T, n>, vec <T, n> >
 					{
 					};
 
+				// vec_min
+				
 				template <typename T, std::size_t n> struct min_function <vec <T, n>, vec <T, n> >:
 					public mmx::min_function <vec <T, n>, vec <T, n> >
 					{
 					};
+					
+				template <> struct min_function <vec <signed char, 16>, vec <signed char, 16> >
+					{
+						typedef vec <signed char, 16> virst_argument_type;
+						typedef vec <signed char, 16> second_argument_type;
+						typedef vec <signed char, 16> result_type;
+						
+						result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs)
+							{
+								const vec <boolean <char>, 16> gt = mmx::cmpgt (lhs, rhs);
+								return mmx::vor (mmx::vand (gt, rhs), mmx::andnot (gt, lhs));
+							}
+					};
 
+				template <> struct min_function <vec <short, 8>, vec <short, 8> >
+					{
+						typedef vec <short, 8> virst_argument_type;
+						typedef vec <short, 8> second_argument_type;
+						typedef vec <short, 8> result_type;
+						
+						result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs)
+							{
+								const vec <boolean <short>, 8> gt = mmx::cmpgt (lhs, rhs);
+								return mmx::vor (mmx::vand (gt, rhs), mmx::andnot (gt, lhs));
+							}
+					};
+
+				template <> struct min_function <vec <int, 4>, vec <int, 4> >
+					{
+						typedef vec <int, 4> virst_argument_type;
+						typedef vec <int, 4> second_argument_type;
+						typedef vec <int, 4> result_type;
+						
+						result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs)
+							{
+								const vec <boolean <int>, 4> gt = mmx::cmpgt (lhs, rhs);
+								return mmx::vor (mmx::vand (gt, rhs), mmx::andnot (gt, lhs));
+							}
+					};
+				
+				// vec_mladd
+				
 				template <typename T, std::size_t n> struct mladd_function <vec <T, n>, vec <T, n>, vec <T, n> >
 					{
 						typedef vec <T, n> first_argument_type;
@@ -484,6 +661,8 @@ namespace macstl
 							}
 					};
 
+				// vec_msum
+				
 				template <> struct msum_function <vec <unsigned short, 8>, vec <unsigned short, 8>, vec <unsigned int, 4> >
 					{
 						typedef vec <unsigned short, 8> first_argument_type;
@@ -512,6 +691,8 @@ namespace macstl
 
 				#ifdef MACSTLIZER_NEED_PRECISE_TRANSLATION
 				
+				// vec_nmsub
+				
 				template <> struct nmsub_function <vec <float, 4>, vec <float, 4> >
 					{
 						typedef vec <float, 4> first_argument_type;
@@ -527,6 +708,8 @@ namespace macstl
 				
 				#endif
 				
+				// vec_nor
+				
 				template <typename T, std::size_t n> struct nor_function <vec <T, n>, vec <T, n> >
 					{
 						typedef vec <T, n> first_argument_type;
@@ -539,27 +722,37 @@ namespace macstl
 							}
 					};
 
+				// vec_or
+				
 				template <typename T, std::size_t n> struct vor_function <vec <T, n>, vec <T, n> >:
 					public mmx::vor_function <vec <T, n>, vec <T, n> >
 					{
 					};
 
+				// vec_packs
+				
 				template <typename T, std::size_t n> struct packs_function <vec <T, n>, vec <T, n> >:
 					public mmx::packs_function <vec <T, n>, vec <T, n> >
 					{
 					};
 
+				// vec_packsu
+				
 				template <typename T, std::size_t n> struct packsu_function <vec <T, n>, vec <T, n> >:
 					public mmx::packus_function <vec <T, n>, vec <T, n> >
 					{
 					};
-					
+				
+				// vec_re
+				
 				template <> struct re_function <vec <float, 4> >:
 					public mmx::rcp_function <vec <float, 4> >
 					{
 					};
 
 				#ifndef MACSTLIZER_NEED_PRECISE_TRANSLATION
+				
+				// vec_round
 				
 				template <> struct round_function <vec <float, 4> >
 					{
@@ -574,11 +767,15 @@ namespace macstl
 
 				#endif
 				
+				// vec_rsqrte
+				
 				template <> struct rsqrte_function <vec <float, 4> >:
 					public mmx::rsqrt_function <vec <float, 4> >
 					{
 					};
-					
+				
+				// vec_sel
+				
 				template <typename T, std::size_t n> struct sel_function <vec <T, n>, vec <T, n>, vec <typename vec <T, n>::boolean_type, n> >
 					{
 						typedef vec <T, n> first_argument_type;
@@ -592,6 +789,8 @@ namespace macstl
 							}
 					};
 
+				// vec_splat
+				
 				template <unsigned int i, typename T> struct splat_function <i, vec <T, 4> >
 					{
 						typedef vec <T, 4> argument_type;
@@ -614,6 +813,8 @@ namespace macstl
 							}
 					};
 
+				// vec_st
+				
 				template <typename T1, std::size_t n1, typename T2> struct st_function <vec <T1, n1>, int, T2*>
 					{	
 						typedef vec <T1, n1> first_argument_type;	
@@ -630,11 +831,15 @@ namespace macstl
 							}		
 					};
 
+				// vec_sub
+				
 				template <typename T, std::size_t n> struct sub_function <vec <T, n>, vec <T, n> >:
 					public mmx::sub_function <vec <T, n>, vec <T, n> >
 					{
 					};
 
+				// vec_subs
+				
 				template <typename T, std::size_t n> struct subs_function <vec <T, n>, vec <T, n> >:
 					public mmx::subs_function <vec <T, n>, vec <T, n> >
 					{
@@ -642,6 +847,8 @@ namespace macstl
 
 
 				#ifndef MACSTLIZER_NEED_PRECISE_TRANSLATION
+				
+				// vec_trunc
 				
 				template <> struct trunc_function <vec <float, 4> >
 					{
@@ -656,6 +863,8 @@ namespace macstl
 
 				#endif
 
+				// vec_unpackh
+				
 				template <> struct unpackh_function <vec <signed char, 16> >
 					{
 						typedef vec <signed char, 16> argument_type;
@@ -667,6 +876,8 @@ namespace macstl
 							}
 					};
 
+				// vec_unpackl
+				
 				template <> struct unpackl_function <vec <signed char, 16> >
 					{
 						typedef vec <signed char, 16> argument_type;
@@ -677,7 +888,9 @@ namespace macstl
 								return mmx::srai <8> (data_cast <result_type> (mmx::unpackhi (lhs, argument_type::fill <0> ())));
 							}
 					};
-					
+				
+				// vec_xor
+				
 				template <typename T, std::size_t n> struct vxor_function <vec <T, n>, vec <T, n> >:
 					public mmx::vxor_function <vec <T, n>, vec <T, n> >
 					{

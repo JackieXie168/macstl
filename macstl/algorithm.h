@@ -85,7 +85,7 @@ namespace stdext
 				template <typename InIter, typename Size, typename OutIter, typename Enable = void>
 					struct uninitialized_copy_n_dispatch
 					{
-						static std::pair <InIter, OutIter> call (const InIter& first, Size n, const OutIter& result)
+						static void call (const InIter& first, Size n, const OutIter& result)
 							{
 								typedef typename std::iterator_traits <OutIter>::value_type value_type;
 								InIter first_copy = first;
@@ -99,7 +99,6 @@ namespace stdext
 												++first_copy;
 												++result_copy;
 											}
-										return std::pair <InIter, OutIter> (first_copy, result_copy);
 									}
 								catch (...)
 									{
@@ -115,17 +114,14 @@ namespace stdext
 						is_same <typename std::iterator_traits <InIter>::iterator_category, std::random_access_iterator_tag>::value != 0
 						&& is_same <typename std::iterator_traits <OutIter>::iterator_category, std::random_access_iterator_tag>::value != 0>::type>
 					{
-						static std::pair <InIter, OutIter> call (const InIter& first, Size n, const OutIter& result)
+						static void call (const InIter& first, Size n, const OutIter& result)
 							{
 								typedef typename std::iterator_traits <OutIter>::value_type value_type;
-								InIter first_copy = first;
-								OutIter result_copy = result;
 								Size index = 0;
 								try
 									{
 										for (; index != n; ++index)
-											new (&result_copy [index]) value_type (first_copy [index]);
-										return std::pair <InIter, OutIter> (first_copy + n, result_copy + n);
+											new (&result [index]) value_type (first [index]);
 									}
 								catch (...)
 									{
@@ -139,9 +135,9 @@ namespace stdext
 			}
 		
 		template <typename InIter, typename Size, typename OutIter>
-			inline std::pair <InIter, OutIter> uninitialized_copy_n (const InIter& first, Size n, const OutIter& result)
+			inline void uninitialized_copy_n (const InIter& first, Size n, const OutIter& result)
 			{
-				return impl::uninitialized_copy_n_dispatch <InIter, Size, OutIter>::call (first, n, result);
+				impl::uninitialized_copy_n_dispatch <InIter, Size, OutIter>::call (first, n, result);
 			}
 
 		// default case
@@ -150,9 +146,9 @@ namespace stdext
 				template <typename OutIter, typename Size, typename T, typename Enable1 = void, typename Enable2 = void>
 					struct uninitialized_fill_n_dispatch
 					{
-						static OutIter call (const OutIter& first, Size n, const T& val)
+						static void call (const OutIter& first, Size n, const T& val)
 							{
-								return std::uninitialized_fill_n (first, n, val);
+								std::uninitialized_fill_n (first, n, val);
 							}
 					};
 
@@ -161,16 +157,14 @@ namespace stdext
 					typename enable_if <is_same <typename std::iterator_traits <OutIter>::iterator_category, std::random_access_iterator_tag>::value>::type,
 					Enable2>
 					{
-						static OutIter call (const OutIter& first, Size n, const T& val)
+						static void call (const OutIter& first, Size n, const T& val)
 							{
-								OutIter first_copy = first;
 								Size index = 0;
 								
 								try
 									{
 										for (; index != n; ++index)
-											new (&first_copy [index]) T (val);
-										return first_copy + n;
+											new (&first [index]) T (val);
 									}
 								catch (...)
 									{
@@ -183,9 +177,9 @@ namespace stdext
 			}
 
 		template <typename OutIter, typename Size, typename T>
-			inline OutIter uninitialized_fill_n (const OutIter& first, Size n, const T& val)
+			inline void uninitialized_fill_n (const OutIter& first, Size n, const T& val)
 			{
-				return impl::uninitialized_fill_n_dispatch <OutIter, Size, T>::call (first, n, val);
+				impl::uninitialized_fill_n_dispatch <OutIter, Size, T>::call (first, n, val);
 			}
 
 		namespace impl
@@ -235,7 +229,7 @@ namespace stdext
 				template <typename InIter, typename Size, typename OutIter, typename Enable1 = void, typename Enable2 = void>
 					struct copy_n_dispatch
 					{
-						static std::pair <InIter, OutIter> call (const InIter& first, Size n, const OutIter& result)
+						static void call (const InIter& first, Size n, const OutIter& result)
 							{
 								InIter first_copy = first;
 								OutIter result_copy = result;
@@ -245,7 +239,6 @@ namespace stdext
 										++first_copy;
 										++result_copy;
 									}
-								return std::pair <InIter, OutIter> (first_copy, result_copy);
 							}
 					};
 
@@ -257,26 +250,18 @@ namespace stdext
 						&& is_same <typename std::iterator_traits <OutIter>::iterator_category, std::random_access_iterator_tag>::value != 0>::type,
 						Enable2>
 					{
-						static void inner_call (const InIter& first, Size n, const OutIter& result)
+						static void call (const InIter& first, Size n, const OutIter& result)
 							{
-								InIter first_copy = first;
-								OutIter result_copy = result;
 								for (Size index = 0; index != n; ++index)
-									result_copy [index] = first_copy [index];
-							}
-							
-						static std::pair <InIter, OutIter> call (const InIter& first, Size n, const OutIter& result)
-							{
-								inner_call (first, n, result);
-								return std::pair <InIter, OutIter> (first + n, result + n);
+									result [index] = first [index];
 							}
 					};
 			}
 
 		template <typename InIter, typename Size, typename OutIter>
-			inline std::pair <InIter, OutIter> copy_n (const InIter& first, Size n, const OutIter& result)
+			inline void copy_n (const InIter& first, Size n, const OutIter& result)
 			{
-				return impl::copy_n_dispatch <InIter, Size, OutIter>::call (first, n, result);
+				impl::copy_n_dispatch <InIter, Size, OutIter>::call (first, n, result);
 			}
 		
 		namespace impl
@@ -298,25 +283,18 @@ namespace stdext
 					typename enable_if <is_same <typename std::iterator_traits <OutIter>::iterator_category, std::random_access_iterator_tag>::value>::type,
 					Enable2>
 					{
-						static void inner_call (const OutIter& first, Size n, const T& val)
+						static void call (const OutIter& first, Size n, const T& val)
 							{
-								OutIter first_copy = first;
 								for (Size index = 0; index != n; ++index)
-									first_copy [index] = val;
-							}
-							
-						static OutIter call (const OutIter& first, Size n, const T& val)
-							{
-								inner_call (first, n, val);
-								return first + n;
+									first [index] = val;
 							}
 					};
 			}
 
 		template <typename OutIter, typename Size, typename T>
-			inline OutIter fill_n (const OutIter& first, Size n, const T& val)
+			inline void fill_n (const OutIter& first, Size n, const T& val)
 			{
-				return impl::fill_n_dispatch <OutIter, Size, T>::call (first, n, val);		
+				impl::fill_n_dispatch <OutIter, Size, T>::call (first, n, val);		
 			}
 			
 		namespace impl

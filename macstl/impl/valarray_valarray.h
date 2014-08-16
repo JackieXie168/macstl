@@ -35,6 +35,10 @@
 #ifndef MACSTL_IMPL_VALARRAY_VALARRAY_H
 #define MACSTL_IMPL_VALARRAY_VALARRAY_H
 
+#if defined(__linux__) || defined(_WIN32) || defined(_WIN64)
+#include <malloc.h>		// for Linux, Windows memalign
+#endif
+
 namespace stdext
 	{
 		namespace impl
@@ -55,17 +59,54 @@ namespace stdext
 						protected:
 							typedef array_term <T> base;
 							
-							valarray_base (std::size_t n)
+							valarray_base (std::size_t n): base (reinterpret_cast <typename array_term <T>::value_data*> (std::malloc (sizeof (T) * n)), n)
 								{
-									base::init (reinterpret_cast <T*> (std::malloc (sizeof (T) * n)), n);
 								}
 
 							~valarray_base ()
 								{
-									std::free (base::data_);
+									std::free (base::values_);
 								}
 					};
-					
+
+				template <int alignment> void* allocate_aligned (std::size_t size);
+				template <int alignment> void deallocate_aligned (void* ptr);
+				
+			#if defined(__MACH__)
+				// on Mach-based systems i.e. Mac OS X, malloc always returns 16-byte aligned memory, but we don't guarantee arbitrary alignment, yet...
+				template <> inline void* allocate_aligned <16> (std::size_t size)	{ return std::malloc (size); }
+				template <> inline void deallocate_aligned <16> (void* ptr)			{ std::free (ptr); }
+			#elif defined(_WIN32) || defined (_WIN64) || defined (__CYGWIN__)
+				// on Windows, we can get arbitrary aligned memory...
+				template <int alignment> void* allocate_aligned (std::size_t size)	{ return ::_mm_malloc (size, alignment); }
+				template <int alignment> void deallocate_aligned (void* ptr)		{ ::_mm_free (ptr); }
+			#elif defined(__linux__)
+				// on Linux-based systems, we also can get arbitrary aligned memory...
+				template <int alignment> void* allocate_aligned (std::size_t size)	{ return ::memalign (alignment, size); }
+				template <int alignment> void deallocate_aligned (void* ptr)		{ ::free (ptr); }
+			#endif
+								
+				template <typename T> class valarray_base <T, typename enable_if <exists <typename array_term <T>::chunk_type>::value>::type>:
+					public array_term <T>
+					{
+						public:
+							typedef array_term <T> base;
+							
+							typedef typename array_term <T>::chunk_type chunk_type;
+							typedef typename chunk_type::data_type data_type;
+														
+							/** Constructs with space for @a n elements. */
+							valarray_base (std::size_t n): base (
+								reinterpret_cast <typename array_term <T>::value_data*> (allocate_aligned <sizeof (chunk_type)> (sizeof (chunk_type) * ((n + chunk_type::length - 1) / chunk_type::length))), n)
+								{
+								}
+
+							/** Destructs entire array. */
+							~valarray_base ()
+								{
+									deallocate_aligned <sizeof (chunk_type)> (base::values_);
+								}
+					};				
 			}
 		 
 		/// Numeric (n-at-a-time) array.
@@ -122,7 +163,7 @@ namespace stdext
 						}
 		
 					/// Constructs a copy of other term.
-					template <typename Term> valarray (const impl::term <T, Term>& other):
+					template <typename T1, typename Term> valarray (const impl::term <T1, Term>& other, typename impl::enable_if <impl::is_convertible <T1, T>::value>::type* = NULL):
 						impl::valarray_base <T> (other.that ().size ())
 						{
 							impl::uninitialized_copy_array (*this, other.that ());
@@ -149,7 +190,8 @@ namespace stdext
 						}
 					
 					/// Assigns the other term.
-					template <typename Expr> valarray& operator= (const impl::term <T, Expr>& other)
+					template <typename T1, typename Term>
+						typename impl::enable_if <impl::is_convertible <T1, T>::value, valarray&>::type operator= (const impl::term <T1, Term>& other)
 						{
 							impl::copy_array (*this, other.that ());
 							return *this;

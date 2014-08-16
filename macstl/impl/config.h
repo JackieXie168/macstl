@@ -36,11 +36,18 @@
 #define MACSTL_IMPL_CONFIG_H
 
 #ifdef __GNUC__
+	#if __GNUC__ < 4
+		#define NO_CHUNKING_ITERATOR		// use pointer to may_alias type instead
+		#define NO_VEC_COPY_CONSTRUCTOR		// use the builtin/trivial copy constructor
+											// NOTE: on gcc 4.0+ a non-trivial vec copy doesn't pessimize code on -faltivec + -maltivec
+											// but definitely pessimizes code on -faltivec - -maltivec
+	#endif
 	#define HAS_C99_COMPLEX
-	#define USE_C99_VEC_INIT_IN_TEMPL
+	#define INLINE __attribute__((always_inline)) inline
 	#if __APPLE_CC__ <= 1
 		#define USE_ALTIVEC_H		// use the altivec.h header to define intrinsics
 	#endif
+	#define USE_C99_VEC_INIT_IN_TEMPL
 #endif
 
 #ifdef _MSC_VER
@@ -50,6 +57,8 @@
 	#pragma warning(disable:4675)	// don't warn resolved overload through ADL
 	#pragma warning(disable:4800)	// don't warn bool conversions
 	#pragma warning(disable:4804)	// don't warn unsafe use of bool
+	
+	#define INLINE __forceinline
 #endif
 
 #ifdef __MWERKS__
@@ -57,11 +66,20 @@
 	#pragma inline_depth(512)
 	#pragma inline_max_size(16384)
 	#pragma inline_max_total_size(16384)
+	#define NO_VEC_COPY_CONSTRUCTOR
 	#define USE_CONTEXTUAL_BOOL
 #endif
 
-#if defined(__APPLE__) || defined(__UNIX__) || defined(__linux__)
+#if defined(__APPLE__) || defined(__linux__)
+	#define HAS_LOG2
+#endif
+
+#if defined(__APPLE__) || defined(__CYGWIN__) || defined(__linux__)
 	#define HAS_MMAP
+#endif
+
+#ifndef INLINE
+#define INLINE inline
 #endif
 
 #endif

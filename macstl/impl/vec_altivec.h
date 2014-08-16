@@ -111,7 +111,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
 				typedef macstl::boolean <T> result_type;
 				
-				result_type operator() (const argument_type& lhs) const;
+				const result_type operator() (const argument_type& lhs) const;
 			};
 
 		template <> struct accumulator <minimum <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> > >
@@ -175,7 +175,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
 				typedef macstl::boolean <T> result_type;
 				
-				result_type operator() (const argument_type& lhs) const;
+				const result_type operator() (const argument_type& lhs) const;
 			};
 		
 		// accumulator <plus>
@@ -241,7 +241,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
 				typedef macstl::boolean <T> result_type;
 				
-				result_type operator() (const argument_type& lhs) const;
+				const result_type operator() (const argument_type& lhs) const;
 			};
 
 		template <> struct accumulator <plus <macstl::vec <stdext::complex <float>, 2>, macstl::vec <stdext::complex <float>, 2> > >
@@ -249,25 +249,25 @@ namespace stdext
 				typedef macstl::vec <stdext::complex <float>, 2> argument_type;
 				typedef stdext::complex <float> result_type;
 				
-				result_type operator() (const argument_type& lhs) const;
-			};
+				const result_type operator() (const argument_type& lhs) const;
+			}; 
 
-		template <typename T, std::size_t n> struct cshifter <macstl::vec <T, n> >
+		template <typename T, std::size_t n> struct cshifter <macstl::vec <T, n>, int>
 			{
 				typedef macstl::vec <T, n> first_argument_type;
 				typedef int second_argument_type;
 				typedef macstl::vec <T, n> result_type;
 
-				result_type operator() (const first_argument_type& lhs, second_argument_type rhs) const;
+				const result_type operator() (const first_argument_type& lhs, second_argument_type rhs) const;
 			};
 
-		template <typename T, std::size_t n> struct shifter <macstl::vec <T, n> >
+		template <typename T, std::size_t n> struct shifter <macstl::vec <T, n>, int>
 			{
 				typedef macstl::vec <T, n> first_argument_type;
 				typedef int second_argument_type;
 				typedef macstl::vec <T, n> result_type;
 
-				result_type operator() (const first_argument_type& lhs, second_argument_type rhs) const;
+				const result_type operator() (const first_argument_type& lhs, second_argument_type rhs) const;
 			};
 
 	}
@@ -276,6 +276,19 @@ namespace macstl
 	{
 		namespace impl
 			{
+				// a workaround for FSF 3.4 compilation problems: need to define vector types at namespace level not class level
+				typedef __vector unsigned char vuc;
+				typedef __vector signed char vsc;
+				typedef __vector __bool char vbc;
+				typedef __vector unsigned short vus;
+				typedef __vector signed short vss;
+				typedef __vector __bool short vbs;
+				typedef __vector unsigned int vui;
+				typedef __vector signed int vsi;
+				typedef __vector __bool int vbi;
+				typedef __vector float vf;
+				typedef __vector __pixel vp;
+
 				template <> struct data_vec <__vector unsigned char>	{ typedef vec <unsigned char, 16> type; };
 				template <> struct data_vec <__vector signed char>		{ typedef vec <signed char, 16> type; };
 				template <> struct data_vec <__vector __bool char>		{ typedef vec <boolean <char>, 16> type; };
@@ -290,23 +303,23 @@ namespace macstl
 
 				template <unsigned int v0, unsigned int v1, unsigned int v2, unsigned int v3> struct generator
 					{
-						__vector unsigned int operator() () const
+						static INLINE vui call ()
 							{
 								#if defined(USE_C99_VEC_INIT_IN_TEMPL)
 								
-								return (__vector unsigned int) {v0, v1, v2, v3};
+								return (vui) {v0, v1, v2, v3};
 								
 								#elif defined(USE_MOT_VEC_INIT_IN_TEMPL)
 								
 								// most compilers choke on this, not realizing v0 - v3 ARE constant expressions!!
-								return (__vector unsigned int) (v0, v1, v2, v3);
+								return (vui) (v0, v1, v2, v3);
 								
 								#else
 						
 								union union_type
 									{
 										unsigned int val [4];
-										__vector unsigned int vec;
+										vui vec;
 									};
 									
 								static const union_type un = {v0, v1, v2, v3};
@@ -325,8 +338,8 @@ namespace macstl
 				// Apple gcc 4.0 on Mac OS X 10.4 (Xcode 2.0): static_cast <V> (v) doesn't work but (V) v works everywhere
 				// Apple gcc 4.0 on Mac OS X 10.4 (Xcode 2.1): static_cast <V> (v) works, (V) v works too
 				// FSF 3.x? on YDL: static_cast <V> (v) doesn't work but (V) v works everywhere
-				// thus to avoid a total mental breakdown for future legions of Altivec programmers, we define an inline function to handle static casting of vectors
-				template <typename T1, typename T2> inline T1 vector_cast (T2 vector)
+				// thus to avoid a total mental breakdown for future legions of Altivec programmers, we define an INLINE function to handle static casting of vectors
+				template <typename T1, typename T2> INLINE T1 vector_cast (T2 vector)
 					{
 						return (T1) vector;
 					}
@@ -336,7 +349,7 @@ namespace macstl
 		
 		template <> class vec <unsigned char, 16>
 			{
-				DEFINE_VEC_CLASS_GUTS(__vector unsigned char,unsigned char,boolean <char>)
+				DEFINE_VEC_CLASS_GUTS(impl::vuc,unsigned char,boolean <char>)
 							
 				public:
 					typedef unsigned char init_type;
@@ -347,20 +360,37 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3,
 						value_type v4, value_type v5, value_type v6, value_type v7,
 						value_type v8, value_type v9, value_type v10, value_type v11,
 						value_type v12, value_type v13, value_type v14, value_type v15)
 						{
-							union_type un = {v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15};
+							union_type un;
+							un.val [0] = v0;
+							un.val [1] = v1;
+							un.val [2] = v2;
+							un.val [3] = v3;
+							un.val [4] = v4;
+							un.val [5] = v5;
+							un.val [6] = v6;
+							un.val [7] = v7;
+							un.val [8] = v8;
+							un.val [9] = v9;
+							un.val [10] = v10;
+							un.val [11] = v11;
+							un.val [12] = v12;
+							un.val [13] = v13;
+							un.val [14] = v14;
+							un.val [15] = v15;
 							return un.vec;
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
-							union_type un = {v0};
+							union_type un;
+							un.val [0] = v0;
 							return vec_splat (un.vec, 0);
 						}
 						
@@ -369,36 +399,46 @@ namespace macstl
 						init_type v4, init_type v5, init_type v6, init_type v7,
 						init_type v8, init_type v9, init_type v10, init_type v11,
 						init_type v12, init_type v13, init_type v14, init_type v15>
-						static vec set ()
+						static INLINE const vec set ()
 						{
 							return impl::vector_cast <data_type> (impl::generator <
 								(v0 << 24) | (v1 << 16) | (v2 << 8) | v3,
 								(v4 << 24) | (v5 << 16) | (v6 << 8) | v7,
 								(v8 << 24) | (v9 << 16) | (v10 << 8) | v11,
-								(v12 << 24) | (v13<< 16) | (v14 << 8) | v15> () ());
+								(v12 << 24) | (v13<< 16) | (v14 << 8) | v15>::call ());
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static INLINE const vec fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
+					static INLINE const vec load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return vec_ld (offset * 16, address);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							vec_st (data_, offset * 16, address);
+						}
+						
+					INLINE vec (): data_ ((data_type) impl::generator <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 
-					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
-					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
+					INLINE const vec cshift (int i) const	{ return stdext::cshifter <vec, int> () (*this, i); }
+					INLINE const vec shift (int i) const	{ return stdext::shifter <vec, int> () (*this, i); }
 			};
 
 		template <> class vec <signed char, 16>
 			{
-				DEFINE_VEC_CLASS_GUTS(__vector signed char,signed char,boolean <char>)
+				DEFINE_VEC_CLASS_GUTS(impl::vsc,signed char,boolean <char>)
 				
 				public:
 					typedef signed char init_type;
@@ -409,20 +449,37 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3,
 						value_type v4, value_type v5, value_type v6, value_type v7,
 						value_type v8, value_type v9, value_type v10, value_type v11,
 						value_type v12, value_type v13, value_type v14, value_type v15)
 						{
-							union_type un = {v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15};
+							union_type un;
+							un.val [0] = v0;
+							un.val [1] = v1;
+							un.val [2] = v2;
+							un.val [3] = v3;
+							un.val [4] = v4;
+							un.val [5] = v5;
+							un.val [6] = v6;
+							un.val [7] = v7;
+							un.val [8] = v8;
+							un.val [9] = v9;
+							un.val [10] = v10;
+							un.val [11] = v11;
+							un.val [12] = v12;
+							un.val [13] = v13;
+							un.val [14] = v14;
+							un.val [15] = v15;
 							return un.vec;
 						}
 						
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
-							union_type un = {v0};
+							union_type un;
+							un.val [0] = v0;
 							return vec_splat (un.vec, 0);
 						}
 						
@@ -431,36 +488,46 @@ namespace macstl
 						init_type v4, init_type v5, init_type v6, init_type v7,
 						init_type v8, init_type v9, init_type v10, init_type v11,
 						init_type v12, init_type v13, init_type v14, init_type v15>
-						static vec set ()
+						static INLINE const vec set ()
 						{
 							return impl::vector_cast <data_type> (impl::generator <
 								(((unsigned char) v0) << 24) | (((unsigned char) v1) << 16) | (((unsigned char) v2) << 8) | ((unsigned char) v3),
 								(((unsigned char) v4) << 24) | (((unsigned char) v5) << 16) | (((unsigned char) v6) << 8) | ((unsigned char) v7),
 								(((unsigned char) v8) << 24) | (((unsigned char) v9) << 16) | (((unsigned char) v10) << 8) | ((unsigned char) v11),
-								(((unsigned char) v12) << 24) | (((unsigned char) v13)<< 16) | (((unsigned char) v14) << 8) | ((unsigned char) v15)> () ());
+								(((unsigned char) v12) << 24) | (((unsigned char) v13)<< 16) | (((unsigned char) v14) << 8) | ((unsigned char) v15)>::call ());
 						}
 
 					template <init_type v0>
-						static vec fill ()
+						static INLINE const vec fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
+					static INLINE const vec load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return vec_ld (offset * 16, address);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							vec_st (data_, offset * 16, address);
+						}
+						
+					INLINE vec (): data_ ((data_type) impl::generator <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 
-					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
-					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
+					INLINE const vec cshift (int i) const	{ return stdext::cshifter <vec, int> () (*this, i); }
+					INLINE const vec shift (int i) const	{ return stdext::shifter <vec, int> () (*this, i); }
 			};
 
 		template <> class vec <boolean <char>, 16>
 			{
-				DEFINE_VEC_CLASS_GUTS(__vector __bool char,boolean <char>,boolean <char>)
+				DEFINE_VEC_CLASS_GUTS(impl::vbc,boolean <char>,boolean <char>)
 				
 				public:
 					typedef bool init_type;
@@ -471,24 +538,37 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3,
 						value_type v4, value_type v5, value_type v6, value_type v7,
 						value_type v8, value_type v9, value_type v10, value_type v11,
 						value_type v12, value_type v13, value_type v14, value_type v15)
 						{
-							union_type un = {
-								v0.data (), v1.data (), v2.data (), v3.data (),
-								v4.data (), v5.data (), v6.data (), v7.data (),
-								v8.data (), v9.data (), v10.data (), v11.data (),
-								v12.data (), v13.data (), v14.data (), v15.data ()};
+							union_type un;
+							un.val [0] = v0.data ();
+							un.val [1] = v1.data ();
+							un.val [2] = v2.data ();
+							un.val [3] = v3.data ();
+							un.val [4] = v4.data ();
+							un.val [5] = v5.data ();
+							un.val [6] = v6.data ();
+							un.val [7] = v7.data ();
+							un.val [8] = v8.data ();
+							un.val [9] = v9.data ();
+							un.val [10] = v10.data ();
+							un.val [11] = v11.data ();
+							un.val [12] = v12.data ();
+							un.val [13] = v13.data ();
+							un.val [14] = v14.data ();
+							un.val [15] = v15.data ();
 							return un.vec;
 						}
 						
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
-							union_type un = {v0.data ()};
+							union_type un;
+							un.val [0] = v0.data ();
 							return vec_splat (un.vec, 0);
 						}
 						
@@ -497,36 +577,46 @@ namespace macstl
 						init_type v4, init_type v5, init_type v6, init_type v7,
 						init_type v8, init_type v9, init_type v10, init_type v11,
 						init_type v12, init_type v13, init_type v14, init_type v15>
-						static vec set ()
+						static INLINE const vec set ()
 						{
 							return impl::vector_cast <data_type> (impl::generator <
 								(v0 ? 0xFF000000U : 0) | (v1 ? 0x00FF0000U : 0) | (v2 ? 0x0000FF00U : 0) | (v3 ? 0x000000FFU : 0),
 								(v4 ? 0xFF000000U : 0) | (v5 ? 0x00FF0000U : 0) | (v6 ? 0x0000FF00U : 0) | (v7 ? 0x000000FFU : 0),
 								(v8 ? 0xFF000000U : 0) | (v9 ? 0x00FF0000U : 0) | (v10 ? 0x0000FF00U : 0) | (v11 ? 0x000000FFU : 0),
-								(v12 ? 0xFF000000U : 0) | (v13 ? 0x00FF0000U : 0) | (v14 ? 0x0000FF00U : 0) | (v15 ? 0x000000FFU : 0)> () ());
+								(v12 ? 0xFF000000U : 0) | (v13 ? 0x00FF0000U : 0) | (v14 ? 0x0000FF00U : 0) | (v15 ? 0x000000FFU : 0)>::call ());
 						}
 
 					template <init_type v0>
-						static vec fill ()
+						static INLINE const vec fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
+					static INLINE const vec load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return impl::vector_cast <impl::vbc> (vec_ld (offset * 16, reinterpret_cast <const signed char*> (address)));
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							vec_st (data_, offset * 16, reinterpret_cast <signed char*> (address));
+						}
+						
+					INLINE vec (): data_ ((data_type) impl::generator <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 
-					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
-					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
+					INLINE const vec cshift (int i) const	{ return stdext::cshifter <vec, int> () (*this, i); }
+					INLINE const vec shift (int i) const	{ return stdext::shifter <vec, int> () (*this, i); }
 			};
 	
 		template <> class vec <unsigned short, 8>
 			{
-				DEFINE_VEC_CLASS_GUTS(__vector unsigned short,unsigned short,boolean <short>)
+				DEFINE_VEC_CLASS_GUTS(impl::vus,unsigned short,boolean <short>)
 				
 				public:
 					typedef unsigned short init_type;
@@ -537,52 +627,71 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3,
 						value_type v4, value_type v5, value_type v6, value_type v7)
 						{
-							union_type un = {v0, v1, v2, v3, v4, v5, v6, v7};
+							union_type un;
+							un.val [0] = v0;
+							un.val [1] = v1;
+							un.val [2] = v2;
+							un.val [3] = v3;
+							un.val [4] = v4;
+							un.val [5] = v5;
+							un.val [6] = v6;
+							un.val [7] = v7;
 							return un.vec;
 						}
 						
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
-							union_type un = {v0};
+							union_type un;
+							un.val [0] = v0;
 							return vec_splat (un.vec, 0);
 						}
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3,
 						init_type v4, init_type v5, init_type v6, init_type v7>
-						static vec set ()
+						static INLINE const vec set ()
 						{
 							return impl::vector_cast <data_type> (impl::generator <
 								(v0 << 16) | v1, (v2 << 16) | v3,
-								(v4 << 16) | v5, (v6 << 16) | v7> () ());
+								(v4 << 16) | v5, (v6 << 16) | v7>::call ());
 						}
 						
 					template <init_type v0>
-						static vec fill ()
+						static INLINE const vec fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
+					static INLINE const vec load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return vec_ld (offset * 16, address);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							vec_st (data_, offset * 16, address);
+						}
+						
+					INLINE vec (): data_ ((data_type) impl::generator <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 
-					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
-					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
+					INLINE const vec cshift (int i) const	{ return stdext::cshifter <vec, int> () (*this, i); }
+					INLINE const vec shift (int i) const	{ return stdext::shifter <vec, int> () (*this, i); }
 			};
 
 		template <> class vec <short, 8>
 			{
-				DEFINE_VEC_CLASS_GUTS(__vector signed short,short,boolean <short>)
+				DEFINE_VEC_CLASS_GUTS(impl::vss,short,boolean <short>)
 				
 				public:
 					typedef short init_type;
@@ -593,52 +702,71 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3,
 						value_type v4, value_type v5, value_type v6, value_type v7)
 						{
-							union_type un = {v0, v1, v2, v3, v4, v5, v6, v7};
+							union_type un;
+							un.val [0] = v0;
+							un.val [1] = v1;
+							un.val [2] = v2;
+							un.val [3] = v3;
+							un.val [4] = v4;
+							un.val [5] = v5;
+							un.val [6] = v6;
+							un.val [7] = v7;
 							return un.vec;
 						}
 						
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
-							union_type un = {v0};
+							union_type un;
+							un.val [0] = v0;
 							return vec_splat (un.vec, 0);
 						}
 
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3,
 						init_type v4, init_type v5, init_type v6, init_type v7>
-						static vec set ()
+						static INLINE const vec set ()
 						{
 							return impl::vector_cast <data_type> (impl::generator <
 								(((unsigned short) v0) << 16) | ((unsigned short) v1), (((unsigned short) v2) << 16) | ((unsigned short) v3),
-								(((unsigned short) v4) << 16) | ((unsigned short) v5), (((unsigned short) v6) << 16) | ((unsigned short) v7)> () ());
+								(((unsigned short) v4) << 16) | ((unsigned short) v5), (((unsigned short) v6) << 16) | ((unsigned short) v7)>::call ());
 						}
 						
 					template <init_type v0>
-						static vec fill ()
+						static INLINE const vec fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
+					static INLINE const vec load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return vec_ld (offset * 16, address);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							vec_st (data_, offset * 16, address);
+						}
+						
+					INLINE vec (): data_ ((data_type) impl::generator <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 
-					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
-					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
+					INLINE const vec cshift (int i) const	{ return stdext::cshifter <vec, int> () (*this, i); }
+					INLINE const vec shift (int i) const	{ return stdext::shifter <vec, int> () (*this, i); }
 			};
 
 		template <> class vec <pixel, 8>
 			{
-				DEFINE_VEC_CLASS_GUTS(__vector __pixel,unsigned short,boolean <short>)
+				DEFINE_VEC_CLASS_GUTS(impl::vp,unsigned short,boolean <short>)
 				
 				public:
 					typedef unsigned short init_type;
@@ -649,48 +777,67 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3,
 						value_type v4, value_type v5, value_type v6, value_type v7)
 						{
-							union_type un = {v0, v1, v2, v3, v4, v5, v6, v7};
+							union_type un;
+							un.val [0] = v0;
+							un.val [1] = v1;
+							un.val [2] = v2;
+							un.val [3] = v3;
+							un.val [4] = v4;
+							un.val [5] = v5;
+							un.val [6] = v6;
+							un.val [7] = v7;
 							return un.vec;
 						}
 						
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
-							union_type un = {v0};
+							union_type un;
+							un.val [0] = v0;
 							return vec_splat (un.vec, 0);
 						}
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3,
 						init_type v4, init_type v5, init_type v6, init_type v7>
-						static vec set ()
+						static INLINE const vec set ()
 						{
 							return impl::vector_cast <data_type> (impl::generator <
 								(v0 << 16) | v1, (v2 << 16) | v3,
-								(v4 << 16) | v5, (v6 << 16) | v7> () ());
+								(v4 << 16) | v5, (v6 << 16) | v7>::call ());
 						}
 						
 					template <init_type v0>
-						static vec fill ()
+						static INLINE const vec fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
+					static INLINE const vec load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return impl::vector_cast <impl::vp> (vec_ld (offset * 16, address));
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							vec_st (data_, offset * 16, address);
+						}
+						
+					INLINE vec (): data_ ((data_type) impl::generator <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
-					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
+					INLINE const vec cshift (int i) const	{ return stdext::cshifter <vec, int> () (*this, i); }
+					INLINE const vec shift (int i) const	{ return stdext::shifter <vec, int> () (*this, i); }
 			};
 
 		template <> class vec <boolean <short>, 8>
 			{
-				DEFINE_VEC_CLASS_GUTS(__vector __bool short,boolean <short>,boolean <short>)
+				DEFINE_VEC_CLASS_GUTS(impl::vbs,boolean <short>,boolean <short>)
 				
 				public:
 					typedef bool init_type;
@@ -701,54 +848,71 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3,
 						value_type v4, value_type v5, value_type v6, value_type v7)
 						{
-							union_type un = {
-								v0.data (), v1.data (), v2.data (), v3.data (),
-								v4.data (), v5.data (), v6.data (), v7.data ()};
+							union_type un;
+							un.val [0] = v0.data ();
+							un.val [1] = v1.data ();
+							un.val [2] = v2.data ();
+							un.val [3] = v3.data ();
+							un.val [4] = v4.data ();
+							un.val [5] = v5.data ();
+							un.val [6] = v6.data ();
+							un.val [7] = v7.data ();
 							return un.vec;
 						}
 						
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
-							union_type un = {v0.data ()};
+							union_type un;
+							un.val [0] = v0.data ();
 							return vec_splat (un.vec, 0);
 						}
 
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3,
 						init_type v4, init_type v5, init_type v6, init_type v7>
-						static vec set ()
+						static INLINE const vec set ()
 						{
 							return impl::vector_cast <data_type> (impl::generator <
 								(v0 ? 0xFFFF0000U : 0) | (v1 ? 0x0000FFFFU : 0), (v2 ? 0xFFFF0000U : 0) | (v3 ? 0x0000FFFFU : 0),
-								(v4 ? 0xFFFF0000U : 0) | (v5 ? 0x0000FFFFU : 0), (v6 ? 0xFFFF0000U : 0) | (v7 ? 0x0000FFFFU : 0)> () ());
+								(v4 ? 0xFFFF0000U : 0) | (v5 ? 0x0000FFFFU : 0), (v6 ? 0xFFFF0000U : 0) | (v7 ? 0x0000FFFFU : 0)>::call ());
 						}
 						
 					template <init_type v0>
-						static vec fill ()
+						static INLINE const vec fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
+					static INLINE const vec load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return impl::vector_cast <impl::vbs> (vec_ld (offset * 16, address));
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							vec_st (data_, offset * 16, address);
+						}
+						
+					INLINE vec (): data_ ((data_type) impl::generator <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 
-					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
-					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
+					INLINE const vec cshift (int i) const	{ return stdext::cshifter <vec, int> () (*this, i); }
+					INLINE const vec shift (int i) const	{ return stdext::shifter <vec, int> () (*this, i); }
 			};
 
 		template <> class vec <unsigned int, 4>
 			{
-				DEFINE_VEC_CLASS_GUTS(__vector unsigned int,unsigned int, boolean <int>)
+				DEFINE_VEC_CLASS_GUTS(impl::vui,unsigned int, boolean <int>)
 				
 				public:
 					typedef unsigned int init_type;
@@ -759,49 +923,64 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3)
 						{
-							union_type un = {v0, v1, v2, v3};
+							union_type un;
+							un.val [0] = v0;
+							un.val [1] = v1;
+							un.val [2] = v2;
+							un.val [3] = v3;
 							return un.vec;
 						}
 						
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
-							union_type un = {v0};
+							union_type un;
+							un.val [0] = v0;
 							return vec_splat (un.vec, 0);
 						}
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec set ()
+						static INLINE const vec set ()
 						{
-							return impl::generator <v0, v1, v2, v3> () ();
+							return impl::generator <v0, v1, v2, v3>::call ();
 						}
 
 					template <init_type v0>
-						static vec fill ()
+						static INLINE const vec fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
+					static INLINE const vec load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return vec_ld (offset * 16, address);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							vec_st (data_, offset * 16, address);
+						}
+						
+					INLINE vec (): data_ ((data_type) impl::generator <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 
-					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
-					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
+					INLINE const vec cshift (int i) const	{ return stdext::cshifter <vec, int> () (*this, i); }
+					INLINE const vec shift (int i) const	{ return stdext::shifter <vec, int> () (*this, i); }
 			};
 
 
 		template <> class vec <int, 4>
 			{
-				DEFINE_VEC_CLASS_GUTS(__vector signed int, int, boolean <int>)
+				DEFINE_VEC_CLASS_GUTS(impl::vsi, int, boolean <int>)
 				
 				public:
 					typedef int init_type;
@@ -812,48 +991,63 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3)
 						{
-							union_type un = {v0, v1, v2, v3};
+							union_type un;
+							un.val [0] = v0;
+							un.val [1] = v1;
+							un.val [2] = v2;
+							un.val [3] = v3;
 							return un.vec;
 						}
 						
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
-							union_type un = {v0};
+							union_type un;
+							un.val [0] = v0;
 							return vec_splat (un.vec, 0);
 						}
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec set ()
+						static INLINE const vec set ()
 						{
-							return impl::vector_cast <data_type> (impl::generator <(int) v0, (int) v1, (int) v2, (int) v3> () ());
+							return impl::vector_cast <data_type> (impl::generator <(int) v0, (int) v1, (int) v2, (int) v3>::call ());
 						}
 
 					template <init_type v0>
-						static vec fill ()
+						static INLINE const vec fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
+					static INLINE const vec load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return vec_ld (offset * 16, address);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							vec_st (data_, offset * 16, address);
+						}
+						
+					INLINE vec (): data_ ((data_type) impl::generator <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 
-					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
-					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
+					INLINE const vec cshift (int i) const	{ return stdext::cshifter <vec, int> () (*this, i); }
+					INLINE const vec shift (int i) const	{ return stdext::shifter <vec, int> () (*this, i); }
 			};
 
 		template <> class vec <float, 4>
 			{
-				DEFINE_VEC_CLASS_GUTS(__vector float, float, boolean <int>)
+				DEFINE_VEC_CLASS_GUTS(impl::vf, float, boolean <int>)
 				
 				public:
 					typedef unsigned int init_type;
@@ -864,48 +1058,63 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3)
 						{
-							union_type un = {v0, v1, v2, v3};
+							union_type un;
+							un.val [0] = v0;
+							un.val [1] = v1;
+							un.val [2] = v2;
+							un.val [3] = v3;
 							return un.vec;
 						}
 						
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
-							union_type un = {v0};
+							union_type un;
+							un.val [0] = v0;
 							return vec_splat (un.vec, 0);
 						}
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec set ()
+						static INLINE const vec set ()
 						{
-							return impl::vector_cast <data_type> (impl::generator <v0, v1, v2, v3> () ());
+							return impl::vector_cast <data_type> (impl::generator <v0, v1, v2, v3>::call ());
 						}
 
 					template <init_type v0>
-						static vec fill ()
+						static INLINE const vec fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
+					static INLINE const vec load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return vec_ld (offset * 16, address);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							vec_st (data_, offset * 16, address);
+						}
+						
+					INLINE vec (): data_ ((data_type) impl::generator <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 
-					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
-					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
+					INLINE const vec cshift (int i) const	{ return stdext::cshifter <vec, int> () (*this, i); }
+					INLINE const vec shift (int i) const	{ return stdext::shifter <vec, int> () (*this, i); }
 			};
 
 		template <> class vec <boolean <int>, 4>
 			{
-				DEFINE_VEC_CLASS_GUTS(__vector __bool int,boolean <int>,boolean <int>)
+				DEFINE_VEC_CLASS_GUTS(impl::vbi,boolean <int>,boolean <int>)
 				
 				public:
 					typedef bool init_type;
@@ -916,49 +1125,63 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						boolean <int> v0, boolean <int> v1, boolean <int> v2, boolean <int> v3)
 						{
-							union_type un = {
-								v0.data (), v1.data (), v2.data (), v3.data ()};
+							union_type un;
+							un.val [0] = v0.data ();
+							un.val [1] = v1.data ();
+							un.val [2] = v2.data ();
+							un.val [3] = v3.data ();
 							return un.vec;
 						}
 						
-					static vec fill (
+					static INLINE const vec fill (
 						boolean <int> v0)
 						{
-							union_type un = {v0.data ()};
+							union_type un;
+							un.val [0] = v0.data ();
 							return vec_splat (un.vec, 0);
 						}
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec set ()
+						static INLINE const vec set ()
 						{
-							return impl::vector_cast <data_type> (impl::generator <v0 ? 0xFFFFFFFFU : 0, v1 ? 0xFFFFFFFFU : 0, v2 ? 0xFFFFFFFFU : 0, v3 ? 0xFFFFFFFFU : 0> () ());
+							return impl::vector_cast <data_type> (impl::generator <v0 ? 0xFFFFFFFFU : 0, v1 ? 0xFFFFFFFFU : 0, v2 ? 0xFFFFFFFFU : 0, v3 ? 0xFFFFFFFFU : 0>::call ());
 						}
 
 					template <init_type v0>
-						static vec fill ()
+						static INLINE const vec fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
+					static INLINE const vec load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return impl::vector_cast <impl::vbi> (vec_ld (offset * 16, address));
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							vec_st (data_, offset * 16, address );
+						}
+						
+					INLINE vec (): data_ ((data_type) impl::generator <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 
-					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
-					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
+					INLINE const vec cshift (int i) const	{ return stdext::cshifter <vec, int> () (*this, i); }
+					INLINE const vec shift (int i) const	{ return stdext::shifter <vec, int> () (*this, i); }
 			};
 
 		template <> class vec <stdext::complex <float>, 2>
 			{
-				DEFINE_VEC_CLASS_GUTS(__vector float,stdext::complex <float>,boolean <long long>)
+				DEFINE_VEC_CLASS_GUTS(impl::vf,stdext::complex <float>,boolean <long long>)
 				
 				public:
 					typedef unsigned long long init_type;
@@ -969,18 +1192,24 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
-						stdext::complex <float> v0, stdext::complex <float> v1)
+					static INLINE const vec set (
+						const stdext::complex <float>& v0, const stdext::complex <float>& v1)
 						{
-							#ifdef HAS_C99_COMPLEX
-							union_type un = {v0.data (), v1.data ()};
-							#else
-							union_type un = {v0.real (), v0.imag (), v1.real (), v1.imag ()};
-							#endif
+							union_type un;
+						
+						#ifdef HAS_C99_COMPLEX
+							un.val [0] = v0.data ();
+							un.val [1] = v1.data ();
+						#else
+							un.val [0][0] = v0.data () [0];
+							un.val [0][1] = v0.data () [1];
+							un.val [1][0] = v1.data () [0];
+							un.val [1][1] = v1.data () [1];
+						#endif
 							return un.vec;
 						}
 						
-					static vec fill (
+					static INLINE const vec fill (
 						stdext::complex <float> v0)
 						{
 							return set (v0, v0);
@@ -988,32 +1217,42 @@ namespace macstl
 						
 					template <
 						unsigned long long v0, unsigned long long v1>
-						static vec set ()
+						static INLINE const vec set ()
 						{
 							return impl::vector_cast <data_type> (impl::generator <
 								(v0 & 0xFFFFFFFF00000000ULL) >> 32, v0 & 0x00000000FFFFFFFFULL,
-								(v1 & 0xFFFFFFFF00000000ULL) >> 32, v1 & 0x00000000FFFFFFFFULL> () ());
+								(v1 & 0xFFFFFFFF00000000ULL) >> 32, v1 & 0x00000000FFFFFFFFULL>::call ());
 						}
 
 					template <unsigned long long v0>
-						static vec fill ()
+						static INLINE const vec fill ()
 						{
 							return set <v0, v0> ();
 						}
 						
-					vec (): data_ ((__vector float) impl::generator <0, 0, 0, 0> () ())
+					static INLINE const vec load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return impl::vector_cast <impl::vf> (vec_ld (offset * 16, reinterpret_cast <const signed char*> (address)));
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							vec_st (impl::vector_cast <impl::vsc> (data_), offset * 16, reinterpret_cast <signed char*> (address));
+						}
+						
+					INLINE vec (): data_ ((__vector float) impl::generator <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 
-					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
-					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
+					INLINE const vec cshift (int i) const	{ return stdext::cshifter <vec, int> () (*this, i); }
+					INLINE const vec shift (int i) const	{ return stdext::shifter <vec, int> () (*this, i); }
 			};
 
 		template <> class vec <boolean <long long>, 2>
 			{
-				DEFINE_VEC_CLASS_GUTS(__vector __bool int,boolean <long long>,boolean <long long>)
+				DEFINE_VEC_CLASS_GUTS(impl::vbi,boolean <long long>,boolean <long long>)
 				
 				public:
 					typedef bool init_type;
@@ -1024,45 +1263,56 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1)
 						{
-							union_type un = {v0.data (), v1.data ()};
+							union_type un;
+							un.val [0] = v0.data ();
+							un.val [1] = v1.data ();
 							return un.vec;
 						}
 						
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
-							union_type un = {v0.data (), v0.data ()};
-							return un.vec;
+							return set (v0, v0);
 						}
 						
 					template <
 						init_type v0, init_type v1>
-						static vec set ()
+						static INLINE const vec set ()
 						{
 							return impl::vector_cast <data_type> (impl::generator <
 								v0 ? 0xFFFFFFFFU : 0x00000000U, v0 ? 0xFFFFFFFFU : 0x00000000U,
-								v1 ? 0xFFFFFFFFU : 0x00000000U, v1 ? 0xFFFFFFFFU : 0x00000000U> () ());
+								v1 ? 0xFFFFFFFFU : 0x00000000U, v1 ? 0xFFFFFFFFU : 0x00000000U>::call ());
 						}
 
 					template <init_type v0>
-						static vec fill ()
+						static INLINE const vec fill ()
 						{
 							return set <v0, v0> ();
 						}
 						
-					vec (): data_ ((data_type) impl::generator <0, 0, 0, 0> () ())
+					static INLINE const vec load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return impl::vector_cast <impl::vbi> (vec_ld (offset * 16, reinterpret_cast <const signed char*> (address)));
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							vec_st (impl::vector_cast <impl::vsc> (data_), offset * 16, reinterpret_cast <signed char*> (address));
+						}
+						
+					INLINE vec (): data_ ((data_type) impl::generator <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 
-					const vec cshift (int i) const	{ return stdext::cshifter <vec> () (*this, i); }
-					const vec shift (int i) const	{ return stdext::shifter <vec> () (*this, i); }
+					INLINE const vec cshift (int i) const	{ return stdext::cshifter <vec, int> () (*this, i); }
+					INLINE const vec shift (int i) const	{ return stdext::shifter <vec, int> () (*this, i); }
 			};
 
 			
@@ -1070,9 +1320,9 @@ namespace macstl
 
 #define DEFINE_ALTIVEC_LOAD(FN,INTR,DESC)																\
 																										\
-DEFINE_VEC_PLATFORM_BINARY_FUNCTION(FN,DESC)																\
+DEFINE_VEC_PLATFORM_BINARY_FUNCTION(FN,DESC)															\
 																										\
-template <typename T1, typename T2> struct FN##_function <T1, const T2*>											\
+template <typename T1, typename T2> struct FN##_function <T1, const T2*>								\
 	{																									\
 		typedef T1 first_argument_type;																	\
 		typedef const T2* second_argument_type;															\
@@ -1080,13 +1330,13 @@ template <typename T1, typename T2> struct FN##_function <T1, const T2*>								
 		enum { kind = sizeof (*impl::type_to_kind (INTR (0, (const T2*) NULL))) };						\
 		typedef typename impl::kind_to_type <kind>::type result_type;									\
 																										\
-		result_type operator() (first_argument_type x, second_argument_type y) const					\
+		INLINE const result_type operator() (first_argument_type x, second_argument_type y) const		\
 			{																							\
 				return INTR (x, y);																		\
 			}																							\
 	};																									\
 																										\
-template <typename T1, typename T2> struct FN##_function <T1, T2*>												\
+template <typename T1, typename T2> struct FN##_function <T1, T2*>										\
 	{																									\
 		typedef T1 first_argument_type;																	\
 		typedef T2* second_argument_type;																\
@@ -1094,7 +1344,7 @@ template <typename T1, typename T2> struct FN##_function <T1, T2*>												\
 		enum { kind = sizeof (*impl::type_to_kind (INTR (0, (T2*) NULL))) };							\
 		typedef typename impl::kind_to_type <kind>::type result_type;									\
 																										\
-		result_type operator() (first_argument_type x, second_argument_type y) const					\
+		INLINE const result_type operator() (first_argument_type x, second_argument_type y) const		\
 			{																							\
 				return INTR (x, y);																		\
 			}																							\
@@ -1112,16 +1362,16 @@ template <typename T1, std::size_t n1, typename T2, typename T3> struct FN##_fun
 																										\
 		typedef void result_type;																		\
 																										\
-		result_type operator() (const first_argument_type& x,											\
+		INLINE const result_type operator() (const first_argument_type& x,								\
 			second_argument_type y, third_argument_type z) const										\
 			{																							\
 				INTR (x.data (), y, z);																	\
 			}																							\
 	};
 
-#define DEFINE_ALTIVEC_UNARY_FUNCTION(FN,INTR,DESC)															\
+#define DEFINE_ALTIVEC_UNARY_FUNCTION(FN,INTR,DESC)														\
 																										\
-DEFINE_VEC_PLATFORM_UNARY_FUNCTION(FN,DESC)																	\
+DEFINE_VEC_PLATFORM_UNARY_FUNCTION(FN,DESC)																\
 																										\
 template <typename T, std::size_t n> struct FN##_function <vec <T, n> >									\
 	{																									\
@@ -1131,15 +1381,30 @@ template <typename T, std::size_t n> struct FN##_function <vec <T, n> >									
 			*(typename argument_type::data_type*) NULL))) };											\
 		typedef typename impl::kind_to_type <kind>::type result_type;									\
 																										\
-		result_type operator () (const argument_type& lhs) const										\
+		INLINE const result_type operator() (const argument_type& lhs) const							\
 			{																							\
 				return INTR (lhs.data ());																\
 			}																							\
 	};
 
-#define DEFINE_ALTIVEC_UNARY_FUNCTION_WITH_LITERAL(FN,INTR,DESC)												\
+#define DEFINE_ALTIVEC_UNARY_FUNCTION_WITH_VOID(FN,INTR,DESC)											\
 																										\
-DEFINE_VEC_PLATFORM_UNARY_FUNCTION_WITH_LITERAL(FN,DESC)														\
+DEFINE_VEC_PLATFORM_UNARY_FUNCTION(FN,DESC)																\
+																										\
+template <typename T, std::size_t n> struct FN##_function <vec <T, n> >									\
+	{																									\
+		typedef vec <T, n> argument_type;																\
+		typedef void result_type;																		\
+																										\
+		INLINE result_type operator() (const argument_type& lhs) const									\
+			{																							\
+				INTR (lhs.data ());																		\
+			}																							\
+	};
+
+#define DEFINE_ALTIVEC_UNARY_FUNCTION_WITH_LITERAL(FN,INTR,DESC)										\
+																										\
+DEFINE_VEC_PLATFORM_UNARY_FUNCTION_WITH_LITERAL(FN,DESC)												\
 																										\
 template <unsigned int i, typename T> struct FN##_function												\
 	{																									\
@@ -1150,16 +1415,16 @@ template <unsigned int i, typename T> struct FN##_function												\
 			0))) };																						\
 		typedef typename impl::kind_to_type <kind>::type result_type;									\
 																										\
-		result_type operator () (const argument_type& lhs) const										\
+		INLINE const result_type operator() (const argument_type& lhs) const							\
 			{																							\
 				return INTR (lhs.data (), i);															\
 			}																							\
 	};
 	
 	
-#define DEFINE_ALTIVEC_BINARY_FUNCTION(FN,INTR,DESC)														\
+#define DEFINE_ALTIVEC_BINARY_FUNCTION(FN,INTR,DESC)													\
 																										\
-DEFINE_VEC_PLATFORM_BINARY_FUNCTION(FN,DESC)																\
+DEFINE_VEC_PLATFORM_BINARY_FUNCTION(FN,DESC)															\
 																										\
 template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_function <vec <T1, n1>, vec <T2, n2> >		\
 	{																									\
@@ -1168,12 +1433,12 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 																										\
 		enum { kind = sizeof (*impl::type_to_kind (INTR (												\
 			*(typename first_argument_type::data_type*) NULL,											\
-			*(typename second_argument_type::data_type*) NULL))) };									\
+			*(typename second_argument_type::data_type*) NULL))) };										\
 		typedef typename impl::kind_to_type <kind>::type result_type;									\
 																										\
-		result_type operator () (const first_argument_type& lhs, const second_argument_type& rhs) const	\
+		INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const	\
 			{																							\
-				return INTR (lhs.data (), rhs.data ());													\
+				return INTR (lhs.data (), rhs.data ());																	\
 			}																							\
 	};
 
@@ -1189,13 +1454,13 @@ template <unsigned int i, typename T1, std::size_t n1, typename T2, std::size_t 
 																										\
 		enum { kind = sizeof (*impl::type_to_kind (INTR (												\
 			*(typename first_argument_type::data_type*) NULL,											\
-			*(typename second_argument_type::data_type*) NULL,										\
+			*(typename second_argument_type::data_type*) NULL,											\
 			0))) };																						\
 		typedef typename impl::kind_to_type <kind>::type result_type;									\
 																										\
-		result_type operator () (const first_argument_type& lhs, const second_argument_type& rhs) const	\
+		INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const	\
 			{																							\
-				return INTR (lhs.data (), rhs.data (), i);												\
+				return INTR (lhs.data (), rhs.data (), i);																	\
 			}																							\
 	};
 
@@ -1217,10 +1482,10 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2, typename T3,
 			*(typename third_argument_type::data_type*) NULL))) };										\
 		typedef typename impl::kind_to_type <kind>::type result_type;									\
 																										\
-		result_type operator () (const first_argument_type& lhs, const second_argument_type& mhs,		\
+		INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& mhs,	\
 			const third_argument_type& rhs) const														\
 			{																							\
-				return INTR (lhs.data (), mhs.data (), rhs.data ());									\
+				return INTR (lhs.data (), mhs.data (), rhs.data ());															\
 			}																							\
 	};
 
@@ -1233,9 +1498,9 @@ template <typename T, std::size_t n> struct FN##_function <vec <T, n> >									
 		typedef vec <T, n> argument_type;																\
 		typedef bool result_type;																		\
 																										\
-		result_type operator() (const argument_type& lhs) const											\
+		INLINE const result_type operator() (const argument_type& lhs) const									\
 			{																							\
-				return INTR (lhs.data ());																\
+				return INTR (lhs.data ());																		\
 			}																							\
 	};
 
@@ -1249,7 +1514,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 		typedef vec <T2, n2> second_argument_type;														\
 		typedef bool result_type;																		\
 																										\
-		result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const	\
+		INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const	\
 			{																							\
 				return INTR (lhs.data (), rhs.data ());													\
 			}																							\
@@ -1347,7 +1612,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 				DEFINE_ALTIVEC_BINARY_FUNCTION(mergel,vec_mergel,merge low)
 				DEFINE_ALTIVEC_UNARY_FUNCTION_WITH_LITERAL(splat,vec_splat,splat)
 			//	DEFINE_ALTIVEC_NULLARY_FUNCTION(mfvscr,mfvscr_function,vec_mfvscr)
-				DEFINE_ALTIVEC_UNARY_FUNCTION(mtvscr,vec_mtvscr,move to status and control register)
+				DEFINE_ALTIVEC_UNARY_FUNCTION_WITH_VOID(mtvscr,vec_mtvscr,move to status and control register)
 				DEFINE_ALTIVEC_BINARY_FUNCTION(pack,vec_pack,pack modulo)
 				DEFINE_ALTIVEC_BINARY_FUNCTION(packpx,vec_packpx,pack pixel)
 				DEFINE_ALTIVEC_BINARY_FUNCTION(packs,vec_packs,pack saturate)
@@ -1447,7 +1712,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 				
 				namespace impl
 					{
-						inline vec <float, 4> reciprocal (const vec <float, 4>& lhs)
+						INLINE const vec <float, 4> reciprocal (const vec <float, 4>& lhs)
 							{
 								// estimate reciprocal then do one pass of Newton-Raphson
 								vec <float, 4> estimate = altivec::re (lhs);
@@ -1457,7 +1722,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 									estimate);
 							}
 
-						inline vec <unsigned int, 4> multiply_high
+						INLINE const vec <unsigned int, 4> multiply_high
 							(const vec <unsigned int, 4>& lhs, const vec <unsigned int, 4>& rhs)
 							{
 								// the high long of multiplying lhs and rhs, but ignoring any carry from the low long
@@ -1476,7 +1741,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 									altivec::sl (altivec::addc (lhs_low_rhs_high, lhs_high_rhs_low), sixteen));
 							}
 							
-						inline vec <unsigned int, 4> multiply
+						INLINE const vec <unsigned int, 4> multiply
 							(const vec <unsigned int, 4>& lhs, const vec <unsigned int, 4>& rhs)
 							{
 								vec <unsigned int, 4> sixteen = vec <unsigned int, 4>::fill <0xFFFFFFF0U> ();
@@ -1496,7 +1761,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 							}
 
 
-						inline vec <unsigned int, 4> estimate_divide (const vec <unsigned int, 4>& dividend, const vec <unsigned int, 4>& divisor)
+						INLINE const vec <unsigned int, 4> estimate_divide (const vec <unsigned int, 4>& dividend, const vec <unsigned int, 4>& divisor)
 							{
 								// we conduct two Newton-Raphson iterations to get a fairly accurate 32-bit result: the first is conducted in floating point,
 								// and the second in (!) 64-bit fixed point
@@ -1504,7 +1769,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 								// compute reciprocal (0.32) of divisor
 								// NOTE: this is a floating point N-R of the intrinsic, approximately 23 bits accuracy
 								const vec <unsigned int, 4> divisor_reciprocal = altivec::ctu <0> (data_cast <vec <float, 4> > (
-									altivec::add (data_cast <vec <unsigned int, 4> > (reciprocal (altivec::ctf <0> (divisor))), (vector unsigned int) (1 << 28))));
+									altivec::add (data_cast <vec <unsigned int, 4> > (reciprocal (altivec::ctf <0> (divisor))), vec <unsigned int, 4>::fill<1 << 28> ())));
 								
 								// compute 2 (0.32) - divisor (int) * reciprocal (0.32)
 								// NOTE: divisor * reciprocal is either 0x1U 0000 xxxx OR 0x0U FFFF xxxx, so to calculate high word it is sufficient to check whether low word is "negative" 
@@ -1523,17 +1788,17 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 									altivec::vand (dividend_reciprocal_high, two_minus_divisor_reciprocal_high));
 							}
 							
-						inline vec <unsigned char, 16> select_high_half ()
+						INLINE const vec <unsigned char, 16> select_high_half ()
 							{
 								vec <unsigned int, 4> zero = vec <unsigned int, 4>::fill <0> ();
-								vector unsigned int sixteen = vec_splat_u32 (-16);
+								vec <unsigned int, 4> sixteen = vec_splat_u32 (-16);
 								
 								return data_cast <vec <unsigned char, 16> > (altivec::mergeh (
 									altivec::pack (altivec::rl (data_cast <vec <unsigned int, 4> > (altivec::lvsl (0, (int*) NULL)), sixteen), zero),
 									altivec::pack (altivec::rl (data_cast <vec <unsigned int, 4> > (altivec::lvsr (0, (int*) NULL)), sixteen), zero)));
 							}
 
-						inline vec <unsigned short, 8> estimate_divide
+						INLINE const vec <unsigned short, 8> estimate_divide
 							(const vec <unsigned short, 8>& dividend, const vec <unsigned short, 8>& divisor)
 							{
 								// we conduct one Newton-Raphson iteration in floating point to get a fairly accurate 16-bit result
@@ -1551,7 +1816,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 									high_half));
 							}
 					
-						inline vec <unsigned char, 16> estimate_divide
+						INLINE const vec <unsigned char, 16> estimate_divide
 							(const vec <unsigned char, 16>& dividend, const vec <unsigned char, 16>& divisor)
 							{
 								// we use the reciprocal estimate directly to get a fairly accurate 8-bit result
@@ -1584,24 +1849,24 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 										high_half)));
 									
 							}
-						template <std::size_t n> vec <unsigned char, 16> swap_real_imag ();
+						template <std::size_t n> const vec <unsigned char, 16> swap_real_imag ();
 						
-						template <> inline vec <unsigned char, 16> swap_real_imag <4> ()	// for words
+						template <> INLINE const vec <unsigned char, 16> swap_real_imag <4> ()	// for words
 							{
 								return altivec::vxor (vec_splat_u8 (4), altivec::lvsl (0, (int*) NULL));
 							}
 						
-						template <> inline vec <unsigned char, 16> swap_real_imag <8> ()	// for shorts
+						template <> INLINE const vec <unsigned char, 16> swap_real_imag <8> ()	// for shorts
 							{
 								return altivec::vxor (vec_splat_u8 (2), altivec::lvsl (0, (int*) NULL));
 							}
 
-						template <> inline vec <unsigned char, 16> swap_real_imag <16> ()	// for bytes
+						template <> INLINE const vec <unsigned char, 16> swap_real_imag <16> ()	// for bytes
 							{
 								return altivec::vxor (vec_splat_u8 (1), altivec::lvsl (0, (int*) NULL));
 							}
 														
-						inline vec <stdext::complex <float>, 2> complex_fma
+						INLINE const vec <stdext::complex <float>, 2> complex_fma
 							(const vec <stdext::complex <float>, 2>& lhs, const vec <stdext::complex <float>, 2>& mhs, const vec <stdext::complex <float>, 2> &rhs)
 							{
 								const vec <unsigned char, 16> inc = altivec::lvsl (0, (int*) NULL);
@@ -1627,7 +1892,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 							}
 					
 						// perform floating point divide assuming y is not denormal
-						inline vec <float, 4> divide_normal (const vec <float, 4>& x, const vec <float, 4>& y)
+						INLINE const vec <float, 4> divide_normal (const vec <float, 4>& x, const vec <float, 4>& y)
 							{
 								const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();	// -0.0f
 								
@@ -1659,7 +1924,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 							}
 														
 						// sin (x - n * Pi) -- where x - n * Pi is in [-Pi/2, Pi/2]
-						inline vec <float, 4> sine_n (const vec <float, 4>& x, const vec <float, 4>& n)
+						INLINE const vec <float, 4> sine_n (const vec <float, 4>& x, const vec <float, 4>& n)
 							{
 								const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();	// -0.0
 								const vec <float, 4> x_reduced = altivec::madd (
@@ -1710,7 +1975,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						return lhs;
 					}
@@ -1723,7 +1988,7 @@ namespace stdext
 				typedef macstl::vec <T, n> argument_type;
 				typedef macstl::vec <T, n> result_type;
 				
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 						
@@ -1739,7 +2004,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const argument_type&) const
+				INLINE const result_type operator() (const argument_type&) const
 					{
 						return result_type::template fill <true> ();
 					}
@@ -1761,7 +2026,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs)
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -1787,7 +2052,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs)
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -1813,13 +2078,29 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs)
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
 						return data_cast <vec <boolean <long long>, 2> > (altivec::vor (
 							data_cast <vec <boolean <int>, 4> > (lhs),
 							data_cast <vec <boolean <int>, 4> > (rhs)));
+					}
+			};
+			
+		// conjugate
+
+		template <> struct conjugate <macstl::vec <stdext::complex <float>, 2> >
+			{
+				typedef macstl::vec <stdext::complex <float>, 2> argument_type;
+				typedef macstl::vec <stdext::complex <float>, 2> result_type;
+
+				INLINE const result_type operator() (const argument_type& lhs) const
+					{
+						using namespace macstl;
+
+						const vec <stdext::complex <float>, 2> conj_filter = vec <stdext::complex <float>, 2>::set<0x0000000080000000ULL, 0x0000000080000000ULL> ();
+						return  data_cast <result_type> (altivec::vxor (lhs, conj_filter));
 					}
 			};
 
@@ -1830,7 +2111,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> argument_type;
 				typedef macstl::vec <float, 4> result_type;
 				
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 
@@ -1850,14 +2131,13 @@ namespace stdext
 								altivec::cmpeq (
 									altivec::vand (altivec::cts <0> (lhs_n), vec <int, 4>::fill <1> ()),
 									vec <int, 4>::fill <0> ()));
-								
 					}	
 			};
 			
 		// cshifter
 
-		template <typename T, std::size_t n> inline macstl::vec <T, n>
-			cshifter <macstl::vec <T, n> >::operator() (const macstl::vec <T, n>& lhs, int rhs) const
+		template <typename T, std::size_t n> INLINE const macstl::vec <T, n>
+			cshifter <macstl::vec <T, n>, int>::operator() (const macstl::vec <T, n>& lhs, int rhs) const
 			{
 				using namespace macstl;
 				
@@ -1878,11 +2158,11 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
-						result_type neq = altivec::vxor (lhs, rhs);
+						const result_type neq = altivec::vxor (lhs, rhs);
 						return altivec::nor (neq, neq);
 					}
 			};
@@ -1893,11 +2173,11 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
-						vec <boolean <int>, 4> neq = altivec::vxor (data_cast <vec <boolean <int>, 4> > (lhs), data_cast <vec <boolean <int>, 4> > (rhs));
+						const vec <boolean <int>, 4> neq = altivec::vxor (data_cast <vec <boolean <int>, 4> > (lhs), data_cast <vec <boolean <int>, 4> > (rhs));
 						return data_cast <vec <boolean <long long>, 2> > (altivec::nor (neq, neq));
 					}
 			};
@@ -1908,11 +2188,11 @@ namespace stdext
 				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
 				typedef typename macstl::vec <stdext::complex <T>, n>::vec_boolean result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
-						typename vec <T, n * 2>::vec_boolean eq = altivec::cmpeq (
+						const typename vec <T, n * 2>::vec_boolean eq = altivec::cmpeq (
 							data_cast <vec <T, n * 2> > (lhs),
 							data_cast <vec <T, n * 2> > (rhs));
 							
@@ -1927,7 +2207,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> argument_type;
 				typedef macstl::vec <float, 4> result_type;
 
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 						
@@ -1976,7 +2256,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> argument_type;
 				typedef macstl::vec <float, 4> result_type;
 
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 						
@@ -2029,7 +2309,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2043,7 +2323,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2063,7 +2343,7 @@ namespace stdext
 				typedef macstl::vec <T, n> second_argument_type;
 				typedef typename macstl::vec <T, n>::vec_boolean result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2083,7 +2363,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2097,11 +2377,11 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
-						vec <boolean <int>, 4> rhs2 = data_cast <vec <boolean <int>, 4> > (rhs);
+						const vec <boolean <int>, 4> rhs2 = data_cast <vec <boolean <int>, 4> > (rhs);
 						return data_cast <vec <boolean <long long>, 2> > (altivec::vor (
 							data_cast <vec <boolean <int>, 4> > (lhs),
 							altivec::nor (rhs2, rhs2)));
@@ -2124,7 +2404,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2138,7 +2418,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2158,11 +2438,11 @@ namespace stdext
 				typedef macstl::vec <T, n> second_argument_type;
 				typedef typename macstl::vec <T, n>::vec_boolean result_type;
 						
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
-						result_type gt = altivec::cmpgt (lhs, rhs);
+						const result_type gt = altivec::cmpgt (lhs, rhs);
 						return altivec::nor (gt, gt);
 					}
 			};
@@ -2178,7 +2458,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2192,7 +2472,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2213,7 +2493,7 @@ namespace stdext
 				typedef macstl::vec <T, n> second_argument_type;
 				typedef typename macstl::vec <T, n>::vec_boolean result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2229,11 +2509,11 @@ namespace stdext
 				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
 				typedef typename macstl::vec <stdext::complex <T>, n>::vec_boolean result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
-						typename vec <T, n * 2>::vec_boolean lhs_rhs = altivec::nor (
+						const typename vec <T, n * 2>::vec_boolean lhs_rhs = altivec::nor (
 							altivec::cmpeq (data_cast <vec <T, n * 2> > (lhs), vec <T, n * 2>::template fill <0> ()),
 							altivec::cmpeq (data_cast <vec <T, n * 2> > (rhs), vec <T, n * 2>::template fill <0> ()));
 						
@@ -2253,7 +2533,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2270,7 +2550,7 @@ namespace stdext
 				typedef macstl::vec <T, n> argument_type;
 				typedef typename macstl::vec <T, n>::vec_boolean result_type;
 				
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 						
@@ -2283,11 +2563,11 @@ namespace stdext
 				typedef macstl::vec <stdext::complex <T>, n> argument_type;
 				typedef typename macstl::vec <stdext::complex <T>, n>::vec_boolean result_type;
 				
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 						
-						typename vec <T, n * 2>::vec_boolean eq = altivec::cmpeq (
+						const typename vec <T, n * 2>::vec_boolean eq = altivec::cmpeq (
 							data_cast <vec <T, n * 2> > (lhs),
 							vec <T, n * 2>::template fill <0> ());
 							
@@ -2301,7 +2581,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 						
@@ -2314,11 +2594,11 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 						
-						vec <boolean <int>, 4> lhs2 = data_cast <vec <boolean <int>, 4> > (lhs);
+						const vec <boolean <int>, 4> lhs2 = data_cast <vec <boolean <int>, 4> > (lhs);
 						return data_cast <vec <boolean <long long>, 2> > (altivec::nor (lhs2, lhs2));
 					}
 			};
@@ -2331,7 +2611,7 @@ namespace stdext
 				typedef macstl::vec <T, n> second_argument_type;
 				typedef typename macstl::vec <T, n>::vec_boolean result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2348,14 +2628,14 @@ namespace stdext
 				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
 				typedef typename macstl::vec <stdext::complex <T>, n>::vec_boolean result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
-						typename vec <T, n * 2>::vec_boolean lhs_rhs = altivec::vand (
+						const typename vec <T, n * 2>::vec_boolean lhs_rhs = altivec::vand (
 							altivec::cmpeq (data_cast <vec <T, n * 2> > (lhs), vec <T, n * 2>::template fill <0> ()),
 							altivec::cmpeq (data_cast <vec <T, n * 2> > (rhs), vec <T, n * 2>::template fill <0> ()));
-						typename vec <T, n * 2>::vec_boolean lhs_rhs2 = altivec::nor (lhs_rhs, lhs_rhs);
+						const typename vec <T, n * 2>::vec_boolean lhs_rhs2 = altivec::nor (lhs_rhs, lhs_rhs);
 						
 						return data_cast <result_type> (altivec::vor (lhs_rhs,
 							altivec::perm (lhs_rhs2, lhs_rhs2, altivec::impl::swap_real_imag <n * 2> ())));
@@ -2373,7 +2653,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2396,7 +2676,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> second_argument_type;
 				typedef macstl::vec <float, 4> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2416,7 +2696,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2430,7 +2710,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2454,7 +2734,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> second_argument_type;
 				typedef macstl::vec <float, 4> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2474,7 +2754,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2488,7 +2768,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2512,7 +2792,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2526,7 +2806,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2542,7 +2822,7 @@ namespace stdext
 				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
 				typedef macstl::vec <stdext::complex <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2560,7 +2840,7 @@ namespace stdext
 				typedef macstl::vec <unsigned char, 16> second_argument_type;
 				typedef macstl::vec <unsigned char, 16> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2576,7 +2856,7 @@ namespace stdext
 				typedef macstl::vec <signed char, 16> second_argument_type;
 				typedef macstl::vec <signed char, 16> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2592,7 +2872,7 @@ namespace stdext
 				typedef macstl::vec <unsigned short, 8> second_argument_type;
 				typedef macstl::vec <unsigned short, 8> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2606,7 +2886,7 @@ namespace stdext
 				typedef macstl::vec <short, 8> second_argument_type;
 				typedef macstl::vec <short, 8> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2620,7 +2900,7 @@ namespace stdext
 				typedef macstl::vec <unsigned int, 4> second_argument_type;
 				typedef macstl::vec <unsigned int, 4> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2634,14 +2914,14 @@ namespace stdext
 				typedef macstl::vec <int, 4> second_argument_type;
 				typedef macstl::vec <int, 4> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
-						vec <int, 4> zero = vec <int, 4>::fill <0> ();
+						const vec <int, 4> zero = vec <int, 4>::fill <0> ();
 						
 						// unsigned multiply
-						vec <int, 4> result = data_cast <vec <int, 4> > (
+						const vec <int, 4> result = data_cast <vec <int, 4> > (
 							data_cast <vec <unsigned int, 4> > (altivec::abs (lhs)) *
 							data_cast <vec <unsigned int, 4> > (altivec::abs (rhs)));
 							
@@ -2657,7 +2937,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> second_argument_type;
 				typedef macstl::vec <float, 4> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2671,7 +2951,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2685,7 +2965,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2701,7 +2981,7 @@ namespace stdext
 				typedef macstl::vec <stdext::complex <float>, 2> second_argument_type;
 				typedef macstl::vec <stdext::complex <float>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2718,12 +2998,12 @@ namespace stdext
 				typedef macstl::vec <unsigned char, 16> second_argument_type;
 				typedef macstl::vec <unsigned char, 16> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
-						vec <unsigned char, 16> quotient = altivec::impl::estimate_divide (lhs, rhs);
-						vec <unsigned char, 16> difference = altivec::sub (lhs, quotient * rhs);
+						const vec <unsigned char, 16> quotient = altivec::impl::estimate_divide (lhs, rhs);
+						const vec <unsigned char, 16> difference = altivec::sub (lhs, quotient * rhs);
 						return altivec::add (quotient,
 							altivec::andc (vec <unsigned char, 16>::fill <1> (), altivec::cmplt (difference, rhs)));
 					}
@@ -2735,7 +3015,7 @@ namespace stdext
 				typedef macstl::vec <signed char, 16> second_argument_type;
 				typedef macstl::vec <signed char, 16> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
@@ -2758,12 +3038,12 @@ namespace stdext
 				typedef macstl::vec <unsigned short, 8> second_argument_type;
 				typedef macstl::vec <unsigned short, 8> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
-						vec <unsigned short, 8> quotient = altivec::impl::estimate_divide (lhs, rhs);
-						vec <unsigned short, 8> difference = altivec::mladd (quotient,
+						const vec <unsigned short, 8> quotient = altivec::impl::estimate_divide (lhs, rhs);
+						const vec <unsigned short, 8> difference = altivec::mladd (quotient,
 							altivec::sub (vec <unsigned short, 8>::fill <0> (), rhs), lhs);
 						
 						return altivec::add (quotient,
@@ -2777,14 +3057,14 @@ namespace stdext
 				typedef macstl::vec <short, 8> second_argument_type;
 				typedef macstl::vec <short, 8> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
-						vec <short, 8> zero = vec <short, 8>::fill <0> ();
+						const vec <short, 8> zero = vec <short, 8>::fill <0> ();
 						
 						// unsigned divide
-						vec <short, 8> result = data_cast <vec <short, 8> > (
+						const vec <short, 8> result = data_cast <vec <short, 8> > (
 							data_cast <vec <unsigned short, 8> > (altivec::abs (lhs)) /
 							data_cast <vec <unsigned short, 8> > (altivec::abs (rhs)));
 							
@@ -2800,7 +3080,7 @@ namespace stdext
 				typedef macstl::vec <unsigned int, 4> second_argument_type;
 				typedef macstl::vec <unsigned int, 4> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2809,9 +3089,9 @@ namespace stdext
 
 						// compute lhs - quotient * rhs, then perform 3 bit division on it
 						vec <unsigned int, 4> difference = altivec::sub (lhs, quotient * rhs);
-						vec <boolean <int>, 4> unbounded2 = altivec::cmplt (difference, rhs2);
+						const vec <boolean <int>, 4> unbounded2 = altivec::cmplt (difference, rhs2);
 						difference = altivec::sel (altivec::sub (difference, rhs2), difference, unbounded2);
-						vec <boolean <int>, 4> unbounded1 = altivec::cmplt (difference, rhs);
+						const vec <boolean <int>, 4> unbounded1 = altivec::cmplt (difference, rhs);
 							
 						return altivec::add (quotient, altivec::vor (
 							altivec::andc (vec <unsigned int, 4>::fill <2> (), unbounded2),
@@ -2825,14 +3105,14 @@ namespace stdext
 				typedef macstl::vec <int, 4> second_argument_type;
 				typedef macstl::vec <int, 4> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
-						vec <int, 4> zero = vec <int, 4>::fill <0> ();
+						const vec <int, 4> zero = vec <int, 4>::fill <0> ();
 						
 						// unsigned divide
-						vec <int, 4> result = data_cast <vec <int, 4> > (
+						const vec <int, 4> result = data_cast <vec <int, 4> > (
 							data_cast <vec <unsigned int, 4> > (altivec::abs (lhs)) /
 							data_cast <vec <unsigned int, 4> > (altivec::abs (rhs)));
 							
@@ -2848,23 +3128,23 @@ namespace stdext
 				typedef macstl::vec <float, 4> second_argument_type;
 				typedef macstl::vec <float, 4> result_type;
 
-				result_type operator() (const first_argument_type& x, const second_argument_type& y) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
 						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();	// -0.0f
 						const vec <float, 4> scale = vec <float, 4>::fill <0x4B000000U> ();	// scale by 2^23, converts smallest denorm into smallest norm
 						
-						const vec <boolean <int>, 4> denormal =	// check if y is a denormalized number
+						const vec <boolean <int>, 4> denormal =	// check if rhs is a denormalized number
 							altivec::cmpeq (
-								altivec::cmpb (y, vec <float, 4>::fill <0x007FFFFFU> ()),
+								altivec::cmpb (rhs, vec <float, 4>::fill <0x007FFFFFU> ()),
 								vec <int, 4>::fill <0> ());
 								
 						// do the division on the renormalized numbers
 						// NOTE: the scale is in both divisor and dividend so it will cancel out
 						return altivec::impl::divide_normal (
-							altivec::sel (x, altivec::madd (x, scale, zero), denormal),
-							altivec::sel (y, altivec::madd (y, scale, zero), denormal));
+							altivec::sel (lhs, altivec::madd (lhs, scale, zero), denormal),
+							altivec::sel (rhs, altivec::madd (rhs, scale, zero), denormal));
 					}
 			};
 
@@ -2874,7 +3154,7 @@ namespace stdext
 				typedef macstl::vec <stdext::complex <float>, 2> second_argument_type;
 				typedef macstl::vec <stdext::complex <float>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2917,7 +3197,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2931,7 +3211,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2948,13 +3228,13 @@ namespace stdext
 				typedef macstl::vec <unsigned char, 16> second_argument_type;
 				typedef macstl::vec <unsigned char, 16> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
-						vec <unsigned char, 16> quotient = altivec::impl::estimate_divide (lhs, rhs);
+						const vec <unsigned char, 16> quotient = altivec::impl::estimate_divide (lhs, rhs);
 
-						vec <unsigned char, 16> difference = altivec::sub (lhs, quotient * rhs);
+						const vec <unsigned char, 16> difference = altivec::sub (lhs, quotient * rhs);
 						return altivec::sel (altivec::sub (difference, rhs), difference, altivec::cmplt (difference, rhs));
 					}
 			};
@@ -2965,14 +3245,14 @@ namespace stdext
 				typedef macstl::vec <signed char, 16> second_argument_type;
 				typedef macstl::vec <signed char, 16> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE  const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
-						vec <signed char, 16> zero = vec <signed char, 16>::fill <0> ();
+						const vec <signed char, 16> zero = vec <signed char, 16>::fill <0> ();
 						
 						// unsigned modulus
-						vec <signed char, 16> result = data_cast <vec <signed char, 16> > (
+						const vec <signed char, 16> result = data_cast <vec <signed char, 16> > (
 							data_cast <vec <unsigned char, 16> > (altivec::abs (lhs)) %
 							data_cast <vec <unsigned char, 16> > (altivec::abs (rhs)));
 							
@@ -2987,13 +3267,13 @@ namespace stdext
 				typedef macstl::vec <unsigned short, 8> second_argument_type;
 				typedef macstl::vec <unsigned short, 8> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
-						vec <unsigned short, 8> quotient = altivec::impl::estimate_divide (lhs, rhs);
+						const vec <unsigned short, 8> quotient = altivec::impl::estimate_divide (lhs, rhs);
 
-						vec <unsigned short, 8> difference = altivec::mladd (quotient,
+						const vec <unsigned short, 8> difference = altivec::mladd (quotient,
 							altivec::sub (vec <unsigned short, 8>::fill <0> (), rhs), lhs);
 						return altivec::sel (altivec::sub (difference, rhs), difference, altivec::cmplt (difference, rhs));
 					}
@@ -3005,14 +3285,14 @@ namespace stdext
 				typedef macstl::vec <short, 8> second_argument_type;
 				typedef macstl::vec <short, 8> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
-						vec <short, 8> zero = vec <short, 8>::fill <0> ();
+						const vec <short, 8> zero = vec <short, 8>::fill <0> ();
 						
 						// unsigned divide
-						vec <short, 8> result = data_cast <vec <short, 8> > (
+						const vec <short, 8> result = data_cast <vec <short, 8> > (
 							data_cast <vec <unsigned short, 8> > (altivec::abs (lhs)) %
 							data_cast <vec <unsigned short, 8> > (altivec::abs (rhs)));
 							
@@ -3027,12 +3307,12 @@ namespace stdext
 				typedef macstl::vec <unsigned int, 4> second_argument_type;
 				typedef macstl::vec <unsigned int, 4> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
-						vec <unsigned int, 4> rhs2 = altivec::adds (rhs, rhs);
-						vec <unsigned int, 4> quotient = altivec::impl::estimate_divide (lhs, rhs);
+						const vec <unsigned int, 4> rhs2 = altivec::adds (rhs, rhs);
+						const vec <unsigned int, 4> quotient = altivec::impl::estimate_divide (lhs, rhs);
 
 						// compute lhs - quotient * rhs, then perform 3 bit division on it
 						vec <unsigned int, 4> difference = altivec::sub (lhs, quotient * rhs);
@@ -3047,14 +3327,14 @@ namespace stdext
 				typedef macstl::vec <int, 4> second_argument_type;
 				typedef macstl::vec <int, 4> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
-						vec <int, 4> zero = vec <int, 4>::fill <0> ();
+						const vec <int, 4> zero = vec <int, 4>::fill <0> ();
 						
 						// unsigned modulus
-						vec <int, 4> result = data_cast <vec <int, 4> > (
+						const vec <int, 4> result = data_cast <vec <int, 4> > (
 							data_cast <vec <unsigned int, 4> > (altivec::abs (lhs)) %
 							data_cast <vec <unsigned int, 4> > (altivec::abs (rhs)));
 							
@@ -3069,7 +3349,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3083,7 +3363,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3100,7 +3380,7 @@ namespace stdext
 				typedef macstl::vec <T, n> argument_type;
 				typedef macstl::vec <T, n> result_type;
 				
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 						
@@ -3113,7 +3393,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						return lhs;
 					}
@@ -3124,7 +3404,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> argument_type;
 				typedef macstl::vec <float, 4> result_type;
 				
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 						
@@ -3138,7 +3418,7 @@ namespace stdext
 				typedef macstl::vec <stdext::complex <float>, 2> argument_type;
 				typedef macstl::vec <stdext::complex <float>, 2> result_type;
 				
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 						
@@ -3156,11 +3436,11 @@ namespace stdext
 				typedef macstl::vec <T, n> second_argument_type;
 				typedef typename macstl::vec <T, n>::vec_boolean result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
-						result_type eq = altivec::cmpeq (lhs, rhs);
+						const result_type eq = altivec::cmpeq (lhs, rhs);
 						return altivec::nor (eq, eq);
 					}
 			};
@@ -3171,7 +3451,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3185,7 +3465,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3201,11 +3481,11 @@ namespace stdext
 				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
 				typedef typename macstl::vec <stdext::complex <T>, n>::vec_boolean result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
-						typename vec <T, n * 2>::vec_boolean eq = altivec::cmpeq (
+						const typename vec <T, n * 2>::vec_boolean eq = altivec::cmpeq (
 							data_cast <vec <T, n * 2> > (lhs),
 							data_cast <vec <T, n * 2> > (rhs));
 							
@@ -3227,7 +3507,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3241,7 +3521,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3257,7 +3537,7 @@ namespace stdext
 				typedef macstl::vec <stdext::complex <T>, n> second_argument_type;
 				typedef macstl::vec <stdext::complex <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3280,7 +3560,7 @@ namespace stdext
 				typedef macstl::vec <signed char, 16> second_argument_type;
 				typedef macstl::vec <signed char, 16> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3294,7 +3574,7 @@ namespace stdext
 				typedef macstl::vec <short, 8> second_argument_type;
 				typedef macstl::vec <short, 8> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3308,7 +3588,7 @@ namespace stdext
 				typedef macstl::vec <int, 4> second_argument_type;
 				typedef macstl::vec <int, 4> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3322,7 +3602,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type&) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type&) const
 					{
 						return lhs; 
 					}
@@ -3345,7 +3625,7 @@ namespace stdext
 				typedef macstl::vec <signed char, 16> second_argument_type;
 				typedef macstl::vec <signed char, 16> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3364,7 +3644,7 @@ namespace stdext
 				typedef macstl::vec <short, 8> second_argument_type;
 				typedef macstl::vec <short, 8> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3383,7 +3663,7 @@ namespace stdext
 				typedef macstl::vec <int, 4> second_argument_type;
 				typedef macstl::vec <int, 4> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3397,7 +3677,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3411,7 +3691,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3421,9 +3701,7 @@ namespace stdext
 			};
 
 		template <typename T, std::size_t n> struct shift_right <macstl::vec <stdext::complex <T>, n>, macstl::vec <stdext::complex <T>, n> >;
-		
-
-			
+					
 		// logarithm
 
 		template <> struct logarithm <macstl::vec <float, 4> >
@@ -3431,7 +3709,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> argument_type;
 				typedef macstl::vec <float, 4> result_type;
 
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 
@@ -3521,7 +3799,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> argument_type;
 				typedef macstl::vec <float, 4> result_type;
 
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 
@@ -3612,7 +3890,7 @@ namespace stdext
 				typedef macstl::vec <unsigned char, 16> second_argument_type;
 				typedef macstl::vec <unsigned char, 16> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3629,7 +3907,7 @@ namespace stdext
 				typedef macstl::vec <signed char, 16> second_argument_type;
 				typedef macstl::vec <signed char, 16> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3646,7 +3924,7 @@ namespace stdext
 				typedef macstl::vec <unsigned short, 8> second_argument_type;
 				typedef macstl::vec <unsigned short, 8> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3663,7 +3941,7 @@ namespace stdext
 				typedef macstl::vec <short, 8> second_argument_type;
 				typedef macstl::vec <short, 8> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3682,7 +3960,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type&, const second_argument_type&) const
+				INLINE const result_type operator() (const first_argument_type&, const second_argument_type&) const
 					{
 						return result_type::template fill <false> ();
 					}
@@ -3712,7 +3990,7 @@ namespace stdext
 				typedef macstl::vec <stdext::complex <float>, 2> third_argument_type;
 				typedef macstl::vec <stdext::complex <float>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& mhs, const third_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& mhs, const third_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3729,7 +4007,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> second_argument_type;
 				typedef macstl::vec <float, 4> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3756,7 +4034,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> argument_type;
 				typedef macstl::vec <float, 4> result_type;
 
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 						
@@ -3807,7 +4085,7 @@ namespace stdext
 				typedef macstl::vec <T, n> third_argument_type;
 				typedef macstl::vec <T, n> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& mhs, const third_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& mhs, const third_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3817,8 +4095,8 @@ namespace stdext
 
 		// shifter
 
-		template <typename T, std::size_t n> inline macstl::vec <T, n>
-			shifter <macstl::vec <T, n> >::operator() (const macstl::vec <T, n>& lhs, int rhs) const
+		template <typename T, std::size_t n> INLINE const macstl::vec <T, n>
+			shifter <macstl::vec <T, n>, int>::operator() (const macstl::vec <T, n>& lhs, int rhs) const
 			{
 				using namespace macstl;
 				
@@ -3841,7 +4119,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> argument_type;
 				typedef macstl::vec <float, 4> result_type;
 
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 
@@ -3866,7 +4144,6 @@ namespace stdext
 									altivec::cmpeq (
 										data_cast <vec <unsigned int, 4> > (lhs), data_cast <vec <unsigned int, 4> > (zero))));
 					}	
-					
 			};
 
 		// square_root
@@ -3876,7 +4153,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> argument_type;
 				typedef macstl::vec <float, 4> result_type;
 
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 						
@@ -3911,7 +4188,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> argument_type;
 				typedef macstl::vec <float, 4> result_type;
 
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 						
@@ -3961,12 +4238,11 @@ namespace stdext
 								zero,
 								altivec::cmpeq (data_cast <vec <unsigned int, 4> > (lhs), data_cast <vec <unsigned int, 4> > (zero)));
 					}	
-					
 			};
 	
 			// accumulator <maximum>
 
-		inline unsigned char accumulator <maximum <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> > >::operator() (const macstl::vec <unsigned char, 16>& lhs) const
+		INLINE unsigned char accumulator <maximum <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> > >::operator() (const macstl::vec <unsigned char, 16>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -3977,7 +4253,7 @@ namespace stdext
 			}
 
 
-		inline signed char accumulator <maximum <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> > >::operator() (const macstl::vec <signed char, 16>& lhs) const
+		INLINE signed char accumulator <maximum <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> > >::operator() (const macstl::vec <signed char, 16>& lhs) const
 			{
 				using namespace macstl;
 						
@@ -3987,7 +4263,7 @@ namespace stdext
 				return altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
 			};
 
-		inline unsigned short accumulator <maximum <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> > >::operator() (const macstl::vec <unsigned short, 8>& lhs) const
+		INLINE unsigned short accumulator <maximum <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> > >::operator() (const macstl::vec <unsigned short, 8>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -3997,7 +4273,7 @@ namespace stdext
 			}
 	
 
-		inline short accumulator <maximum <macstl::vec <short, 8>, macstl::vec <short, 8> > >::operator() (const macstl::vec <short, 8>& lhs) const
+		INLINE short accumulator <maximum <macstl::vec <short, 8>, macstl::vec <short, 8> > >::operator() (const macstl::vec <short, 8>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4006,7 +4282,7 @@ namespace stdext
 				return altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
 			}
 
-		inline unsigned int accumulator <maximum <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> > >::operator() (const macstl::vec <unsigned int, 4>& lhs) const
+		INLINE unsigned int accumulator <maximum <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> > >::operator() (const macstl::vec <unsigned int, 4>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4014,7 +4290,7 @@ namespace stdext
 				return altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
 			}
 
-		inline int accumulator <maximum <macstl::vec <int, 4>, macstl::vec <int, 4> > >::operator() (const macstl::vec <int, 4>& lhs) const
+		INLINE int accumulator <maximum <macstl::vec <int, 4>, macstl::vec <int, 4> > >::operator() (const macstl::vec <int, 4>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4022,7 +4298,7 @@ namespace stdext
 				return altivec::max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
 			}
 
-		inline float accumulator <maximum <macstl::vec <float, 4>, macstl::vec <float, 4> > >::operator() (const macstl::vec <float, 4>& lhs) const
+		INLINE float accumulator <maximum <macstl::vec <float, 4>, macstl::vec <float, 4> > >::operator() (const macstl::vec <float, 4>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4030,7 +4306,7 @@ namespace stdext
 				return max (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
 			}
 
-		template <typename T, std::size_t n> inline macstl::boolean <T>
+		template <typename T, std::size_t n> INLINE const macstl::boolean <T>
 			accumulator <maximum <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> > >::operator() (const macstl::vec <macstl::boolean <T>, n>& lhs) const
 			{
 				using namespace macstl;
@@ -4040,7 +4316,7 @@ namespace stdext
 		
 		// accumulator <minimum>
 
-		inline unsigned char accumulator <minimum <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> > >::operator() (const macstl::vec <unsigned char, 16>& lhs) const
+		INLINE unsigned char accumulator <minimum <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> > >::operator() (const macstl::vec <unsigned char, 16>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4050,7 +4326,7 @@ namespace stdext
 				return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
 			}
 
-		inline signed char accumulator <minimum <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> > >::operator() (const macstl::vec <signed char, 16>& lhs) const
+		INLINE signed char accumulator <minimum <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> > >::operator() (const macstl::vec <signed char, 16>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4060,7 +4336,7 @@ namespace stdext
 				return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
 			}
 
-		inline unsigned short accumulator <minimum <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> > >::operator() (const macstl::vec <unsigned short, 8>& lhs) const
+		INLINE unsigned short accumulator <minimum <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> > >::operator() (const macstl::vec <unsigned short, 8>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4069,7 +4345,7 @@ namespace stdext
 				return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
 			}
 
-		inline short accumulator <minimum <macstl::vec <short, 8>, macstl::vec <short, 8> > >::operator() (const macstl::vec <short, 8>& lhs) const
+		INLINE short accumulator <minimum <macstl::vec <short, 8>, macstl::vec <short, 8> > >::operator() (const macstl::vec <short, 8>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4078,7 +4354,7 @@ namespace stdext
 				return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
 			}
 
-		inline unsigned int accumulator <minimum <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> > >::operator() (const macstl::vec <unsigned int, 4>& lhs) const
+		INLINE unsigned int accumulator <minimum <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> > >::operator() (const macstl::vec <unsigned int, 4>& lhs) const
 			{
 				using namespace macstl;
 						
@@ -4086,7 +4362,7 @@ namespace stdext
 				return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
 			}
 
-		inline int accumulator <minimum <macstl::vec <int, 4>, macstl::vec <int, 4> > >::operator() (const macstl::vec <int, 4>& lhs) const
+		INLINE int accumulator <minimum <macstl::vec <int, 4>, macstl::vec <int, 4> > >::operator() (const macstl::vec <int, 4>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4094,7 +4370,7 @@ namespace stdext
 				return altivec::min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
 			}
 
-		inline float accumulator <minimum <macstl::vec <float, 4>, macstl::vec <float, 4> > >::operator() (const macstl::vec <float, 4>& lhs) const
+		INLINE float accumulator <minimum <macstl::vec <float, 4>, macstl::vec <float, 4> > >::operator() (const macstl::vec <float, 4>& lhs) const
 			{
 				using namespace macstl;
 						
@@ -4102,7 +4378,7 @@ namespace stdext
 				return min (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
 			}
 
-		template <typename T, std::size_t n> inline macstl::boolean <T>
+		template <typename T, std::size_t n> INLINE const macstl::boolean <T>
 			accumulator <minimum <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> > >::operator() (const macstl::vec <macstl::boolean <T>, n>& lhs) const
 			{
 				using namespace macstl;
@@ -4112,7 +4388,7 @@ namespace stdext
 		
 		// accumulator <plus>
 
-		inline unsigned char accumulator <plus <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> > >::operator() (const macstl::vec <unsigned char, 16>& lhs) const
+		INLINE unsigned char accumulator <plus <macstl::vec <unsigned char, 16>, macstl::vec <unsigned char, 16> > >::operator() (const macstl::vec <unsigned char, 16>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4120,7 +4396,7 @@ namespace stdext
 					data_cast <vec <int, 4> > (altivec::sum4s (lhs, vec <unsigned int, 4>::fill <0> ())), vec <int, 4>::fill <0> ())) [15];
 			}
 
-		inline signed char accumulator <plus <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> > >::operator() (const macstl::vec <signed char, 16>& lhs) const
+		INLINE signed char accumulator <plus <macstl::vec <signed char, 16>, macstl::vec <signed char, 16> > >::operator() (const macstl::vec <signed char, 16>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4128,7 +4404,7 @@ namespace stdext
 					altivec::sum4s (lhs, vec <int, 4>::fill <0> ()), vec <int, 4>::fill <0> ())) [15];
 			}
 
-		inline unsigned short accumulator <plus <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> > >::operator() (const macstl::vec <unsigned short, 8>& lhs) const
+		INLINE unsigned short accumulator <plus <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> > >::operator() (const macstl::vec <unsigned short, 8>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4137,7 +4413,7 @@ namespace stdext
 					altivec::sum4s (data_cast <vec <signed short, 8> > (lhs), zero), zero) [3];
 			}
 			
-		inline short accumulator <plus <macstl::vec <short, 8>, macstl::vec <short, 8> > >::operator() (const macstl::vec <short, 8>& lhs) const
+		INLINE short accumulator <plus <macstl::vec <short, 8>, macstl::vec <short, 8> > >::operator() (const macstl::vec <short, 8>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4147,7 +4423,7 @@ namespace stdext
 					vec <int, 4>::fill <0x40000U> ()) [3];
 			}
 
-		inline unsigned int accumulator <plus <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> > >::operator() (const macstl::vec <unsigned int, 4>& lhs) const
+		INLINE unsigned int accumulator <plus <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> > >::operator() (const macstl::vec <unsigned int, 4>& lhs) const
 			{
 				using namespace macstl;
 						
@@ -4155,7 +4431,7 @@ namespace stdext
 				return altivec::add (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
 			}
 
-		inline int accumulator <plus <macstl::vec <int, 4>, macstl::vec <int, 4> > >::operator() (const macstl::vec <int, 4>& lhs) const
+		INLINE int accumulator <plus <macstl::vec <int, 4>, macstl::vec <int, 4> > >::operator() (const macstl::vec <int, 4>& lhs) const
 			{
 				using namespace macstl;
 						
@@ -4163,7 +4439,7 @@ namespace stdext
 				return altivec::add (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
 			}
 			
-		inline float accumulator <plus <macstl::vec <float, 4>, macstl::vec <float, 4> > >::operator() (const macstl::vec <float, 4>& lhs) const
+		INLINE float accumulator <plus <macstl::vec <float, 4>, macstl::vec <float, 4> > >::operator() (const macstl::vec <float, 4>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4171,7 +4447,7 @@ namespace stdext
 				return altivec::add (result, altivec::slo (result, vec <unsigned char, 16>::fill <64> ())) [0];
 			}
 
-		template <typename T, std::size_t n> inline macstl::boolean <T>
+		template <typename T, std::size_t n> INLINE const macstl::boolean <T>
 			accumulator <plus <macstl::vec <macstl::boolean <T>, n>, macstl::vec <macstl::boolean <T>, n> > >::operator() (const macstl::vec <macstl::boolean <T>, n>& lhs) const
 			{
 				using namespace macstl;
@@ -4179,7 +4455,7 @@ namespace stdext
 				return result_type (altivec::any_ne (lhs, argument_type::template fill <false> ()));
 			}
 
-		inline stdext::complex <float> accumulator <plus <macstl::vec <stdext::complex <float>, 2>, macstl::vec <stdext::complex <float>, 2> > >::operator() (const macstl::vec <stdext::complex <float>, 2>& lhs) const
+		INLINE const stdext::complex <float> accumulator <plus <macstl::vec <stdext::complex <float>, 2>, macstl::vec <stdext::complex <float>, 2> > >::operator() (const macstl::vec <stdext::complex <float>, 2>& lhs) const
 			{
 				using namespace macstl;
 				

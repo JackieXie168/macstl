@@ -121,7 +121,8 @@ namespace stdext
 								{
 									for (std::size_t dim = indexer_.size (); dim; --dim)
 										{
-											if (++(indexer_ [dim - 1]) != lengther_ [dim - 1])
+											indexer_ [dim - 1] = indexer_ [dim - 1] + 1;
+											if (indexer_ [dim - 1] != lengther_ [dim - 1])
 												{
 													std::advance (subterm_iter_, strider_ [dim - 1]);
 													break;
@@ -147,7 +148,7 @@ namespace stdext
 										{
 											if (indexer_ [dim - 1])
 												{
-													--(indexer_ [dim - 1]);
+													indexer_ [dim - 1] = indexer_ [dim - 1] - 1;
 													std::advance (subterm_iter_, -strider_ [dim - 1]);
 													break;
 												}

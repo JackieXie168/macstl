@@ -49,32 +49,22 @@ namespace stdext
 				 /// @param	T		The element type.
 				 /// @param	Enable	If void, enables a particular specialization
 
-				template <typename T, std::size_t n, typename Enable = void> class statarray_base: public array_term <T>
+				template <typename T, std::size_t n, typename Enable = void> class statarray_base
 					{
 						protected:
-							statarray_base ()
-								{
-									init (array_, n);
-								}
-
-						private:
-							T array_ [n];
+							typename array_term <T>::value_data array_ [n];
 					};
 	
-				template <typename T, std::size_t n> class statarray_base <T, n, typename enable_if <exists <typename array_term <T>::chunk_type>::value>::type>:
-					public array_term <T>
+				template <typename T, std::size_t n> class statarray_base <T, n, typename enable_if <exists <typename array_term <T>::chunk_type>::value>::type>
 					{
-						public:
+						protected:
 							typedef typename array_term <T>::chunk_type chunk_type;
 							
-							statarray_base ()
+							union
 								{
-									// reserve enough bytes to put equivalent of n elements of T, but as aligned chunks
-									init (array_, n);
-								}
-								
-						private:
-							chunk_type array_ [(n + chunk_type::length - 1) / chunk_type::length];
+									typename chunk_type::data_type aligner_;
+									typename array_term <T>::value_data array_ [chunk_type::length * (n + chunk_type::length - 1) / chunk_type::length];
+								};
 
 					};
 				
@@ -96,52 +86,46 @@ namespace stdext
 		///
 		/// @header	#include <macstl/valarray.h>
 		
-		template <typename T, std::size_t n> class statarray: public impl::statarray_base <T, n>
+		template <typename T, std::size_t n> class statarray: private impl::statarray_base <T, n>, public impl::array_term <T>
 			{
 				public:
-					using impl::array_term <T>::value_type;
+					typedef impl::statarray_base <T, n> base;
 					
 					/// @name Constructors and Destructors
 					
 					//@{
 					
 					/// Constructs an array, each element zero.
-					statarray (): impl::statarray_base <T, n> ()
+					statarray (): impl::array_term <T> (base::array_, n)
 						{
 							impl::fill_array (*this, T ());
 						}
 						
 					/// Constructs an array, each element a copy of x.
-					statarray (const T& x): impl::statarray_base <T, n> ()
+					statarray (const T& x): impl::array_term <T> (base::array_, n)
 						{
 							impl::fill_array (*this, x);
 						}
 		
 					/// Constructs an array with copies of the first b elements from x.
-					statarray (const T* x): impl::statarray_base <T, n> ()
+					statarray (const T* x): impl::array_term <T> (base::array_, n)
 						{
 							impl::copy_array_ptr (*this, x);
 						}
 		
 					/// Constructs a copy of other array.
-					statarray (const statarray& other): impl::statarray_base <T, n> ()
+					statarray (const statarray& other): impl::array_term <T> (base::array_, n)
 						{
 							impl::copy_array (*this, other);
 						}
 		
 					/// Constructs a copy of other term.
-					template <typename Term> statarray (const impl::term <T, Term>& other):
-						impl::statarray_base <T, n> ()
+					template <typename T1, typename Term> statarray (const impl::term <T1, Term>& other, typename impl::enable_if <impl::is_convertible <T1, T>::value>::type* = NULL):
+						impl::array_term <T> (base::array_, n)
 						{
 							impl::copy_array (*this, other.that ());
 						}
-														
-					/// Destructs the array.
-					~statarray ()
-						{
-							impl::destroy_array (*this);
-						}
-						
+																				
 					//@}
 					
 					/// @name Assignments
@@ -157,7 +141,8 @@ namespace stdext
 						}
 					
 					/// Assigns the other term.
-					template <typename Expr> statarray& operator= (const impl::term <T, Expr>& other)
+					template <typename T1, typename Term>
+						typename impl::enable_if <impl::is_convertible <T1, T>::value, statarray&>::type operator= (const impl::term <T1, Term>& other)
 						{
 							impl::copy_array (*this, other.that ());
 							return *this;

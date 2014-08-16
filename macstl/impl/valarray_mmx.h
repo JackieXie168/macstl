@@ -54,30 +54,92 @@ namespace stdext
 				template <> struct chunk <long long>						{ typedef macstl::vec <long long, 2> type; };
 				template <> struct chunk <double>							{ typedef macstl::vec <double, 2> type; };
 				#endif
+			
+				// optimize v1 << k to use MMX SLL
 
-				template <typename T> class valarray_base <T, typename enable_if <exists <typename array_term <T>::chunk_type>::value>::type>:
-					public array_term <T>
+				template <typename LTerm, typename RTerm, typename Enable1, typename Enable3, typename Enable4>
+					class chunker <binary_term <LTerm, literal_term <RTerm>, shift_left>,
+						Enable1,	// since general shift left operations are not optimized (for now), we leave this blank
+						typename enable_if <
+							exists <typename macstl::mmx::sll_function <typename std::iterator_traits <typename LTerm::const_chunk_iterator>::value_type, int>::result_type>::value>::type,
+						Enable3,
+						Enable4>
 					{
 						public:
-							typedef array_term <T> base;
-							typedef typename array_term <T>::chunk_type chunk_type;
+							typedef binary_iterator <typename LTerm::const_chunk_iterator, literal_iterator <int>, macstl::mmx::sll_function> const_chunk_iterator;
 							
-							/** Constructs with space for @a n elements. */
-							valarray_base (std::size_t n)
+							const_chunk_iterator chunk_begin () const
 								{
-									// allocate enough bytes to put equivalent of n elements of T, but as aligned chunks
-									base::init (
-										reinterpret_cast <chunk_type*> (_mm_malloc (sizeof (chunk_type) * ((n + chunk_type::length - 1) / chunk_type::length),
-											sizeof (typename chunk <T>::type))),
-										n);
+									return const_chunk_iterator (
+										that ().left_subterm_.chunk_begin (),
+										literal_iterator <int> (that ().right_subterm_.literal_, 0));
 								}
-
-							/** Destructs entire array. */
-							~valarray_base ()
+								
+						private:
+							const binary_term <LTerm, literal_term <RTerm>, shift_left>& that () const
 								{
-									_mm_free (base::data_);
+									return static_cast <const binary_term <LTerm, literal_term <RTerm>, shift_left>&> (*this);
 								}
 					};
+
+				// optimize v1 >> k (unsigned) to use MMX SRL
+
+				template <typename LTerm, typename RTerm, typename Enable1, typename Enable3, typename Enable4>
+					class chunker <binary_term <LTerm, literal_term <RTerm>, shift_right>,
+						Enable1,	// since general shift right operations are not optimized (for now), we leave this blank
+						typename enable_if <
+							exists <typename macstl::mmx::sll_function <typename std::iterator_traits <typename LTerm::const_chunk_iterator>::value_type, int>::result_type>::value != 0 &&
+							is_unsigned <typename LTerm::value_type>::value != 0>::type,
+						Enable3,
+						Enable4>
+					{
+						public:
+							typedef binary_iterator <typename LTerm::const_chunk_iterator, literal_iterator <int>, macstl::mmx::srl_function> const_chunk_iterator;
+							
+							const_chunk_iterator chunk_begin () const
+								{
+									return const_chunk_iterator (
+										that ().left_subterm_.chunk_begin (),
+										literal_iterator <int> (that ().right_subterm_.literal_, 0));
+								}
+								
+						private:
+							const binary_term <LTerm, literal_term <RTerm>, shift_right>& that () const
+								{
+									return static_cast <const binary_term <LTerm, literal_term <RTerm>, shift_right>&> (*this);
+								}
+					};
+
+				// optimize v1 >> k (signed) to use MMX SRA
+
+				template <typename LTerm, typename RTerm, typename Enable1, typename Enable3, typename Enable4>
+					class chunker <binary_term <LTerm, literal_term <RTerm>, shift_right>,
+						Enable1,	// since general shift right operations are not optimized (for now), we leave this blank
+						typename enable_if <
+							exists <typename macstl::mmx::sll_function <typename std::iterator_traits <typename LTerm::const_chunk_iterator>::value_type, int>::result_type>::value != 0 &&
+							is_signed <typename LTerm::value_type>::value != 0>::type,
+						Enable3,
+						Enable4>
+					{
+						public:
+							typedef binary_iterator <typename LTerm::const_chunk_iterator, literal_iterator <int>, macstl::mmx::sra_function> const_chunk_iterator;
+							
+							const_chunk_iterator chunk_begin () const
+								{
+									return const_chunk_iterator (
+										that ().left_subterm_.chunk_begin (),
+										literal_iterator <int> (that ().right_subterm_.literal_, 0));
+								}
+								
+						private:
+							const binary_term <LTerm, literal_term <RTerm>, shift_right>& that () const
+								{
+									return static_cast <const binary_term <LTerm, literal_term <RTerm>, shift_right>&> (*this);
+								}
+					};
+
+					
 			}
+
 	}
 #endif

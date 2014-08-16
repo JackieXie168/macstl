@@ -104,6 +104,12 @@ namespace macstl
 
 					/// Fills a vector with the same constant element @a v.
 					template <init_type v> static vec fill ();
+
+					/// Loads a vector at @a offset from @a address.
+					static vec load (const value_data* address, std::ptrdiff_t offset);
+										
+					/// Stores this vector to @a offset from @a address.
+					vec store (value_data* address, std::ptrdiff_t offset);
 			
 			}
 		
@@ -116,8 +122,8 @@ namespace macstl
 namespace stdext
 	{
 		template <typename F> struct accumulator;
-		template <typename T> struct cshifter;
-		template <typename T> struct shifter;
+		template <typename T, typename I> struct cshifter;
+		template <typename T, typename I> struct shifter;
 	}
 	
 namespace macstl
@@ -162,6 +168,16 @@ namespace macstl
 						static const int value = 1;
 					};
 
+				template <typename T, typename Enable = void> struct data_type_of
+					{
+						typedef T type;
+					};
+
+				template <typename T> struct data_type_of <T, typename stdext::impl::enable_if <stdext::impl::exists <typename T::data_type>::value>::type>
+					{
+						typedef typename T::data_type type;
+					};
+
 			}
 					
 		/// @name I/O
@@ -171,7 +187,7 @@ namespace macstl
 		
 		/// Inserts a @a vector into an output stream @a os.
 		template <typename CharT, typename Traits, typename T, std::size_t n>
-			inline std::basic_ostream <CharT, Traits>& operator<< (std::basic_ostream <CharT, Traits>& os, const vec <T, n>& vector)
+			std::basic_ostream <CharT, Traits>& operator<< (std::basic_ostream <CharT, Traits>& os, const vec <T, n>& vector)
 			{
 				if (os.good ())
 					{
@@ -204,7 +220,7 @@ namespace macstl
 		
 		/// Extracts a @a vector from an input stream @a is.
 		template <typename CharT, typename Traits, typename T, std::size_t n>
-			inline std::basic_istream <CharT, Traits>& operator>> (std::basic_istream <CharT, Traits>& is, vec <T, n>& vector)
+			std::basic_istream <CharT, Traits>& operator>> (std::basic_istream <CharT, Traits>& is, vec <T, n>& vector)
 			{
 				if (is.good ())
 					{
@@ -231,7 +247,7 @@ namespace macstl
 
 		/// Inserts a vector element into an output stream @a os, through an element proxy.
 		template <typename CharT, typename Traits, typename T, std::size_t n>
-			inline std::basic_ostream <CharT, Traits>& operator<< (std::basic_ostream <CharT, Traits>& os, const typename vec <T, n>::reference& reference)
+			std::basic_ostream <CharT, Traits>& operator<< (std::basic_ostream <CharT, Traits>& os, const typename vec <T, n>::reference& reference)
 			{
 				return os << static_cast <typename vec <T, n>::value_type> (reference);
 			}
@@ -250,6 +266,8 @@ namespace stdext
 			}
 	}
 	
+#ifdef NO_VEC_COPY_CONSTRUCTOR
+
 #define DEFINE_VEC_CLASS_GUTS(VEC,VAL,BOO)														\
 																								\
 public:																							\
@@ -260,25 +278,65 @@ public:																							\
 	static const size_t length = sizeof (data_type) / sizeof (value_type);						\
 																								\
 	typedef vec <BOO, length> vec_boolean;														\
+	typedef impl::data_type_of <VAL >::type value_data;											\
 	typedef impl::vec_reference <vec> reference;												\
 																								\
-	vec (data_type data): data_ (data)	{ }														\
-	void operator= (data_type lhs)		{ data_ = lhs; }										\
-	data_type data () const				{ return data_; }										\
-	static std::size_t size ()			{ return length; }										\
+	INLINE vec (data_type data): data_ (data)	{ }												\
+	INLINE void operator= (data_type lhs)		{ data_ = lhs; }								\
+	INLINE data_type data () const				{ return data_; }								\
+	INLINE static std::size_t size ()			{ return length; }								\
 																								\
-	value_type operator[] (std::size_t i) const													\
+	INLINE value_type operator[] (std::size_t i) const											\
 		{																						\
 			return value_type (reinterpret_cast <const union_type&> (data_).val [i]);			\
 		}																						\
 																								\
-	reference operator[] (std::size_t i)														\
+	INLINE reference operator[] (std::size_t i)													\
 		{																						\
 			return reference (&data_, i);														\
 		}																						\
 																								\
 private:																						\
 	data_type data_;
+
+#else
+
+#define DEFINE_VEC_CLASS_GUTS(VEC,VAL,BOO)														\
+																								\
+public:																							\
+	typedef VEC data_type;																		\
+	typedef VAL value_type;																		\
+	typedef BOO boolean_type;																	\
+																								\
+	static const size_t length = sizeof (data_type) / sizeof (value_type);						\
+																								\
+	typedef vec <BOO, length> vec_boolean;														\
+	typedef impl::data_type_of <VAL >::type value_data;											\
+	typedef impl::vec_reference <vec> reference;												\
+																								\
+	INLINE vec (data_type data): data_ (data)	{ }												\
+	INLINE void operator= (data_type lhs)		{ data_ = lhs; }								\
+	INLINE data_type data () const				{ return data_; }								\
+	INLINE static std::size_t size ()			{ return length; }								\
+																								\
+	INLINE value_type operator[] (std::size_t i) const											\
+		{																						\
+			return value_type (reinterpret_cast <const union_type&> (data_).val [i]);			\
+		}																						\
+																								\
+	INLINE reference operator[] (std::size_t i)													\
+		{																						\
+			return reference (&data_, i);														\
+		}																						\
+																								\
+	INLINE vec (const vec& other): data_ (other.data_)											\
+		{																						\
+		}																						\
+																								\
+private:																						\
+	data_type data_;
+
+#endif
 	
 #define DEFINE_VEC_COMMON_UNARY_FUNCTION(FN,FTR)															\
 																											\
@@ -289,7 +347,7 @@ namespace stdext																							\
 																											\
 namespace macstl																							\
 	{																										\
-		template <typename T> inline const typename stdext::impl::enable_if <								\
+		template <typename T> INLINE const typename stdext::impl::enable_if <								\
 			impl::is_vec <typename impl::data_vec <T>::type>::value,										\
 			typename stdext::FTR <typename impl::data_vec <T>::type>::result_type>::type FN					\
 			(const T& lhs)																					\
@@ -310,7 +368,7 @@ namespace stdext																							\
 																											\
 namespace macstl																							\
 	{																										\
-		template <typename T1, typename T2> inline const typename stdext::impl::enable_if <					\
+		template <typename T1, typename T2> INLINE const typename stdext::impl::enable_if <					\
 			impl::is_vec <typename impl::data_vec <T1>::type>::value != 0									\
 			&& impl::is_vec <typename impl::data_vec <T2>::type>::value != 0,								\
 			typename stdext::FTR <																			\
@@ -336,7 +394,7 @@ namespace stdext																							\
 																											\
 namespace macstl																							\
 	{																										\
-		template <typename T1, typename T2, typename T3> inline const typename stdext::impl::enable_if <	\
+		template <typename T1, typename T2, typename T3> INLINE const typename stdext::impl::enable_if <	\
 			impl::is_vec <typename impl::data_vec <T1>::type>::value != 0									\
 			&& impl::is_vec <typename impl::data_vec <T2>::type>::value != 0								\
 			&& impl::is_vec <typename impl::data_vec <T3>::type>::value != 0,								\
@@ -349,7 +407,7 @@ namespace macstl																							\
 				return stdext::FTR <																		\
 					typename impl::data_vec <T1>::type,														\
 					typename impl::data_vec <T2>::type,														\
-					typename impl::data_vec <T3>::type> () (lhs, mhs, rhs);									\
+					typename impl::data_vec <T3>::type> () (lhs, mhs, rhs);								\
 			}																								\
 	}
 	
@@ -357,7 +415,7 @@ namespace macstl																							\
 																											\
 namespace macstl																							\
 	{																										\
-		template <typename T1, typename T2, std::size_t n> inline const typename stdext::impl::enable_if <	\
+		template <typename T1, typename T2, std::size_t n> INLINE const typename stdext::impl::enable_if <	\
 			impl::is_vec <typename impl::data_vec <T2>::type>::value != 0,									\
 			vec <T1, n>&>::type FN (vec <T1, n>& lhs, const T2& rhs)										\
 			{																								\
@@ -424,6 +482,7 @@ DEFINE_VEC_COMMON_UNARY_FUNCTION(acos,arc_cosine)
 DEFINE_VEC_COMMON_UNARY_FUNCTION(asin,arc_sine)
 DEFINE_VEC_COMMON_UNARY_FUNCTION(atan,arc_tangent)
 DEFINE_VEC_COMMON_BINARY_FUNCTION(atan2,arc_tangent2)
+DEFINE_VEC_COMMON_UNARY_FUNCTION(conj,conjugate)
 DEFINE_VEC_COMMON_UNARY_FUNCTION(cos,cosine)
 DEFINE_VEC_COMMON_UNARY_FUNCTION(cosh,hyperbolic_cosine)
 DEFINE_VEC_COMMON_UNARY_FUNCTION(exp,exponent)
@@ -467,7 +526,7 @@ DEFINE_VEC_COMMON_CASSIGN_FUNCTION(operator>>=,shift_right)
 template <typename T> struct FN##_function;																	\
 																									\
 template <typename T>																				\
-	inline const typename FN##_function <typename macstl::impl::data_vec <T>::type>::result_type FN (const T& lhs)				\
+	INLINE const typename FN##_function <typename macstl::impl::data_vec <T>::type>::result_type FN (const T& lhs)				\
 	{																								\
 		return FN##_function <typename macstl::impl::data_vec <T>::type> () (lhs);																	\
 	}			
@@ -477,7 +536,7 @@ template <typename T>																				\
 template <unsigned int i, typename T> struct FN##_function;													\
 																									\
 template <unsigned int i, typename T>																\
-	inline const typename FN##_function <i, typename macstl::impl::data_vec <T>::type>::result_type FN (const T& lhs)				\
+	INLINE const typename FN##_function <i, typename macstl::impl::data_vec <T>::type>::result_type FN (const T& lhs)				\
 	{																								\
 		return FN##_function <i, typename macstl::impl::data_vec <T>::type> () (lhs);																	\
 	}			
@@ -487,7 +546,7 @@ template <unsigned int i, typename T>																\
 template <unsigned int i, unsigned int j, unsigned int k, unsigned int l, typename T> struct FN##_function;													\
 																									\
 template <unsigned int i, unsigned int j, unsigned int k, unsigned int l, typename T>																\
-	inline const typename FN##_function <i, j, k, l, typename macstl::impl::data_vec <T>::type>::result_type FN (const T& lhs)				\
+	INLINE const typename FN##_function <i, j, k, l, typename macstl::impl::data_vec <T>::type>::result_type FN (const T& lhs)				\
 	{																								\
 		return FN##_function <i, j, k, l, typename macstl::impl::data_vec <T>::type> () (lhs);																	\
 	}			
@@ -496,7 +555,7 @@ template <unsigned int i, unsigned int j, unsigned int k, unsigned int l, typena
 																									\
 template <typename R, typename T> struct FN##_function;												\
 																									\
-template <typename R, typename T> inline const R FN (const T& lhs)									\
+template <typename R, typename T> INLINE const R FN (const T& lhs)									\
 	{																								\
 		return FN##_function <R, typename macstl::impl::data_vec <T>::type> () (lhs);				\
 	}			
@@ -506,7 +565,7 @@ template <typename R, typename T> inline const R FN (const T& lhs)									\
 template <typename T1, typename T2 = T1> struct FN##_function;												\
 																									\
 template <typename T1, typename T2>																	\
-	inline const typename FN##_function <typename macstl::impl::data_vec <T1>::type, typename macstl::impl::data_vec <T2>::type>::result_type FN (const T1& lhs, const T2& rhs)						\
+	INLINE const typename FN##_function <typename macstl::impl::data_vec <T1>::type, typename macstl::impl::data_vec <T2>::type>::result_type FN (const T1& lhs, const T2& rhs)						\
 	{																								\
 		return FN##_function <typename macstl::impl::data_vec <T1>::type, typename macstl::impl::data_vec <T2>::type> () (lhs, rhs);															\
 	}
@@ -516,7 +575,7 @@ template <typename T1, typename T2>																	\
 template <unsigned int i, typename T1, typename T2 = T1> struct FN##_function;								\
 																									\
 template <unsigned int i, typename T1, typename T2>													\
-	inline const typename FN##_function <i, typename macstl::impl::data_vec <T1>::type, typename macstl::impl::data_vec <T2>::type>::result_type FN (const T1& lhs, const T2& rhs)					\
+	INLINE const typename FN##_function <i, typename macstl::impl::data_vec <T1>::type, typename macstl::impl::data_vec <T2>::type>::result_type FN (const T1& lhs, const T2& rhs)					\
 	{																								\
 		return FN##_function <i, typename macstl::impl::data_vec <T1>::type, typename macstl::impl::data_vec <T2>::type> () (lhs, rhs);														\
 	}
@@ -526,7 +585,7 @@ template <unsigned int i, typename T1, typename T2>													\
 template <unsigned int i, unsigned int j, typename T1, typename T2 = T1> struct FN##_function;								\
 																									\
 template <unsigned int i, unsigned int j, typename T1, typename T2>													\
-	inline const typename FN##_function <i, j, typename macstl::impl::data_vec <T1>::type, typename macstl::impl::data_vec <T2>::type>::result_type FN (const T1& lhs, const T2& rhs)					\
+	INLINE const typename FN##_function <i, j, typename macstl::impl::data_vec <T1>::type, typename macstl::impl::data_vec <T2>::type>::result_type FN (const T1& lhs, const T2& rhs)					\
 	{																								\
 		return FN##_function <i, j, typename macstl::impl::data_vec <T1>::type, typename macstl::impl::data_vec <T2>::type> () (lhs, rhs);														\
 	}
@@ -536,7 +595,7 @@ template <unsigned int i, unsigned int j, typename T1, typename T2>													
 template <unsigned int i, unsigned int j, unsigned int k, unsigned int l, typename T1, typename T2 = T1> struct FN##_function;								\
 																									\
 template <unsigned int i, unsigned int j, unsigned int k, unsigned int l, typename T1, typename T2>													\
-	inline const typename FN##_function <i, j, k, l, typename macstl::impl::data_vec <T1>::type, typename macstl::impl::data_vec <T2>::type>::result_type FN (const T1& lhs, const T2& rhs)					\
+	INLINE const typename FN##_function <i, j, k, l, typename macstl::impl::data_vec <T1>::type, typename macstl::impl::data_vec <T2>::type>::result_type FN (const T1& lhs, const T2& rhs)					\
 	{																								\
 		return FN##_function <i, j, k, l, typename macstl::impl::data_vec <T1>::type, typename macstl::impl::data_vec <T2>::type> () (lhs, rhs);														\
 	}
@@ -545,7 +604,7 @@ template <unsigned int i, unsigned int j, unsigned int k, unsigned int l, typena
 																									\
 template <typename R, typename T1, typename T2 = T1> struct FN##_function;							\
 																									\
-template <typename R, typename T1, typename T2> inline const R FN (const T1& lhs, const T2& rhs)					\
+template <typename R, typename T1, typename T2> INLINE const R FN (const T1& lhs, const T2& rhs)					\
 	{																								\
 		return FN##_function <R, typename macstl::impl::data_vec <T1>::type, typename macstl::impl::data_vec <T2>::type> () (lhs, rhs);			\
 	}			
@@ -555,7 +614,7 @@ template <typename R, typename T1, typename T2> inline const R FN (const T1& lhs
 template <typename T1, typename T2 = T1, typename T3 = T1> struct FN##_function;								\
 																									\
 template <typename T1, typename T2, typename T3>													\
-	inline const typename FN##_function <typename macstl::impl::data_vec <T1>::type, typename macstl::impl::data_vec <T2>::type, typename macstl::impl::data_vec <T3>::type>::result_type FN (const T1& lhs, const T2& mhs, const T3& rhs)	\
+	INLINE const typename FN##_function <typename macstl::impl::data_vec <T1>::type, typename macstl::impl::data_vec <T2>::type, typename macstl::impl::data_vec <T3>::type>::result_type FN (const T1& lhs, const T2& mhs, const T3& rhs)	\
 	{																								\
 		return FN##_function <typename macstl::impl::data_vec <T1>::type, typename macstl::impl::data_vec <T2>::type, typename macstl::impl::data_vec <T3>::type> () (lhs, mhs, rhs);													\
 	}

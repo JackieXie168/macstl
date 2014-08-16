@@ -49,52 +49,58 @@ namespace stdext
 							typedef const value_type* pointer;
 							typedef value_type reference;
 							
-							literal_iterator (const value_type& literal, difference_type index): literal_ (literal), index_ (index)
+							INLINE literal_iterator (const value_type& literal, std::ptrdiff_t index): literal_ (literal), index_ (index)
 								{
 								}
 								
-							value_type operator* () const					{ return literal_; }
-							value_type operator[] (std::ptrdiff_t) const	{ return literal_; }
-
-							literal_iterator& operator++ ()						{ ++index_; return *this; }
-							literal_iterator operator++ (int)					{ return literal_iterator (literal_, index_++); }
-							literal_iterator& operator+= (difference_type n)	{ index_ += n; return *this; }
-		
-							literal_iterator& operator-- ()						{ --index_; return *this; }
-							literal_iterator operator-- (int)					{ return literal_iterator (literal_, index_--); }
-							literal_iterator& operator-= (difference_type n)	{ index_ -= n; return *this; }
-								
-							friend literal_iterator operator+ (const literal_iterator& left, difference_type right)
+							// this looks and smells like a trivial copy constructor, but it actually inhibits the "vectorized memcpy disabled due to use of -faltivec without -maltivec"
+							// pessimization, which otherwise would have created a non-inlineable memcpy for the trivial copy constructor...
+							INLINE literal_iterator (const literal_iterator& other): literal_ (other.literal_)
 								{
-									return literal_iterator (left.literal_, right);
-								}
-		
-							friend literal_iterator operator+ (difference_type left, const literal_iterator& right)
-								{
-									return literal_iterator (right.literal_, left + right.index_);
-								}
-		
-							friend literal_iterator operator- (const literal_iterator& left, difference_type right)
-								{
-									return literal_iterator (left.literal_, left.index_ - right);
 								}
 							
-							friend difference_type operator- (const literal_iterator& left, const literal_iterator& right)
+							INLINE const value_type& operator* () const					{ return literal_; }
+							INLINE const value_type& operator[] (std::ptrdiff_t) const	{ return literal_; }
+
+							INLINE literal_iterator& operator++ ()						{ ++index_; return *this; }
+							INLINE literal_iterator operator++ (int)					{ return literal_iterator (literal_, index_++); }
+							INLINE literal_iterator& operator+= (difference_type n)		{ index_ += n; return *this; }
+		
+							INLINE literal_iterator& operator-- ()						{ --index_; return *this; }
+							INLINE literal_iterator operator-- (int)					{ return literal_iterator (literal_, index_--); }
+							INLINE literal_iterator& operator-= (difference_type n)		{ index_ -= n; return *this; }
+								
+							friend INLINE literal_iterator operator+ (const literal_iterator& left, difference_type right)
+								{
+									return literal_iterator (left) += right;
+								}
+		
+							friend INLINE literal_iterator operator+ (difference_type left, const literal_iterator& right)
+								{
+									return literal_iterator (right) += left;
+								}
+		
+							friend INLINE literal_iterator operator- (const literal_iterator& left, difference_type right)
+								{
+									return literal_iterator (left) -= right;
+								}
+							
+							friend INLINE difference_type operator- (const literal_iterator& left, const literal_iterator& right)
 								{
 									return left.index_ - right.index_;
 								}
 								
-							friend bool operator== (const literal_iterator& left, const literal_iterator& right)
+							friend INLINE bool operator== (const literal_iterator& left, const literal_iterator& right)
 								{
 									return left.index_ == right.index_;
 								}
 								
-							friend bool operator!= (const literal_iterator& left, const literal_iterator& right)
+							friend INLINE bool operator!= (const literal_iterator& left, const literal_iterator& right)
 								{
 									return left.index_ != right.index_;
 								}
 		
-							friend bool operator< (const literal_iterator& left, const literal_iterator& right)
+							friend INLINE bool operator< (const literal_iterator& left, const literal_iterator& right)
 								{
 									return left.index_ < right.index_;
 								}
@@ -103,74 +109,7 @@ namespace stdext
 							const value_type literal_;
 							std::ptrdiff_t index_;
 					};
-/*
-				template <typename T> class literal_iterator
-					{
-						public:
-							typedef std::random_access_iterator_tag iterator_category;
-							typedef T value_type; 
-							typedef std::ptrdiff_t difference_type;
-							typedef const value_type* pointer;
-							typedef value_type reference;
-							
-							literal_iterator (const value_type& literal): literal_ (literal)
-								{
-								}
-							literal_iterator (const value_type& literal, difference_type): literal_ (literal)
-								{
-								}
-								
-							value_type operator* () const					{ return literal_; }
-							value_type operator[] (std::ptrdiff_t) const	{ return literal_; }
-
-							literal_iterator& operator++ ()						{ return *this; }
-							literal_iterator operator++ (int)					{ return literal_iterator (literal_); }
-							literal_iterator& operator+= (difference_type n)	{ return *this; }
-		
-							literal_iterator& operator-- ()						{ return *this; }
-							literal_iterator operator-- (int)					{ return literal_iterator (literal_); }
-							literal_iterator& operator-= (difference_type n)	{ return *this; }
-								
-							friend literal_iterator operator+ (const literal_iterator& left, difference_type right)
-								{
-									return literal_iterator (left.literal_);
-								}
-		
-							friend literal_iterator operator+ (difference_type left, const literal_iterator& right)
-								{
-									return literal_iterator (right.literal_);
-								}
-		
-							friend literal_iterator operator- (const literal_iterator& left, difference_type right)
-								{
-									return literal_iterator (left.literal_);
-								}
-							
-							friend difference_type operator- (const literal_iterator& left, const literal_iterator& right)
-								{
-									return 0;
-								}
-								
-							friend bool operator== (const literal_iterator& left, const literal_iterator& right)
-								{
-									return 0;
-								}
-								
-							friend bool operator!= (const literal_iterator& left, const literal_iterator& right)
-								{
-									return 0;
-								}
-		
-							friend bool operator< (const literal_iterator& left, const literal_iterator& right)
-								{
-									return 0;
-								}
-								
-						protected:
-							const value_type literal_;
-							// std::ptrdiff_t index_;
-					};
-	*/			
+					
 				template <typename Term, typename Enable2, typename Enable3, typename Enable4> class chunker <literal_term <Term>,
 					typename enable_if <exists <typename Term::const_chunk_iterator>::value>::type,
 					Enable2,
@@ -255,59 +194,59 @@ namespace stdext
 							typedef const value_type* pointer;
 							typedef value_type reference;
 							
-							unary_iterator (const TermIt& subterm_iter): subterm_iter_ (subterm_iter)
+							INLINE unary_iterator (const TermIt& subterm_iter): subterm_iter_ (subterm_iter)
 								{
 								}
 								
-							value_type operator* () const
+							INLINE const value_type operator* () const
 								{
 									return operation () (*subterm_iter_);
 								}
 								
-							value_type operator[] (typename std::iterator_traits <TermIt>::difference_type n) const
+							INLINE const value_type operator[] (typename std::iterator_traits <TermIt>::difference_type n) const
 								{
 									return operation () (subterm_iter_ [n]);
 								}
 								
-							unary_iterator& operator++ ()					{ ++subterm_iter_; return *this; }
-							unary_iterator operator++ (int)					{ return unary_iterator (subterm_iter_++); }
-							unary_iterator& operator+= (difference_type n)	{ subterm_iter_ += n; return *this; }
+							INLINE unary_iterator& operator++ ()					{ ++subterm_iter_; return *this; }
+							INLINE unary_iterator operator++ (int)					{ return unary_iterator (subterm_iter_++); }
+							INLINE unary_iterator& operator+= (difference_type n)	{ subterm_iter_ += n; return *this; }
 		
-							unary_iterator& operator-- ()					{ --subterm_iter_; return *this; }
-							unary_iterator operator-- (int)					{ return unary_iterator (subterm_iter_--); }
-							unary_iterator& operator-= (difference_type n)	{ subterm_iter_ -= n; return *this; }
+							INLINE unary_iterator& operator-- ()					{ --subterm_iter_; return *this; }
+							INLINE unary_iterator operator-- (int)					{ return unary_iterator (subterm_iter_--); }
+							INLINE unary_iterator& operator-= (difference_type n)	{ subterm_iter_ -= n; return *this; }
 								
-							friend unary_iterator operator+ (const unary_iterator& left, difference_type right)
+							friend INLINE unary_iterator operator+ (const unary_iterator& left, difference_type right)
 								{
-									return unary_iterator (left.subterm_iter_ + right);
+									return unary_iterator (left) += right;
 								}
 		
-							friend unary_iterator operator+ (difference_type left, const unary_iterator& right)
+							friend INLINE unary_iterator operator+ (difference_type left, const unary_iterator& right)
 								{
-									return unary_iterator (left + right.subterm_iter_);
+									return unary_iterator (right) += left;
 								}
 		
-							friend unary_iterator operator- (const unary_iterator& left, difference_type right)
+							friend INLINE unary_iterator operator- (const unary_iterator& left, difference_type right)
 								{
-									return unary_iterator (left.subterm_iter_ - right);
+									return unary_iterator (left) -= right;
 								}
 							
-							friend difference_type operator- (const unary_iterator& left, const unary_iterator& right)
+							friend INLINE difference_type operator- (const unary_iterator& left, const unary_iterator& right)
 								{
 									return left.subterm_iter_ - right.subterm_iter_;
 								}
 								
-							friend bool operator== (const unary_iterator& left, const unary_iterator& right)
+							friend INLINE bool operator== (const unary_iterator& left, const unary_iterator& right)
 								{
 									return left.subterm_iter_ == right.subterm_iter_;
 								}
 								
-							friend bool operator!= (const unary_iterator& left, const unary_iterator& right)
+							friend INLINE bool operator!= (const unary_iterator& left, const unary_iterator& right)
 								{
 									return left.subterm_iter_ != right.subterm_iter_;
 								}
 		
-							friend bool operator< (const unary_iterator& left, const unary_iterator& right)
+							friend INLINE bool operator< (const unary_iterator& left, const unary_iterator& right)
 								{
 									return left.subterm_iter_ < right.subterm_iter_;
 								}
@@ -366,7 +305,7 @@ namespace stdext
 								}
 								
 							/// Gets the element at index n.
-							value_type operator[] (std::size_t n) const	{ return operation () (subterm_ [n]); }
+							const value_type operator[] (std::size_t n) const	{ return operation () (subterm_ [n]); }
 							
 							/// Gets the number of elements.
 							std::size_t size () const					{ return subterm_.size (); }
@@ -397,12 +336,12 @@ namespace stdext
 								{
 								}
 								
-							value_type operator* () const
+							const value_type operator* () const
 								{
 									return func_ (*subterm_iter_);
 								}
 								
-							value_type operator[] (difference_type n) const
+							const value_type operator[] (difference_type n) const
 								{
 									return func_ (subterm_iter_ [n]);
 								}
@@ -417,17 +356,17 @@ namespace stdext
 								
 							friend apply_iterator operator+ (const apply_iterator& left, difference_type right)
 								{
-									return apply_iterator (left.subterm_iter_ + right, left.func_);
+									return apply_iterator (left) += right;
 								}
 		
 							friend apply_iterator operator+ (difference_type left, const apply_iterator& right)
 								{
-									return apply_iterator (left + right.subterm_iter_, right.func_);
+									return apply_iterator (right) += left;
 								}
 		
 							friend apply_iterator operator- (const apply_iterator& left, difference_type right)
 								{
-									return apply_iterator (left.subterm_iter_ - right, left.func_);
+									return apply_iterator (left) -= right;
 								}
 							
 							friend difference_type operator- (const apply_iterator& left, const apply_iterator& right)
@@ -476,7 +415,7 @@ namespace stdext
 							typedef value_type reference;
 							
 							/// Gets the element at index n.
-							value_type operator[] (std::size_t n) const	{ return func_ (subterm_ [n]); }
+							const value_type operator[] (std::size_t n) const	{ return func_ (subterm_ [n]); }
 							
 							/// Gets the number of elements.
 							std::size_t size () const					{ return subterm_.size (); }
@@ -543,60 +482,60 @@ namespace stdext
 							typedef const value_type* pointer;
 							typedef value_type reference;
 							
-							binary_iterator (const LTermIt& left_subterm_iter, const RTermIt& right_subterm_iter):
+							INLINE binary_iterator (const LTermIt& left_subterm_iter, const RTermIt& right_subterm_iter):
 								left_subterm_iter_ (left_subterm_iter), right_subterm_iter_ (right_subterm_iter)
 								{
 								}
 								
-							value_type operator* () const
+							INLINE const value_type operator* () const
 								{
 									return operation () (*left_subterm_iter_, *right_subterm_iter_);
 								}
 								
-							value_type operator[] (typename std::iterator_traits <LTermIt>::difference_type n) const
+							INLINE const value_type operator[] (typename std::iterator_traits <LTermIt>::difference_type n) const
 								{
 									return operation () (left_subterm_iter_ [n], right_subterm_iter_ [n]);
 								}
 								
-							binary_iterator& operator++ ()					{ ++left_subterm_iter_; ++right_subterm_iter_; return *this; }
-							binary_iterator operator++ (int)				{ return binary_iterator (left_subterm_iter_++, right_subterm_iter_++); }
-							binary_iterator& operator+= (difference_type n)	{ left_subterm_iter_ += n; right_subterm_iter_ += n; return *this; }
+							INLINE binary_iterator& operator++ ()					{ ++left_subterm_iter_; ++right_subterm_iter_; return *this; }
+							INLINE binary_iterator operator++ (int)					{ return binary_iterator (left_subterm_iter_++, right_subterm_iter_++); }
+							INLINE binary_iterator& operator+= (difference_type n)	{ left_subterm_iter_ += n; right_subterm_iter_ += n; return *this; }
 		
-							binary_iterator& operator-- ()					{ --left_subterm_iter_; --right_subterm_iter_; return *this; }
-							binary_iterator operator-- (int)				{ return binary_iterator (left_subterm_iter_--, right_subterm_iter_--); }
-							binary_iterator& operator-= (difference_type n)	{ left_subterm_iter_ -= n; right_subterm_iter_ -= n; return *this; }
+							INLINE binary_iterator& operator-- ()					{ --left_subterm_iter_; --right_subterm_iter_; return *this; }
+							INLINE binary_iterator operator-- (int)					{ return binary_iterator (left_subterm_iter_--, right_subterm_iter_--); }
+							INLINE binary_iterator& operator-= (difference_type n)	{ left_subterm_iter_ -= n; right_subterm_iter_ -= n; return *this; }
 								
-							friend binary_iterator operator+ (const binary_iterator& left, difference_type right)
+							friend INLINE binary_iterator operator+ (const binary_iterator& left, difference_type right)
 								{
-									return binary_iterator (left.left_subterm_iter_ + right, left.right_subterm_iter_ + right);
+									return binary_iterator (left) += right;
 								}
 
-							friend binary_iterator operator+ (difference_type left, const binary_iterator& right)
+							friend INLINE binary_iterator operator+ (difference_type left, const binary_iterator& right)
 								{
-									return binary_iterator (left + right.left_subterm_iter_, left + right.right_subterm_iter_);
+									return binary_iterator (right) += left;
 								}
 
-							friend binary_iterator operator- (const binary_iterator& left, difference_type right)
+							friend INLINE binary_iterator operator- (const binary_iterator& left, difference_type right)
 								{
-									return binary_iterator (left.left_subterm_iter_ - right, left.right_subterm_iter_ - right);
+									return binary_iterator (left) -= right;
 								}
 							
-							friend difference_type operator- (const binary_iterator& left, const binary_iterator& right)
+							friend INLINE difference_type operator- (const binary_iterator& left, const binary_iterator& right)
 								{
 									return left.left_subterm_iter_ - right.left_subterm_iter_;
 								}
 								
-							friend bool operator== (const binary_iterator& left, const binary_iterator& right)
+							friend INLINE bool operator== (const binary_iterator& left, const binary_iterator& right)
 								{
 									return left.left_subterm_iter_ == right.left_subterm_iter_;
 								}
 								
-							friend bool operator!= (const binary_iterator& left, const binary_iterator& right)
+							friend INLINE bool operator!= (const binary_iterator& left, const binary_iterator& right)
 								{
 									return left.left_subterm_iter_ != right.left_subterm_iter_;
 								}
 
-							friend bool operator< (const binary_iterator& left, const binary_iterator& right)
+							friend INLINE bool operator< (const binary_iterator& left, const binary_iterator& right)
 								{
 									return left.left_subterm_iter_ < right.left_subterm_iter_;
 								}
@@ -669,7 +608,7 @@ namespace stdext
 								}
 								
 							// Gets the element at index @a n.
-							value_type operator[] (std::size_t index) const	{ return operation () (left_subterm_ [index], right_subterm_ [index]); }
+							const value_type operator[] (std::size_t index) const	{ return operation () (left_subterm_ [index], right_subterm_ [index]); }
 							
 							/// Gets the number of elements.
 							std::size_t size () const						{ return left_subterm_.size (); }
@@ -705,60 +644,60 @@ namespace stdext
 							typedef const value_type* pointer;
 							typedef value_type reference;
 							
-							ternary_iterator (const LTermIt& left_subterm_iter, const MTermIt& mid_subterm_iter, const RTermIt& right_subterm_iter):
+							INLINE ternary_iterator (const LTermIt& left_subterm_iter, const MTermIt& mid_subterm_iter, const RTermIt& right_subterm_iter):
 								left_subterm_iter_ (left_subterm_iter), mid_subterm_iter_ (mid_subterm_iter), right_subterm_iter_ (right_subterm_iter)
 								{
 								}
 								
-							value_type operator* () const
+							INLINE const value_type operator* () const
 								{
 									return operation () (*left_subterm_iter_, *mid_subterm_iter_, *right_subterm_iter_);
 								}
 								
-							value_type operator[] (typename std::iterator_traits <LTermIt>::difference_type n) const
+							INLINE const value_type operator[] (typename std::iterator_traits <LTermIt>::difference_type n) const
 								{
 									return operation () (left_subterm_iter_ [n], mid_subterm_iter_ [n], right_subterm_iter_ [n]);
 								}
 								
-							ternary_iterator& operator++ ()						{ ++left_subterm_iter_; ++mid_subterm_iter_; ++right_subterm_iter_; return *this; }
-							ternary_iterator operator++ (int)					{ return ternary_iterator (left_subterm_iter_++, mid_subterm_iter_++, right_subterm_iter_++); }
-							ternary_iterator& operator+= (difference_type n)	{ left_subterm_iter_ += n; mid_subterm_iter_ += n; right_subterm_iter_ += n; return *this; }
+							INLINE ternary_iterator& operator++ ()					{ ++left_subterm_iter_; ++mid_subterm_iter_; ++right_subterm_iter_; return *this; }
+							INLINE ternary_iterator operator++ (int)				{ return ternary_iterator (left_subterm_iter_++, mid_subterm_iter_++, right_subterm_iter_++); }
+							INLINE ternary_iterator& operator+= (difference_type n)	{ left_subterm_iter_ += n; mid_subterm_iter_ += n; right_subterm_iter_ += n; return *this; }
 		
-							ternary_iterator& operator-- ()						{ --left_subterm_iter_; --mid_subterm_iter_; --right_subterm_iter_; return *this; }
-							ternary_iterator operator-- (int)					{ return ternary_iterator (left_subterm_iter_--, mid_subterm_iter_--, right_subterm_iter_--); }
-							ternary_iterator& operator-= (difference_type n)	{ left_subterm_iter_ -= n; mid_subterm_iter_ -= n; right_subterm_iter_ -= n; return *this; }
+							INLINE ternary_iterator& operator-- ()					{ --left_subterm_iter_; --mid_subterm_iter_; --right_subterm_iter_; return *this; }
+							INLINE ternary_iterator operator-- (int)				{ return ternary_iterator (left_subterm_iter_--, mid_subterm_iter_--, right_subterm_iter_--); }
+							INLINE ternary_iterator& operator-= (difference_type n)	{ left_subterm_iter_ -= n; mid_subterm_iter_ -= n; right_subterm_iter_ -= n; return *this; }
 								
-							friend ternary_iterator operator+ (const ternary_iterator& left, difference_type right)
+							friend INLINE ternary_iterator operator+ (const ternary_iterator& left, difference_type right)
 								{
-									return ternary_iterator (left.left_subterm_iter_ + right, left.mid_subterm_iter_ + right, left.right_subterm_iter_ + right);
+									return ternary_iterator (left) += right;
 								}
 
-							friend ternary_iterator operator+ (difference_type left, const ternary_iterator& right)
+							friend INLINE ternary_iterator operator+ (difference_type left, const ternary_iterator& right)
 								{
-									return ternary_iterator (left + right.left_subterm_iter_, left + right.mid_subterm_iter_, left + right.right_subterm_iter_);
+									return ternary_iterator (right) += left;
 								}
 
-							friend ternary_iterator operator- (const ternary_iterator& left, difference_type right)
+							friend INLINE ternary_iterator operator- (const ternary_iterator& left, difference_type right)
 								{
-									return ternary_iterator (left.left_subterm_iter_ - right, left.mid_subterm_iter_ - right, left.right_subterm_iter_ - right);
+									return ternary_iterator (left) -= right;
 								}
 							
-							friend difference_type operator- (const ternary_iterator& left, const ternary_iterator& right)
+							friend INLINE difference_type operator- (const ternary_iterator& left, const ternary_iterator& right)
 								{
 									return left.left_subterm_iter_ - right.left_subterm_iter_;
 								}
 								
-							friend bool operator== (const ternary_iterator& left, const ternary_iterator& right)
+							friend INLINE bool operator== (const ternary_iterator& left, const ternary_iterator& right)
 								{
 									return left.left_subterm_iter_ == right.left_subterm_iter_;
 								}
 								
-							friend bool operator!= (const ternary_iterator& left, const ternary_iterator& right)
+							friend INLINE bool operator!= (const ternary_iterator& left, const ternary_iterator& right)
 								{
 									return left.left_subterm_iter_ != right.left_subterm_iter_;
 								}
 
-							friend bool operator< (const ternary_iterator& left, const ternary_iterator& right)
+							friend INLINE bool operator< (const ternary_iterator& left, const ternary_iterator& right)
 								{
 									return left.left_subterm_iter_ < right.left_subterm_iter_;
 								}

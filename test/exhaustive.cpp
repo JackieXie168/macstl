@@ -63,7 +63,7 @@ int main (int, const char *)
 		std::cout << "Testing " << NAME(OPERATION) << " with " << NAME(TYPE) << ".\n\n";
 		
 		// use more accurate Java mode for testing
-		vec_mtvscr ((vector unsigned char) (0));
+		altivec::mtvscr (vec <unsigned char, 16>::fill <0> ());
 
 		unsigned long long count = 0;
 		unsigned int threshold = 0;

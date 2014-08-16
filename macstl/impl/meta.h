@@ -88,7 +88,10 @@ namespace stdext
 
 				template <typename T> char (*has_second_argument_type (typename T::second_argument_type*)) [yes];
 				template <typename T> char (*has_second_argument_type (...)) [no];
-								
+				
+				template <typename T> char (*will_convert (T)) [yes];
+				template <typename T> char (*will_convert (...)) [no];
+
 				template <typename T> struct is_unary_function
 					{
 						enum { value =
@@ -102,6 +105,12 @@ namespace stdext
 							sizeof (*has_first_argument_type <T> (NULL)) == yes
 							&& sizeof (*has_second_argument_type <T> (NULL)) == yes
 							&& sizeof (*has_result_type <T> (NULL)) == yes };
+					};
+
+				template <typename T1, typename T2> struct is_convertible
+					{
+						enum { value =
+							sizeof (*will_convert <T2> (*(T1*) NULL)) == yes  };
 					};
 					
 				// type traits
@@ -161,11 +170,44 @@ namespace stdext
 				template <> struct is_integral <long long>			{ static const int value = 1; };
 				template <> struct is_integral <unsigned long>		{ static const int value = 1; };
 				template <> struct is_integral <long>				{ static const int value = 1; };
-		
+				
+				template <typename T> struct is_const				{ static const int value = 0; };
+				template <typename T> struct is_const <const T>		{ static const int value = 1; };
 
+				template <typename T> struct is_signed
+					{
+						static const int value = 0;
+					};
+					
+				template <> struct is_signed <signed char>		{ static const int value = 1; };
+				template <> struct is_signed <short>			{ static const int value = 1; };
+				template <> struct is_signed <int>				{ static const int value = 1; };
+				template <> struct is_signed <long long>		{ static const int value = 1; };
+				template <> struct is_signed <long>				{ static const int value = 1; };
+
+				template <typename T> struct is_unsigned
+					{
+						static const int value = 0;
+					};
+					
+				template <> struct is_unsigned <unsigned char>			{ static const int value = 1; };
+				template <> struct is_unsigned <unsigned short>			{ static const int value = 1; };
+				template <> struct is_unsigned <unsigned int>			{ static const int value = 1; };
+				template <> struct is_unsigned <unsigned long long>		{ static const int value = 1; };
+				template <> struct is_unsigned <unsigned long>			{ static const int value = 1; };
+				
+				// if_c
+				
+				template <bool c, typename T1, typename T2> struct if_c
+					{
+						typedef T2 type;
+					};
+				
+				template <typename T1, typename T2> struct if_c <true, T1, T2>
+					{
+						typedef T1 type;
+					};		
 			}
-	
-	
 	}
 	
 #endif

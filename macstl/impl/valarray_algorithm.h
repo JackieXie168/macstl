@@ -39,8 +39,6 @@ namespace stdext
 	{
 		// forward declared from vec.h -- only used if algorithms instantiated with vec <T, n>
 		template <typename F> struct accumulator;
-		template <typename T> struct shifter;
-		template <typename T> struct cshifter;
 
 		namespace impl
 			{
@@ -85,7 +83,11 @@ namespace stdext
 					};
 					
 				template <template <typename, typename> class Func, typename Expr, typename Enable2> struct accumulate_array_dispatch <Func, Expr,
-					typename enable_if <exists <typename Expr::const_chunk_iterator>::value>::type, Enable2>
+					typename enable_if <
+						exists <typename stdext::accumulator <Func <
+							typename std::iterator_traits <typename Expr::const_chunk_iterator>::value_type,
+							typename std::iterator_traits <typename Expr::const_chunk_iterator>::value_type> >::result_type>::value>::type,
+					Enable2>
 					{
 						static typename Expr::value_type tail (const Expr& expr, typename Expr::value_type partial)
 							{
@@ -105,7 +107,7 @@ namespace stdext
 								typedef typename std::iterator_traits <typename Expr::const_chunk_iterator>::value_type chunk_type;
 								
 								typename Expr::const_chunk_iterator iter = expr.chunk_begin ();
-								chunk_type init = *iter;
+								const chunk_type init = *iter;
 								++iter;
 								
 								typedef Func <chunk_type, chunk_type> function;
@@ -184,6 +186,7 @@ namespace stdext
 					{
 						static void tail (Expr1& expr1, const Expr2& expr2)
 							{
+								
 								std::size_t size = expr1.size ();
 								std::size_t tailed = size % std::iterator_traits <typename Expr1::chunk_iterator>::value_type::length;
 				
@@ -194,7 +197,9 @@ namespace stdext
 								std::advance (iter2, size - tailed);
 								
 								// only copy the part at the tail
+								
 								stdext::copy_n (iter2, tailed, iter1);
+								
 							}
 							
 						static void call (Expr1& expr1, const Expr2& expr2)

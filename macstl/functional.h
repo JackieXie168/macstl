@@ -39,11 +39,16 @@
 #include <functional>
 #include <limits>
 
-#if defined(__PPC__) || defined(__PPC64__)
-#include <ppc_intrinsics.h>
-#endif
-
 #include "impl/meta.h"
+
+#ifndef HAS_LOG2
+// Cygwin has a log2 macro but no log2 function, so we #undef it here
+#ifdef log2
+#undef log2
+#endif
+inline float log2 (float lhs)	{ return logf (lhs) / 0.693147180559945309417f; }
+inline double log2 (double lhs)	{ return log (lhs) / 0.693147180559945309417; }
+#endif
 
 namespace stdext
 	{
@@ -85,26 +90,34 @@ namespace stdext
 
 		inline int mulhi (int lhs, int rhs)
 			{
-				return __mulhw (lhs, rhs);
+				int result;
+				__asm__ ("mulhw %0, %1, %2" 
+					   /* outputs:  */ : "=r" (result) 
+					   /* inputs:   */ : "r" (lhs), "r"(rhs));
+				return result;
 			}
 
 		inline unsigned int mulhi (unsigned int lhs, unsigned int rhs)
 			{
-				return __mulhwu (lhs, rhs);
+				unsigned int result;
+				__asm__ ("mulhwu %0, %1, %2" 
+					   /* outputs:  */ : "=r" (result) 
+					   /* inputs:   */ : "r" (lhs), "r"(rhs));
+				return result;
 			}
 
 		#endif
 
 		inline float rsqrt (float lhs)
 			{
-				return 1.0 / std::sqrt ((double) lhs);	// note, we use double precision here so that the double op should be accurate...
+				return (float) (1.0 / std::sqrt ((double) lhs));	// note, we use double precision here so that the double op should be accurate...
 			}
 			
 		// absolute
 
 		template <typename T> struct absolute: public std::unary_function <T, T>
 			{
-				T operator() (const T& lhs) const
+				const T operator() (const T& lhs) const
 					{
 						using std::abs;
 						return abs (lhs);
@@ -113,7 +126,7 @@ namespace stdext
 
 		template <typename T> struct arc_cosine: public std::unary_function <T, T>
 			{
-				T operator() (const T& lhs) const
+				const T operator() (const T& lhs) const
 					{
 						using std::acos;
 						return acos (lhs);
@@ -124,7 +137,7 @@ namespace stdext
 
 		template <typename T> struct arc_sine: public std::unary_function <T, T>
 			{
-				T operator() (const T& lhs) const
+				const T operator() (const T& lhs) const
 					{
 						using std::asin;
 						return asin (lhs);
@@ -135,7 +148,7 @@ namespace stdext
 
 		template <typename T> struct arc_tangent: public std::unary_function <T, T>
 			{
-				T operator() (const T& lhs) const
+				const T operator() (const T& lhs) const
 					{
 						using std::atan;
 						return atan (lhs);
@@ -148,7 +161,7 @@ namespace stdext
 		
 		template <typename T> struct arc_tangent2 <T, T>: public std::binary_function <T, T, T>
 			{
-				T operator() (const T& lhs, const T& rhs) const
+				const T operator() (const T& lhs, const T& rhs) const
 					{
 						using std::atan2;
 						return atan2 (lhs, rhs);
@@ -161,9 +174,9 @@ namespace stdext
 		
 		template <typename T> struct bitwise_and <T, T>: public std::binary_function <T, T, T>
 			{
-				T operator() (const T& x, const T& y) const
+				const T operator() (const T& lhs, const T& rhs) const
 					{
-						return x & y;
+						return lhs & rhs;
 					}
 			};
 			
@@ -171,9 +184,9 @@ namespace stdext
 		
 		template <typename T> struct bitwise_not: public std::unary_function <T, T>
 			{
-				T operator() (const T& x) const	
+				const T operator() (const T& lhs) const
 					{
-						return ~x;
+						return ~lhs;
 					}
 			};
 			
@@ -183,9 +196,9 @@ namespace stdext
 		
 		template <typename T> struct bitwise_or <T, T>: public std::binary_function <T, T, T>
 			{
-				T operator() (const T& x, const T& y) const
+				const T operator() (const T& lhs, const T& rhs) const
 					{
-						return x | y;
+						return lhs | rhs;
 					}
 			};
 		
@@ -195,9 +208,19 @@ namespace stdext
 		
 		template <typename T> struct bitwise_xor <T, T>: public std::binary_function <T, T, T>
 			{
-				T operator() (const T& x, const T& y) const
+				const T operator() (const T& lhs, const T& rhs) const
 					{
-						return x ^ y;
+						return lhs ^ rhs;
+					}
+			};
+			
+		// conjugate
+		
+		template <typename T> struct conjugate: public std::unary_function <T, T>
+			{
+				const T operator() (const T& lhs) const
+					{
+						return conj (lhs);
 					}
 			};
 			
@@ -205,7 +228,7 @@ namespace stdext
 			
 		template <typename T> struct cosine: public std::unary_function <T, T>
 			{
-				T operator() (const T& lhs) const
+				const T operator() (const T& lhs) const
 					{
 						using std::cos;
 						return cos (lhs);
@@ -218,9 +241,9 @@ namespace stdext
 		
 		template <typename T> struct divides <T, T>: public std::binary_function <T, T, T>
 			{
-				T operator() (const T& x, const T& y) const
+				const T operator() (const T& lhs, const T& rhs) const
 					{
-						return x / y;
+						return lhs / rhs;
 					}
 			};
 			
@@ -230,9 +253,9 @@ namespace stdext
 		
 		template <typename T> struct equal_to <T, T>: public std::binary_function <T, T, bool>
 			{
-				bool operator() (const T& x, const T& y) const
+				bool operator() (const T& lhs, const T& rhs) const
 					{
-						return x == y;
+						return lhs == rhs;
 					}
 			};
 			
@@ -240,7 +263,7 @@ namespace stdext
 
 		template <typename T> struct exponent: public std::unary_function <T, T>
 			{
-				T operator() (const T& lhs) const
+				const T operator() (const T& lhs) const
 					{
 						using std::exp;
 						return exp (lhs);
@@ -251,7 +274,7 @@ namespace stdext
 		
 		template <typename T> struct exponent2: public std::unary_function <T, T>
 			{
-				T operator() (const T& lhs) const
+				const T operator() (const T& lhs) const
 					{
 						return exp2 (lhs);
 					}
@@ -263,9 +286,9 @@ namespace stdext
 		
 		template <typename T> struct greater <T, T>: public std::binary_function <T, T, bool>
 			{
-				bool operator() (const T& x, const T& y) const
+				bool operator() (const T& lhs, const T& rhs) const
 					{
-						return x > y;
+						return lhs > rhs;
 					}
 			};
 			
@@ -275,9 +298,9 @@ namespace stdext
 		
 		template <typename T> struct greater_equal <T, T>: public std::binary_function <T, T, bool>
 			{
-				bool operator() (const T& x, const T& y) const
+				bool operator() (const T& lhs, const T& rhs) const
 					{
-						return x >= y;
+						return lhs >= rhs;
 					}
 			};
 
@@ -285,7 +308,7 @@ namespace stdext
 			
 		template <typename T> struct hyperbolic_cosine: public std::unary_function <T, T>
 			{
-				T operator() (const T& lhs) const
+				const T operator() (const T& lhs) const
 					{
 						using std::cosh;
 						return cosh (lhs);
@@ -296,7 +319,7 @@ namespace stdext
 		
 		template <typename T> struct hyperbolic_sine: public std::unary_function <T, T>
 			{
-				T operator() (const T& lhs) const
+				const T operator() (const T& lhs) const
 					{
 						using std::sinh;
 						return sinh (lhs);
@@ -307,7 +330,7 @@ namespace stdext
 		
 		template <typename T> struct hyperbolic_tangent: public std::unary_function <T, T>
 			{
-				T operator() (const T& lhs) const
+				const T operator() (const T& lhs) const
 					{
 						using std::tanh;
 						return tanh (lhs);
@@ -318,9 +341,9 @@ namespace stdext
 
 		template <typename T> struct identity: public std::unary_function <T, T>
 			{
-				T operator() (const T& x) const	
+				const T operator() (const T& lhs) const
 					{
-						return x;
+						return lhs;
 					}
 			};
 			
@@ -330,9 +353,9 @@ namespace stdext
 		
 		template <typename T> struct less <T, T>: public std::binary_function <T, T, bool>
 			{
-				bool operator() (const T& x, const T& y) const
+				bool operator() (const T& lhs, const T& rhs) const
 					{
-						return x < y;
+						return lhs < rhs;
 					}
 			};
 			
@@ -342,9 +365,9 @@ namespace stdext
 		
 		template <typename T> struct less_equal <T, T>: public std::binary_function <T, T, bool>
 			{
-				bool operator() (const T& x, const T& y) const
+				bool operator() (const T& lhs, const T& rhs) const
 					{
-						return x <= y;
+						return lhs <= rhs;
 					}
 			};
 			
@@ -352,7 +375,7 @@ namespace stdext
 		
 		template <typename T> struct logarithm: public std::unary_function <T, T>
 			{
-				T operator() (const T& lhs) const
+				const T operator() (const T& lhs) const
 					{
 						using std::log;
 						return log (lhs);
@@ -363,7 +386,7 @@ namespace stdext
 		
 		template <typename T> struct logarithm2: public std::unary_function <T, T>
 			{
-				T operator() (const T& lhs) const
+				const T operator() (const T& lhs) const
 					{
 						return log2 (lhs);
 					}
@@ -373,7 +396,7 @@ namespace stdext
 		
 		template <typename T> struct logarithm10: public std::unary_function <T, T>
 			{
-				T operator() (const T& lhs) const
+				const T operator() (const T& lhs) const
 					{
 						using std::log10;
 						return log10 (lhs);
@@ -387,9 +410,9 @@ namespace stdext
 		
 		template <typename T> struct logical_and <T, T>: public std::binary_function <T, T, bool>
 			{
-				bool operator() (const T& x, const T& y) const
+				bool operator() (const T& lhs, const T& rhs) const
 					{
-						return x && y;
+						return lhs && rhs;
 					}
 			};
 			
@@ -397,9 +420,9 @@ namespace stdext
 
 		template <typename T> struct logical_not: public std::unary_function <T, bool>
 			{
-				bool operator() (const T& x) const
+				bool operator() (const T& lhs) const
 					{
-						return !x;
+						return !lhs;
 					}
 			};
 
@@ -409,9 +432,9 @@ namespace stdext
 		
 		template <typename T> struct logical_or <T, T>: public std::binary_function <T, T, bool>
 			{
-				bool operator() (const T& x, const T& y) const
+				bool operator() (const T& lhs, const T& rhs) const
 					{
-						return x || y;
+						return lhs || rhs;
 					}
 			};
 			
@@ -421,7 +444,7 @@ namespace stdext
 		
 		template <typename T> struct maximum <T, T>: public std::binary_function <T, T, T>
 			{
-				T operator() (const T& lhs, const T& rhs) const
+				const T operator() (const T& lhs, const T& rhs) const
 					{
 						return rhs < lhs ? lhs : rhs;
 					}
@@ -453,7 +476,7 @@ namespace stdext
 		
 		template <typename T> struct minimum <T, T>: public std::binary_function <T, T, T>
 			{
-				T operator() (const T& lhs, const T& rhs) const
+				const T operator() (const T& lhs, const T& rhs) const
 					{
 						return lhs < rhs ? lhs : rhs;
 					}
@@ -485,9 +508,9 @@ namespace stdext
 		
 		template <typename T> struct minus <T, T>: public std::binary_function <T, T, T>
 			{
-				T operator() (const T& x, const T& y) const
+				const T operator() (const T& lhs, const T& rhs) const
 					{
-						return x - y;
+						return lhs - rhs;
 					}
 			};
 			
@@ -497,9 +520,9 @@ namespace stdext
 		
 		template <typename T> struct modulus <T, T>: public std::binary_function <T, T, T>
 			{
-				T operator() (const T& x, const T& y) const
+				const T operator() (const T& lhs, const T& rhs) const
 					{
-						return x % y;
+						return lhs % rhs;
 					}
 			};
 			
@@ -509,9 +532,9 @@ namespace stdext
 		
 		template <typename T> struct multiplies <T, T>: public std::binary_function <T, T, T>
 			{
-				T operator() (const T& x, const T& y) const
+				const T operator() (const T& lhs, const T& rhs) const
 					{
-						return x * y;
+						return lhs * rhs;
 					}
 			};
 			
@@ -521,9 +544,9 @@ namespace stdext
 		
 		template <typename T> struct multiplies_high <T, T>: public std::binary_function <T, T, T>
 			{
-				T operator() (const T& x, const T& y) const
+				const T operator() (const T& lhs, const T& rhs) const
 					{
-						return mulhi (x, y);
+						return mulhi (lhs, rhs);
 					}
 			};
 			
@@ -535,9 +558,9 @@ namespace stdext
 		
 		template <typename T> struct negate: public std::unary_function <T, T>
 			{
-				T operator() (const T& x) const
+				const T operator() (const T& lhs) const
 					{
-						return -x;
+						return -lhs;
 					}
 			};
 
@@ -547,9 +570,9 @@ namespace stdext
 		
 		template <typename T> struct not_equal_to <T, T>: public std::binary_function <T, T, bool>
 			{
-				bool operator() (const T& x, const T& y) const
+				bool operator() (const T& lhs, const T& rhs) const
 					{
-						return x != y;
+						return lhs != rhs;
 					}
 			};
 			
@@ -559,7 +582,7 @@ namespace stdext
 		
 		template <typename T> struct power <T, T>: public std::binary_function <T, T, T>
 			{
-				T operator() (const T& lhs, const T& rhs) const
+				const T operator() (const T& lhs, const T& rhs) const
 					{
 						using std::pow;
 						return pow (lhs, rhs);
@@ -572,9 +595,9 @@ namespace stdext
 		
 		template <typename T> struct plus <T, T>: public std::binary_function <T, T, T>
 			{
-				T operator() (const T& x, const T& y) const
+				const T operator() (const T& lhs, const T& rhs) const
 					{
-						return x + y;
+						return lhs + rhs;
 					}
 			};
 			
@@ -582,7 +605,7 @@ namespace stdext
 		
 		template <typename T> struct reciprocal_square_root: public std::unary_function <T, T>
 			{
-				T operator() (const T& lhs) const
+				const T operator() (const T& lhs) const
 					{
 						return rsqrt (lhs);
 					}
@@ -599,9 +622,9 @@ namespace stdext
 				typedef T third_argument_type;
 				typedef T result_type;
 				
-				T operator() (bool x, const T& y, const T& z) const
+				const T operator() (bool lhs, const T& mhs, const T& rhs) const
 					{
-						return x ? y : z;
+						return lhs ? mhs : rhs;
 					}
 			};
 
@@ -611,9 +634,9 @@ namespace stdext
 		
 		template <typename T> struct shift_left <T, T>: public std::binary_function <T, T, T>
 			{
-				T operator() (const T& x, const T& y) const
+				const T operator() (const T& lhs, const T& rhs) const
 					{
-						return x << y;
+						return lhs << rhs;
 					}
 			};
 		
@@ -623,9 +646,9 @@ namespace stdext
 		
 		template <typename T> struct shift_right <T, T>: public std::binary_function <T, T, T>
 			{
-				T operator() (const T& x, const T& y) const
+				const T operator() (const T& lhs, const T& rhs) const
 					{
-						return x >> y;
+						return lhs >> rhs;
 					}
 			};
 			
@@ -633,7 +656,7 @@ namespace stdext
 			
 		template <typename T> struct sine: public std::unary_function <T, T>
 			{
-				T operator() (const T& lhs) const
+				const T operator() (const T& lhs) const
 					{
 						using std::sin;
 						return sin (lhs);
@@ -644,7 +667,7 @@ namespace stdext
 
 		template <typename T> struct square_root: public std::unary_function <T, T>
 			{
-				T operator() (const T& lhs) const
+				const T operator() (const T& lhs) const
 					{
 						using std::sqrt;
 						return sqrt (lhs);
@@ -655,7 +678,7 @@ namespace stdext
 
 		template <typename T> struct tangent: public std::unary_function <T, T>
 			{
-				T operator() (const T& lhs) const
+				const T operator() (const T& lhs) const
 					{
 						using std::tan;
 						return tan (lhs);

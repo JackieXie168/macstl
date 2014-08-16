@@ -69,6 +69,11 @@ namespace stdext
 							
 							/// Gets the complex part.
 							T imag () const		{ return val_ [1]; }
+							
+							const data_type& data () const
+								{
+									return val_;
+								}
 
 							/// @name Unary Arithmetic
 							

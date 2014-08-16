@@ -47,6 +47,10 @@
 #include <emmintrin.h>
 #endif
 
+#ifdef __SSE3__
+#include <pmmintrin.h>
+#endif
+
 namespace stdext
 	{
 		// accumulator <maximum>
@@ -58,7 +62,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <char>, 8> argument_type;
 				typedef macstl::boolean <char> result_type;
 
-				result_type operator() (const argument_type& lhs) const;
+				const result_type operator() (const argument_type& lhs) const;
 			};
 
 		template <> struct accumulator <maximum <macstl::vec <unsigned short, 4>, macstl::vec <unsigned short, 4> > >
@@ -94,7 +98,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <float>, 4> argument_type;
 				typedef macstl::boolean <float> result_type;
 
-				result_type operator() (const argument_type& lhs) const;
+				const result_type operator() (const argument_type& lhs) const;
 			};
 
 		#endif
@@ -114,7 +118,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <double>, 2> argument_type;
 				typedef macstl::boolean <double> result_type;
 
-				result_type operator() (const argument_type& lhs) const;
+				const result_type operator() (const argument_type& lhs) const;
 			};
 
 		template <> struct accumulator <maximum <macstl::vec <macstl::boolean <char>, 16>, macstl::vec <macstl::boolean <char>, 16> > >
@@ -122,7 +126,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <char>, 16> argument_type;
 				typedef macstl::boolean <char> result_type;
 
-				result_type operator() (const argument_type& lhs) const;
+				const result_type operator() (const argument_type& lhs) const;
 			};
 
 		#endif
@@ -136,7 +140,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <char>, 8> argument_type;
 				typedef macstl::boolean <char> result_type;
 
-				result_type operator() (const argument_type& lhs) const;
+				const result_type operator() (const argument_type& lhs) const;
 			};
 			
 		template <> struct accumulator <minimum <macstl::vec <unsigned short, 4>, macstl::vec <unsigned short, 4> > >
@@ -172,7 +176,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <float>, 4> argument_type;
 				typedef macstl::boolean <float> result_type;
 
-				result_type operator() (const argument_type& lhs) const;
+				const result_type operator() (const argument_type& lhs) const;
 			};
 
 		#endif
@@ -192,7 +196,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <double>, 2> argument_type;
 				typedef macstl::boolean <double> result_type;
 
-				result_type operator() (const argument_type& lhs) const;
+				const result_type operator() (const argument_type& lhs) const;
 			};
 
 		template <> struct accumulator <minimum <macstl::vec <macstl::boolean <char>, 16>, macstl::vec <macstl::boolean <char>, 16> > >
@@ -200,7 +204,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <char>, 16> argument_type;
 				typedef macstl::boolean <char> result_type;
 
-				result_type operator() (const argument_type& lhs) const;
+				const result_type operator() (const argument_type& lhs) const;
 			};
 
 		#endif
@@ -278,7 +282,7 @@ namespace macstl
 				
 				template <unsigned int v0, unsigned int v1> struct generator_m64
 					{
-						__m64 operator() () const
+						static INLINE __m64 call ()
 							{
 								union union_type
 									{
@@ -293,7 +297,7 @@ namespace macstl
 
 				template <> struct generator_m64 <0, 0>
 					{
-						__m64 operator() () const
+						static INLINE __m64 call ()
 							{
 								return _mm_setzero_si64 ();
 							}
@@ -307,7 +311,7 @@ namespace macstl
 				
 				template <unsigned int v0, unsigned int v1, unsigned int v2, unsigned int v3> struct generator_m128
 					{
-						__m128 operator() () const
+						static INLINE __m128 call ()
 							{
 								union union_type
 									{
@@ -322,7 +326,7 @@ namespace macstl
 					
 				template <> struct generator_m128 <0, 0, 0, 0>
 					{
-						__m128 operator() () const
+						static INLINE __m128 call ()
 							{
 								return _mm_setzero_ps ();
 							}
@@ -337,7 +341,7 @@ namespace macstl
 
 				template <unsigned int v0, unsigned int v1, unsigned int v2, unsigned int v3> struct generator_m128d
 					{
-						__m128d operator() () const
+						static INLINE __m128d call ()
 							{
 								union union_type
 									{
@@ -352,7 +356,7 @@ namespace macstl
 
 				template <> struct generator_m128d <0, 0, 0, 0>
 					{
-						__m128d operator() () const
+						static INLINE __m128d call ()
 							{
 								return _mm_setzero_pd ();
 							}
@@ -360,7 +364,7 @@ namespace macstl
 
 				template <unsigned int v0, unsigned int v1, unsigned int v2, unsigned int v3> struct generator_m128i
 					{
-						__m128i operator() () const
+						static INLINE __m128i call ()
 							{
 								union union_type
 									{
@@ -375,7 +379,7 @@ namespace macstl
 
 				template <> struct generator_m128i <0, 0, 0, 0>
 					{
-						__m128i operator() () const
+						static INLINE __m128i call ()
 							{
 								return _mm_setzero_si128 ();
 							}
@@ -403,14 +407,14 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3,
 						value_type v4, value_type v5, value_type v6, value_type v7)
 						{
 							return _mm_setr_pi8 (v0, v1, v2, v3, v4, v5, v6, v7);
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_pi8 (v0);
@@ -419,20 +423,20 @@ namespace macstl
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3,
 						init_type v4, init_type v5, init_type v6, init_type v7>
-						static vec <unsigned char, 8> set ()
+						static INLINE const vec <unsigned char, 8> set ()
 						{
 							return impl::generator_m64 <
 								(v3 << 24) | (v2 << 16) | (v1 << 8) | v0,
-								(v7 << 24) | (v6 << 16) | (v5 << 8) | v4> () ();
+								(v7 << 24) | (v6 << 16) | (v5 << 8) | v4>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <unsigned char, 8> fill ()
+						static INLINE const vec <unsigned char, 8> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m64 <0, 0> () ())
+					INLINE vec (): data_ (impl::generator_m64 <0, 0>::call ())
 						{
 						}
 			};
@@ -450,14 +454,14 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3,
 						value_type v4, value_type v5, value_type v6, value_type v7)
 						{
 							return _mm_setr_pi8 (v0, v1, v2, v3, v4, v5, v6, v7);
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_pi8 (v0);
@@ -466,20 +470,20 @@ namespace macstl
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3,
 						init_type v4, init_type v5, init_type v6, init_type v7>
-						static vec <signed char, 8> set ()
+						static INLINE const vec <signed char, 8> set ()
 						{
 							return impl::generator_m64 <
 								(((unsigned char) v3) << 24) | (((unsigned char) v2) << 16) | (((unsigned char) v1) << 8) | ((unsigned char) v0),
-								(((unsigned char) v7) << 24) | (((unsigned char) v6) << 16) | (((unsigned char) v5) << 8) | ((unsigned char) v4)> () ();
+								(((unsigned char) v7) << 24) | (((unsigned char) v6) << 16) | (((unsigned char) v5) << 8) | ((unsigned char) v4)>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <signed char, 8> fill ()
+						static INLINE const vec <signed char, 8> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m64 <0, 0> () ())
+					INLINE vec (): data_ (impl::generator_m64 <0, 0>::call ())
 						{
 						}						
 			};
@@ -497,7 +501,7 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3,
 						value_type v4, value_type v5, value_type v6, value_type v7)
 						{
@@ -506,7 +510,7 @@ namespace macstl
 								v4.data (), v5.data (), v6.data (), v7.data ());
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_pi8 (v0.data ());
@@ -515,26 +519,26 @@ namespace macstl
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3,
 						init_type v4, init_type v5, init_type v6, init_type v7>
-						static vec <boolean <char>, 8> set ()
+						static INLINE const vec <boolean <char>, 8> set ()
 						{
 							return impl::generator_m64 <
 								(v3 ? 0xFF000000U : 0) | (v2 ? 0x00FF0000U : 0) | (v1 ? 0x0000FF00U : 0) | (v0 ? 0x000000FFU : 0),
-								(v7 ? 0xFF000000U : 0) | (v6 ? 0x00FF0000U : 0) | (v5 ? 0x0000FF00U : 0) | (v4 ? 0x000000FFU : 0)> () ();
+								(v7 ? 0xFF000000U : 0) | (v6 ? 0x00FF0000U : 0) | (v5 ? 0x0000FF00U : 0) | (v4 ? 0x000000FFU : 0)>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <boolean <char>, 8> fill ()
+						static INLINE const vec <boolean <char>, 8> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m64 <0, 0> () ())
+					INLINE vec (): data_ (impl::generator_m64 <0, 0>::call ())
 						{
 						}
 						
 					#ifdef __SSE__
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE const value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE const value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
 					#endif
 			};
 
@@ -551,13 +555,13 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3)
 						{
 							return _mm_setr_pi16 (v0, v1, v2, v3);
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_pi16 (v0);
@@ -565,26 +569,26 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec <unsigned short, 4> set ()
+						static INLINE const vec <unsigned short, 4> set ()
 						{
 							return impl::generator_m64 <
-								(v1 << 16) | v0, (v3 << 16) | v2> () ();
+								(v1 << 16) | v0, (v3 << 16) | v2>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <unsigned short, 4> fill ()
+						static INLINE const vec <unsigned short, 4> fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m64 <0, 0> () ())
+					INLINE vec (): data_ (impl::generator_m64 <0, 0>::call ())
 						{
 						}
 						
 					#ifdef __SSE__
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE const value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE const value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE const value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 					#endif
 			};
 
@@ -601,13 +605,13 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3)
 						{
 							return _mm_setr_pi16 (v0, v1, v2, v3);
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_pi16 (v0);
@@ -615,26 +619,26 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec <short, 4> set ()
+						static INLINE const vec <short, 4> set ()
 						{
 							return impl::generator_m64 <
-								(((unsigned short) v1) << 16) | ((unsigned short) v0), (((unsigned short) v3) << 16) | ((unsigned short) v2)> () ();
+								(((unsigned short) v1) << 16) | ((unsigned short) v0), (((unsigned short) v3) << 16) | ((unsigned short) v2)>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <short, 4> fill ()
+						static INLINE const vec <short, 4> fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m64 <0, 0> () ())
+					INLINE vec (): data_ (impl::generator_m64 <0, 0>::call ())
 						{
 						}
 
 					#ifdef __SSE__
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE const value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE const value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE const value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 					#endif
 			};
 
@@ -651,14 +655,14 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3)
 						{
 							return _mm_setr_pi16 (
 								v0.data (), v1.data (), v2.data (), v3.data ());
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_pi16 (v0.data ());
@@ -666,19 +670,19 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec <boolean <short>, 4> set ()
+						static INLINE const vec <boolean <short>, 4> set ()
 						{
 							return impl::generator_m64 <
-								(v1 ? 0xFFFF0000U : 0) | (v0 ? 0x0000FFFFU : 0), (v3 ? 0xFFFF0000U : 0) | (v2 ? 0x0000FFFFU : 0)> () ();
+								(v1 ? 0xFFFF0000U : 0) | (v0 ? 0x0000FFFFU : 0), (v3 ? 0xFFFF0000U : 0) | (v2 ? 0x0000FFFFU : 0)>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <boolean <short>, 4> fill ()
+						static INLINE const vec <boolean <short>, 4> fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m64 <0, 0> () ())
+					INLINE vec (): data_ (impl::generator_m64 <0, 0>::call ())
 						{
 						}
 			};
@@ -696,13 +700,13 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1)
 						{
 							return _mm_setr_pi32 (v0, v1);
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_pi32 (v0);
@@ -710,18 +714,18 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1>
-						static vec <unsigned int, 2> set ()
+						static INLINE const vec <unsigned int, 2> set ()
 						{
-							return impl::generator_m64 <v0, v1> () ();
+							return impl::generator_m64 <v0, v1>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <unsigned int, 2> fill ()
+						static INLINE const vec <unsigned int, 2> fill ()
 						{
 							return set <v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m64 <0, 0> () ())
+					INLINE vec (): data_ (impl::generator_m64 <0, 0>::call ())
 						{
 						}
 			};
@@ -739,13 +743,13 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1)
 						{
 							return _mm_setr_pi32 (v0, v1);
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_pi32 (v0);
@@ -753,18 +757,18 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1>
-						static vec <int, 2> set ()
+						static INLINE const vec <int, 2> set ()
 						{
-							return impl::generator_m64 <(int) v0, (int) v1> () ();
+							return impl::generator_m64 <(int) v0, (int) v1>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <int, 2> fill ()
+						static INLINE const vec <int, 2> fill ()
 						{
 							return set <v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m64 <0, 0> () ())
+					INLINE vec (): data_ (impl::generator_m64 <0, 0>::call ())
 						{
 						}
 			};
@@ -782,14 +786,14 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1)
 						{
 							return _mm_setr_pi32 (
 								v0.data (), v1.data ());
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_pi32 (v0.data ());
@@ -797,18 +801,18 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1>
-						static vec <boolean <int>, 2> set ()
+						static INLINE const vec <boolean <int>, 2> set ()
 						{
-							return impl::generator_m64 <v0 ? 0xFFFFFFFFU : 0, v1 ? 0xFFFFFFFFU : 0> () ();
+							return impl::generator_m64 <v0 ? 0xFFFFFFFFU : 0, v1 ? 0xFFFFFFFFU : 0>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <boolean <int>, 2> fill ()
+						static INLINE const vec <boolean <int>, 2> fill ()
 						{
 							return set <v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m64 <0, 0> () ())
+					INLINE vec (): data_ (impl::generator_m64 <0, 0>::call ())
 						{
 						}
 			};
@@ -830,13 +834,13 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3)
 						{
 							return _mm_setr_ps (v0, v1, v2, v3);
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_ps (v0);
@@ -844,24 +848,34 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec <float, 4> set ()
+						static INLINE const vec <float, 4> set ()
 						{
-							return impl::generator_m128 <v0, v1, v2, v3> () ();
+							return impl::generator_m128 <v0, v1, v2, v3>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <float, 4> fill ()
+						static INLINE const vec <float, 4> fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m128 <0, 0, 0, 0> () ())
+					static INLINE const vec <float, 4> load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return _mm_load_ps (address + offset * length);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							_mm_store_ps (address + offset * length, data_);
+						}
+						
+					INLINE vec (): data_ (impl::generator_m128 <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE const value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE const value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE const value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 			};
 
 		template <> class vec <boolean <float>, 4>
@@ -877,14 +891,14 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3)
 						{
 							return _mm_setr_ps (
 								v0.data (), v1.data (), v2.data (), v3.data ());
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_ps (v0.data ());
@@ -892,23 +906,33 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec <boolean <float>, 4> set ()
+						static INLINE const vec <boolean <float>, 4> set ()
 						{
-							return impl::generator_m128 <v0 ? 0xFFFFFFFFU : 0, v1 ? 0xFFFFFFFFU : 0, v2 ? 0xFFFFFFFFU : 0, v3 ? 0xFFFFFFFFU : 0> () ();
+							return impl::generator_m128 <v0 ? 0xFFFFFFFFU : 0, v1 ? 0xFFFFFFFFU : 0, v2 ? 0xFFFFFFFFU : 0, v3 ? 0xFFFFFFFFU : 0>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <boolean <float>, 4> fill ()
+						static INLINE const vec <boolean <float>, 4> fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
+
+					static INLINE const vec <boolean <float>, 4> load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return _mm_load_ps (reinterpret_cast <const float*> (address) + offset * length);
+						}
 						
-					vec (): data_ (impl::generator_m128 <0, 0, 0, 0> () ())
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							_mm_store_ps (reinterpret_cast <float*> (address) + offset * length, data_);
+						}
+						
+					INLINE vec (): data_ (impl::generator_m128 <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE const value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE const value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
 			};
 		
 		#endif
@@ -928,13 +952,13 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1)
 						{
 							return _mm_setr_pd (v0, v1);
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_pd (v0);
@@ -942,26 +966,36 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1>
-						static vec <double, 2> set ()
+						static INLINE const vec <double, 2> set ()
 						{
 							return impl::generator_m128d <
 								v0 & 0x00000000FFFFFFFFULL, (v0 & 0xFFFFFFFF00000000ULL) >> 32, 
-								v1 & 0x00000000FFFFFFFFULL, (v1 & 0xFFFFFFFF00000000ULL) >> 32> () ();
+								v1 & 0x00000000FFFFFFFFULL, (v1 & 0xFFFFFFFF00000000ULL) >> 32>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <double, 2> fill ()
+						static INLINE const vec <double, 2> fill ()
 						{
 							return set <v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m128d <0, 0, 0, 0> () ())
+					static INLINE const vec <double, 2> load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return _mm_load_pd (address + offset * length);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							_mm_store_pd (address + offset * length, data_);
+						}
+						
+					INLINE vec (): data_ (impl::generator_m128d <0, 0, 0, 0>::call ())
 						{
 						}
 
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE const value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE const value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE const value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 			};
 
 		template <> class vec <boolean <double>, 2>
@@ -977,14 +1011,14 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1)
 						{
 							return _mm_setr_pd (
 								v0.data (), v1.data ());
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_pd (v0.data ());
@@ -992,25 +1026,35 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1>
-						static vec <boolean <double>, 2> set ()
+						static INLINE const vec <boolean <double>, 2> set ()
 						{
 							return impl::generator_m128d <
 								v0 ? 0xFFFFFFFFU : 0x00000000U, v0 ? 0xFFFFFFFFU : 0x00000000U,
-								v1 ? 0xFFFFFFFFU : 0x00000000U, v1 ? 0xFFFFFFFFU : 0x00000000U> () ();
+								v1 ? 0xFFFFFFFFU : 0x00000000U, v1 ? 0xFFFFFFFFU : 0x00000000U>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <boolean <double>, 2> fill ()
+						static INLINE const vec <boolean <double>, 2> fill ()
 						{
 							return set <v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m128d <0, 0, 0, 0> () ())
+					static INLINE const vec <boolean <double>, 2> load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return _mm_load_pd (reinterpret_cast <const double *> (address) + offset * length);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							_mm_store_pd (reinterpret_cast <double*> (address) + offset * length, data_);
+						}
+
+					INLINE vec (): data_ (impl::generator_m128d <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE const value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE const value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
 			};
 
 		template <> class vec <unsigned char, 16>
@@ -1026,7 +1070,7 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3,
 						value_type v4, value_type v5, value_type v6, value_type v7,
 						value_type v8, value_type v9, value_type v10, value_type v11,
@@ -1036,7 +1080,7 @@ namespace macstl
 								v8, v9, v10, v11, v12, v13, v14, v15);
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_epi8 (v0);
@@ -1047,22 +1091,32 @@ namespace macstl
 						init_type v4, init_type v5, init_type v6, init_type v7,
 						init_type v8, init_type v9, init_type v10, init_type v11,
 						init_type v12, init_type v13, init_type v14, init_type v15>
-						static vec <unsigned char, 16> set ()
+						static INLINE const vec <unsigned char, 16> set ()
 						{
 							return impl::generator_m128i <
 								(v3 << 24) | (v2 << 16) | (v1 << 8) | v0,
 								(v7 << 24) | (v6 << 16) | (v5 << 8) | v4,
 								(v11 << 24) | (v10 << 16) | (v9 << 8) | v8,
-								(v15 << 24) | (v14 << 16) | (v13 << 8) | v12> () ();
+								(v15 << 24) | (v14 << 16) | (v13 << 8) | v12>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <unsigned char, 16> fill ()
+						static INLINE const vec <unsigned char, 16> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m128i <0, 0, 0, 0> () ())
+					static INLINE const vec <unsigned char, 16> load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return _mm_load_si128 (reinterpret_cast <const __m128i*> (address) + offset);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							_mm_store_si128 (reinterpret_cast <__m128i*> (address) + offset, data_);
+						}
+
+					INLINE vec (): data_ (impl::generator_m128i <0, 0, 0, 0>::call ())
 						{
 						}
 			};
@@ -1080,7 +1134,7 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3,
 						value_type v4, value_type v5, value_type v6, value_type v7,
 						value_type v8, value_type v9, value_type v10, value_type v11,
@@ -1089,7 +1143,7 @@ namespace macstl
 							return _mm_setr_epi8 (v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15);
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_epi8 (v0);
@@ -1100,22 +1154,32 @@ namespace macstl
 						init_type v4, init_type v5, init_type v6, init_type v7,
 						init_type v8, init_type v9, init_type v10, init_type v11,
 						init_type v12, init_type v13, init_type v14, init_type v15>
-						static vec <signed char, 16> set ()
+						static INLINE const vec <signed char, 16> set ()
 						{
 							return impl::generator_m128i <
 								(((unsigned char) v3) << 24) | (((unsigned char) v2) << 16) | (((unsigned char) v1) << 8) | ((unsigned char) v0),
 								(((unsigned char) v7) << 24) | (((unsigned char) v6) << 16) | (((unsigned char) v5) << 8) | ((unsigned char) v4),
 								(((unsigned char) v11) << 24) | (((unsigned char) v10) << 16) | (((unsigned char) v9) << 8) | ((unsigned char) v8),
-								(((unsigned char) v15) << 24) | (((unsigned char) v14)<< 16) | (((unsigned char) v13) << 8) | ((unsigned char) v12)> () ();
+								(((unsigned char) v15) << 24) | (((unsigned char) v14)<< 16) | (((unsigned char) v13) << 8) | ((unsigned char) v12)>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <signed char, 16> fill ()
+						static INLINE const vec <signed char, 16> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m128i <0, 0, 0, 0> () ())
+					static INLINE const vec <signed char, 16> load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return _mm_load_si128 (reinterpret_cast <const __m128i*> (address) + offset);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							_mm_store_si128 (reinterpret_cast <__m128i*> (address) + offset, data_);
+						}
+
+					INLINE vec (): data_ (impl::generator_m128i <0, 0, 0, 0>::call ())
 						{
 						}
 			};
@@ -1133,7 +1197,7 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3,
 						value_type v4, value_type v5, value_type v6, value_type v7,
 						value_type v8, value_type v9, value_type v10, value_type v11,
@@ -1146,7 +1210,7 @@ namespace macstl
 								v12.data (), v13.data (), v14.data (), v15.data ());
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_epi8 (v0.data ());
@@ -1157,27 +1221,37 @@ namespace macstl
 						init_type v4, init_type v5, init_type v6, init_type v7,
 						init_type v8, init_type v9, init_type v10, init_type v11,
 						init_type v12, init_type v13, init_type v14, init_type v15>
-						static vec <boolean <char>, 16> set ()
+						static INLINE const vec <boolean <char>, 16> set ()
 						{
 							return impl::generator_m128i <
 								(v3 ? 0xFF000000U : 0) | (v2 ? 0x00FF0000U : 0) | (v1 ? 0x0000FF00U : 0) | (v0 ? 0x000000FFU : 0),
 								(v7 ? 0xFF000000U : 0) | (v6 ? 0x00FF0000U : 0) | (v5 ? 0x0000FF00U : 0) | (v4 ? 0x000000FFU : 0),
 								(v11 ? 0xFF000000U : 0) | (v10 ? 0x00FF0000U : 0) | (v9 ? 0x0000FF00U : 0) | (v8 ? 0x000000FFU : 0),
-								(v15 ? 0xFF000000U : 0) | (v14 ? 0x00FF0000U : 0) | (v13 ? 0x0000FF00U : 0) | (v12 ? 0x000000FFU : 0)> () ();
+								(v15 ? 0xFF000000U : 0) | (v14 ? 0x00FF0000U : 0) | (v13 ? 0x0000FF00U : 0) | (v12 ? 0x000000FFU : 0)>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <boolean <char>, 16> fill ()
+						static INLINE const vec <boolean <char>, 16> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m128i <0, 0, 0, 0> () ())
+					static INLINE const vec <boolean <char>, 16> load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return _mm_load_si128 (reinterpret_cast <const __m128i*> (address) + offset);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							_mm_store_si128 (reinterpret_cast <__m128i*> (address) + offset, data_);
+						}
+
+					INLINE vec (): data_ (impl::generator_m128i <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
-					value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
+					INLINE const value_type max () const	{ return stdext::accumulator <stdext::maximum <vec> > () (*this); }
+					INLINE const value_type min () const	{ return stdext::accumulator <stdext::minimum <vec> > () (*this); }
 			};
 
 		template <> class vec <unsigned short, 8>
@@ -1193,14 +1267,14 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3,
 						value_type v4, value_type v5, value_type v6, value_type v7)
 						{
 							return _mm_setr_epi16 (v0, v1, v2, v3, v4, v5, v6, v7);
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_epi16 (v0);
@@ -1209,20 +1283,30 @@ namespace macstl
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3,
 						init_type v4, init_type v5, init_type v6, init_type v7>
-						static vec <unsigned short, 8> set ()
+						static INLINE const vec <unsigned short, 8> set ()
 						{
 							return impl::generator_m128i <
 								(v1 << 16) | v0, (v3 << 16) | v2,
-								(v5 << 16) | v4, (v7 << 16) | v6> () ();
+								(v5 << 16) | v4, (v7 << 16) | v6>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <unsigned short, 8> fill ()
+						static INLINE const vec <unsigned short, 8> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m128i <0, 0, 0, 0> () ())
+					static INLINE const vec <unsigned short, 8> load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return _mm_load_si128 (reinterpret_cast <const __m128i*> (address) + offset);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							_mm_store_si128 (reinterpret_cast <__m128i*> (address) + offset, data_);
+						}
+
+					INLINE vec (): data_ (impl::generator_m128i <0, 0, 0, 0>::call ())
 						{
 						}
 			};
@@ -1240,14 +1324,14 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3,
 						value_type v4, value_type v5, value_type v6, value_type v7)
 						{
 							return _mm_setr_epi16 (v0, v1, v2, v3, v4, v5, v6, v7);
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_epi16 (v0);
@@ -1256,20 +1340,30 @@ namespace macstl
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3,
 						init_type v4, init_type v5, init_type v6, init_type v7>
-						static vec <short, 8> set ()
+						static INLINE const vec <short, 8> set ()
 						{
 							return impl::generator_m128i <
 								(((unsigned short) v1) << 16) | ((unsigned short) v0), (((unsigned short) v3) << 16) | ((unsigned short) v2),
-								(((unsigned short) v5) << 16) | ((unsigned short) v4), (((unsigned short) v7) << 16) | ((unsigned short) v6)> () ();
+								(((unsigned short) v5) << 16) | ((unsigned short) v4), (((unsigned short) v7) << 16) | ((unsigned short) v6)>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <short, 8> fill ()
+						static INLINE const vec <short, 8> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m128i <0, 0, 0, 0> () ())
+					static INLINE const vec <short, 8> load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return _mm_load_si128 (reinterpret_cast <const __m128i*> (address) + offset);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							_mm_store_si128 (reinterpret_cast <__m128i*> (address) + offset, data_);
+						}
+
+					INLINE vec (): data_ (impl::generator_m128i <0, 0, 0, 0>::call ())
 						{
 						}
 			};
@@ -1287,7 +1381,7 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3,
 						value_type v4, value_type v5, value_type v6, value_type v7)
 						{
@@ -1296,7 +1390,7 @@ namespace macstl
 								v4.data (), v5.data (), v6.data (), v7.data ());
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_epi16 (v0.data ());
@@ -1305,20 +1399,30 @@ namespace macstl
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3,
 						init_type v4, init_type v5, init_type v6, init_type v7>
-						static vec <boolean <short>, 8> set ()
+						static INLINE const vec <boolean <short>, 8> set ()
 						{
 							return impl::generator_m128i <
 								(v1 ? 0xFFFF0000U : 0) | (v0 ? 0x0000FFFFU : 0), (v3 ? 0xFFFF0000U : 0) | (v2 ? 0x0000FFFFU : 0),
-								(v5 ? 0xFFFF0000U : 0) | (v4 ? 0x0000FFFFU : 0), (v7 ? 0xFFFF0000U : 0) | (v6 ? 0x0000FFFFU : 0)> () ();
+								(v5 ? 0xFFFF0000U : 0) | (v4 ? 0x0000FFFFU : 0), (v7 ? 0xFFFF0000U : 0) | (v6 ? 0x0000FFFFU : 0)>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <boolean <short>, 8> fill ()
+						static INLINE const vec <boolean <short>, 8> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m128i <0, 0, 0, 0> () ())
+					static INLINE const vec <boolean <short>, 8> load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return _mm_load_si128 (reinterpret_cast <const __m128i*> (address) + offset);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							_mm_store_si128 (reinterpret_cast <__m128i*> (address) + offset, data_);
+						}
+
+					INLINE vec (): data_ (impl::generator_m128i <0, 0, 0, 0>::call ())
 						{
 						}
 			};
@@ -1336,13 +1440,13 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3)
 						{
 							return _mm_setr_epi32 (v0, v1, v2, v3);
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_epi32 (v0);
@@ -1350,22 +1454,32 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec <unsigned int, 4> set ()
+						static INLINE const vec <unsigned int, 4> set ()
 						{
-							return impl::generator_m128i <v0, v1, v2, v3> () ();
+							return impl::generator_m128i <v0, v1, v2, v3>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <unsigned int, 4> fill ()
+						static INLINE const vec <unsigned int, 4> fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m128i <0, 0, 0, 0> () ())
+					static INLINE const vec <unsigned int, 4> load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return _mm_load_si128 (reinterpret_cast <const __m128i*> (address) + offset);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							_mm_store_si128 (reinterpret_cast <__m128i*> (address) + offset, data_);
+						}
+
+					INLINE vec (): data_ (impl::generator_m128i <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE const value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 			};
 
 		template <> class vec <int, 4>
@@ -1381,13 +1495,13 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3)
 						{
 							return _mm_setr_epi32 (v0, v1, v2, v3);
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_epi32 (v0);
@@ -1395,22 +1509,32 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec <int, 4> set ()
+						static INLINE const vec <int, 4> set ()
 						{
-							return impl::generator_m128i <(int) v0, (int) v1, (int) v2, (int) v3> () ();
+							return impl::generator_m128i <(unsigned int) v0, (unsigned int) v1, (unsigned int) v2, (unsigned int) v3>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <int, 4> fill ()
+						static INLINE const vec <int, 4> fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m128i <0, 0, 0, 0> () ())
+					static INLINE const vec <int, 4> load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return _mm_load_si128 (reinterpret_cast <const __m128i*> (address) + offset);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							_mm_store_si128 (reinterpret_cast <__m128i*> (address) + offset, data_);
+						}
+
+					INLINE vec (): data_ (impl::generator_m128i <0, 0, 0, 0>::call ())
 						{
 						}
 						
-					value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
+					INLINE const value_type sum () const	{ return stdext::accumulator <stdext::plus <vec> > () (*this); }
 			};
 
 		template <> class vec <boolean <int>, 4>
@@ -1426,14 +1550,14 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1, value_type v2, value_type v3)
 						{
 							return _mm_setr_epi32 (
 								v0.data (), v1.data (), v2.data (), v3.data ());
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return _mm_set1_epi32 (v0.data ());
@@ -1441,18 +1565,28 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec <boolean <int>, 4> set ()
+						static INLINE const vec <boolean <int>, 4> set ()
 						{
-							return impl::generator_m128i <v0 ? 0xFFFFFFFFU : 0, v1 ? 0xFFFFFFFFU : 0, v2 ? 0xFFFFFFFFU : 0, v3 ? 0xFFFFFFFFU : 0> () ();
+							return impl::generator_m128i <v0 ? 0xFFFFFFFFU : 0, v1 ? 0xFFFFFFFFU : 0, v2 ? 0xFFFFFFFFU : 0, v3 ? 0xFFFFFFFFU : 0>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <boolean <int>, 4> fill ()
+						static INLINE const vec <boolean <int>, 4> fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m128i <0, 0, 0, 0> () ())
+					static INLINE const vec <boolean <int>, 4> load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return _mm_load_si128 (reinterpret_cast <const __m128i*> (address) + offset);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							_mm_store_si128 (reinterpret_cast <__m128i*> (address) + offset, data_);
+						}
+
+					INLINE vec (): data_ (impl::generator_m128i <0, 0, 0, 0>::call ())
 						{
 						}
 			};
@@ -1470,14 +1604,14 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1)
 						{
 							union_type un = {v0, v1};
 							return un.vec;
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return set (v0, v0);
@@ -1485,20 +1619,30 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1>
-						static vec <unsigned long long, 2> set ()
+						static INLINE const vec <unsigned long long, 2> set ()
 						{
 							return impl::generator_m128i <
 								v0 & 0x00000000FFFFFFFFULL, (v0 & 0xFFFFFFFF00000000ULL) >> 32,
-								v1 & 0x00000000FFFFFFFFULL, (v1 & 0xFFFFFFFF00000000ULL) >> 32> () ();
+								v1 & 0x00000000FFFFFFFFULL, (v1 & 0xFFFFFFFF00000000ULL) >> 32>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <unsigned long long, 2> fill ()
+						static INLINE const vec <unsigned long long, 2> fill ()
 						{
 							return set <v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m128i <0, 0, 0, 0> () ())
+					static INLINE const vec <unsigned long long, 2> load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return _mm_load_si128 (reinterpret_cast <const __m128i*> (address) + offset);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							_mm_store_si128 (reinterpret_cast <__m128i*> (address) + offset, data_);
+						}
+
+					INLINE vec (): data_ (impl::generator_m128i <0, 0, 0, 0>::call ())
 						{
 						}
 			};
@@ -1516,14 +1660,14 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1)
 						{
 							union_type un = {v0, v1};
 							return un.vec;
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return set (v0, v0);
@@ -1531,20 +1675,30 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1>
-						static vec <long long, 2> set ()
+						static INLINE const vec <long long, 2> set ()
 						{
 							return impl::generator_m128i <
 								((unsigned long long) v0) & 0x00000000FFFFFFFFULL, (((unsigned long long) v0) & 0xFFFFFFFF00000000ULL) >> 32,
-								((unsigned long long) v1) & 0x00000000FFFFFFFFULL, (((unsigned long long) v1) & 0xFFFFFFFF00000000ULL) >> 32> () ();
+								((unsigned long long) v1) & 0x00000000FFFFFFFFULL, (((unsigned long long) v1) & 0xFFFFFFFF00000000ULL) >> 32>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <long long, 2> fill ()
+						static INLINE const vec <long long, 2> fill ()
 						{
 							return set <v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m128i <0, 0, 0, 0> () ())
+					static INLINE const vec <long long, 2> load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return _mm_load_si128 (reinterpret_cast <const __m128i*> (address) + offset);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							_mm_store_si128 (reinterpret_cast <__m128i*> (address) + offset, data_);
+						}
+
+					INLINE vec (): data_ (impl::generator_m128i <0, 0, 0, 0>::call ())
 						{
 						}
 			};
@@ -1562,14 +1716,14 @@ namespace macstl
 							data_type vec;
 						};
 					
-					static vec set (
+					static INLINE const vec set (
 						value_type v0, value_type v1)
 						{
 							union_type un = {v0.data (), v1.data ()};
 							return un.vec;
 						}
 
-					static vec fill (
+					static INLINE const vec fill (
 						value_type v0)
 						{
 							return set (v0, v0);
@@ -1577,20 +1731,30 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1>
-						static vec <boolean <long long>, 2> set ()
+						static INLINE const vec <boolean <long long>, 2> set ()
 						{
 							return impl::generator_m128i <
 								v0 ? 0xFFFFFFFFU : 0x00000000U, v0 ? 0xFFFFFFFFU : 0x00000000U,
-								v1 ? 0xFFFFFFFFU : 0x00000000U, v1 ? 0xFFFFFFFFU : 0x00000000U> () ();
+								v1 ? 0xFFFFFFFFU : 0x00000000U, v1 ? 0xFFFFFFFFU : 0x00000000U>::call ();
 						}
 					
 					template <init_type v0>
-						static vec <boolean <long long>, 2> fill ()
+						static INLINE const vec <boolean <long long>, 2> fill ()
 						{
 							return set <v0, v0> ();
 						}
 						
-					vec (): data_ (impl::generator_m128i <0, 0, 0, 0> () ())
+					static INLINE const vec <boolean <long long>, 2> load (const value_data* address, std::ptrdiff_t offset)
+						{
+							return _mm_load_si128 (reinterpret_cast <const __m128i*> (address) + offset);
+						}
+						
+					INLINE void store (value_data* address, std::ptrdiff_t offset) const
+						{
+							_mm_store_si128 (reinterpret_cast <__m128i*> (address) + offset, data_);
+						}
+
+					INLINE vec (): data_ (impl::generator_m128i <0, 0, 0, 0>::call ())
 						{
 						}
 			};
@@ -1605,7 +1769,7 @@ template <> struct FN##_function <RESULT, ARG >										\
 		typedef ARG argument_type;													\
 		typedef RESULT result_type;													\
 																					\
-		result_type operator() (const argument_type& lhs) const						\
+		INLINE const result_type operator() (const argument_type& lhs) const						\
 			{																		\
 				return INTR (lhs.data ());											\
 			}																		\
@@ -1617,7 +1781,7 @@ template <unsigned int i, unsigned int j, unsigned int k, unsigned int l> struct
 		typedef ARG argument_type;													\
 		typedef RESULT result_type;													\
 																					\
-		result_type operator() (const argument_type& lhs) const						\
+		INLINE const result_type operator() (const argument_type& lhs) const						\
 			{																		\
 				return INTR (lhs.data (), (i << 6) | (j << 4) | (k << 2) | l);		\
 			}																		\
@@ -1630,7 +1794,7 @@ template <unsigned int i, unsigned int j, unsigned int k, unsigned int l> struct
 		typedef ARG2 second_argument_type;													\
 		typedef RESULT result_type;													\
 																					\
-		result_type operator()														\
+		INLINE const result_type operator()														\
 			(const first_argument_type& lhs, const second_argument_type& rhs) const	\
 			{																		\
 				return INTR (lhs.data (), rhs.data (), (i << 6) | (j << 4) | (k << 2) | l);		\
@@ -1644,7 +1808,7 @@ template <unsigned int i, unsigned int j> struct FN##_function <i, j, ARG1, ARG2
 		typedef ARG2 second_argument_type;											\
 		typedef RESULT result_type;													\
 																					\
-		result_type operator()														\
+		INLINE const result_type operator()														\
 			(const first_argument_type& lhs, const second_argument_type& rhs) const	\
 			{																		\
 				return INTR (lhs.data (), rhs.data (), (i << 1) | j);				\
@@ -1658,7 +1822,7 @@ template <> struct FN##_function <ARG >												\
 		typedef ARG argument_type;													\
 		typedef RESULT result_type;													\
 																					\
-		result_type operator() (const argument_type& lhs) const						\
+		INLINE const result_type operator() (const argument_type& lhs) const						\
 			{																		\
 				return INTR (data_of (lhs));										\
 			}																		\
@@ -1670,7 +1834,7 @@ template <unsigned int i> struct FN##_function <i, ARG >							\
 		typedef ARG argument_type;													\
 		typedef RESULT result_type;													\
 																					\
-		result_type operator() (const argument_type& lhs) const						\
+		INLINE const result_type operator() (const argument_type& lhs) const						\
 			{																		\
 				return INTR (lhs.data (), i);										\
 			}																		\
@@ -1683,7 +1847,7 @@ template <> struct FN##_function <ARG1, ARG2, RESULT >								\
 		typedef ARG2 second_argument_type;											\
 		typedef RESULT result_type;													\
 																					\
-		result_type operator()														\
+		INLINE const result_type operator()														\
 			(const first_argument_type& lhs, const second_argument_type& rhs) const	\
 			{																		\
 				return INTR (lhs.data (), rhs.data ());								\
@@ -1697,7 +1861,7 @@ template <> struct FN##_function <ARG1, ARG2 >										\
 		typedef ARG2 second_argument_type;											\
 		typedef RESULT result_type;													\
 																					\
-		result_type operator()														\
+		INLINE const result_type operator()														\
 			(const first_argument_type& lhs, const second_argument_type& rhs) const	\
 			{																		\
 				return INTR (data_of (lhs), data_of (rhs));							\
@@ -1711,7 +1875,7 @@ template <unsigned int i> struct FN##_function <i, ARG1, ARG2 >						\
 		typedef ARG2 second_argument_type;											\
 		typedef RESULT result_type;													\
 																					\
-		result_type operator()														\
+		INLINE const result_type operator()														\
 			(const first_argument_type& lhs, const second_argument_type& rhs) const	\
 			{																		\
 				return INTR (lhs.data (), data_of (rhs), i);						\
@@ -1724,7 +1888,7 @@ template <> struct FN##_function <const ARG*>										\
 		typedef const ARG* argument_type;											\
 		typedef RESULT result_type;													\
 																					\
-		result_type operator() (argument_type lhs) const							\
+		INLINE const result_type operator() (argument_type lhs) const							\
 			{																		\
 				return INTR (reinterpret_cast <const ARGA*> (lhs));					\
 			}																		\
@@ -1735,7 +1899,7 @@ template <> struct FN##_function <ARG*>												\
 		typedef ARG* argument_type;													\
 		typedef RESULT result_type;													\
 																					\
-		result_type operator() (argument_type lhs) const							\
+		INLINE const result_type operator() (argument_type lhs) const							\
 			{																		\
 				return INTR (reinterpret_cast <ARGA*> (lhs));						\
 			}																		\
@@ -1748,7 +1912,7 @@ template <> struct FN##_function <ARG1*, ARG2 >													\
 		typedef ARG2 second_argument_type;														\
 		typedef void result_type;																\
 																								\
-		result_type operator() (first_argument_type lhs, const second_argument_type& rhs) const	\
+		INLINE void operator() (first_argument_type lhs, const second_argument_type& rhs) const	\
 			{																					\
 				INTR (reinterpret_cast <ARG1A*> (lhs), data_of (rhs));							\
 			}																					\
@@ -1897,7 +2061,7 @@ template <> struct FN##_function <ARG1*, ARG2 >													\
 
 				#ifdef __MMX__
 				
-				inline void empty ()	{ _mm_empty (); }
+				INLINE void empty ()	{ _mm_empty (); }
 				
 				DEFINE_MMX_BINARY_FUNCTION (packs, _mm_packs_pi16, M64_I16, M64_I16, M64_I8)
 				DEFINE_MMX_BINARY_FUNCTION (packs, _mm_packs_pi32, M64_I32, M64_I32, M64_I16)
@@ -1961,41 +2125,48 @@ template <> struct FN##_function <ARG1*, ARG2 >													\
 
 				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_sll_pi16, M64_I16, M64_U16, M64_I16)
 				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_sll_pi16, M64_U16, M64_U16, M64_U16)
-				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_sll_pi16, M64_B16, M64_U16, M64_B16)
+
+				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_slli_pi16, M64_I16, int, M64_I16)
+				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_slli_pi16, M64_U16, int, M64_U16)
 
 				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_sll_pi32, M64_I32, M64_U32, M64_I32)
 				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_sll_pi32, M64_U32, M64_U32, M64_U32)
-				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_sll_pi32, M64_B32, M64_U32, M64_B32)
+
+				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_slli_pi32, M64_I32, int, M64_I32)
+				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_slli_pi32, M64_U32, int, M64_U32)
 
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (slli, _mm_slli_pi16, M64_I16, M64_I16)
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (slli, _mm_slli_pi16, M64_U16, M64_U16)
-				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (slli, _mm_slli_pi16, M64_B16, M64_B16)
 
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (slli, _mm_slli_pi32, M64_I32, M64_I32)
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (slli, _mm_slli_pi32, M64_U32, M64_U32)
-				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (slli, _mm_slli_pi32, M64_B32, M64_B32)
 
 				DEFINE_MMX_BINARY_FUNCTION (sra, _mm_sra_pi16, M64_I16, M64_U16, M64_I16)
 				DEFINE_MMX_BINARY_FUNCTION (sra, _mm_sra_pi32, M64_I32, M64_U32, M64_I32)
+
+				DEFINE_MMX_BINARY_FUNCTION (sra, _mm_srai_pi16, M64_I16, int, M64_I16)
+				DEFINE_MMX_BINARY_FUNCTION (sra, _mm_srai_pi32, M64_I32, int, M64_I32)
 
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srai, _mm_srai_pi16, M64_I16, M64_I16)
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srai, _mm_srai_pi32, M64_I32, M64_I32)
 
 				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srl_pi16, M64_I16, M64_U16, M64_I16)
 				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srl_pi16, M64_U16, M64_U16, M64_U16)
-				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srl_pi16, M64_B16, M64_U16, M64_B16)
+
+				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srli_pi16, M64_I16, int, M64_I16)
+				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srli_pi16, M64_U16, int, M64_U16)
 
 				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srl_pi32, M64_I32, M64_U32, M64_I32)
 				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srl_pi32, M64_U32, M64_U32, M64_U32)
-				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srl_pi32, M64_B32, M64_U32, M64_B32)
+
+				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srli_pi32, M64_I32, int, M64_I32)
+				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srli_pi32, M64_U32, int, M64_U32)
 
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srli, _mm_srli_pi16, M64_I16, M64_I16)
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srli, _mm_srli_pi16, M64_U16, M64_U16)
-				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srli, _mm_srli_pi16, M64_B16, M64_B16)
 
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srli, _mm_srli_pi32, M64_I32, M64_I32)
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srli, _mm_srli_pi32, M64_U32, M64_U32)
-				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srli, _mm_srli_pi32, M64_B32, M64_B32)
 
 				// MMX Logical Intrinsics
 
@@ -2571,30 +2742,36 @@ template <> struct FN##_function <ARG1*, ARG2 >													\
 
 				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_sll_epi16, M128I_I16, M128I_U16, M128I_I16)
 				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_sll_epi16, M128I_U16, M128I_U16, M128I_U16)
-				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_sll_epi16, M128I_B16, M128I_U16, M128I_B16)
+
+				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_slli_epi16, M128I_I16, int, M128I_I16)
+				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_slli_epi16, M128I_U16, int, M128I_U16)
 
 				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_sll_epi32, M128I_I32, M128I_U32, M128I_I32)
 				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_sll_epi32, M128I_U32, M128I_U32, M128I_U32)
-				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_sll_epi32, M128I_B32, M128I_U32, M128I_B32)
+
+				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_slli_epi32, M128I_I32, int, M128I_I32)
+				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_slli_epi32, M128I_U32, int, M128I_U32)
 
 				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_sll_epi64, M128I_I64, M128I_U64, M128I_I64)
 				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_sll_epi64, M128I_U64, M128I_U64, M128I_U64)
-				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_sll_epi64, M128I_B64, M128I_U64, M128I_B64)
+
+				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_slli_epi64, M128I_I64, int, M128I_I64)
+				DEFINE_MMX_BINARY_FUNCTION (sll, _mm_slli_epi64, M128I_U64, int, M128I_U64)
 
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (slli, _mm_slli_epi16, M128I_I16, M128I_I16)
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (slli, _mm_slli_epi16, M128I_U16, M128I_U16)
-				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (slli, _mm_slli_epi16, M128I_B16, M128I_B16)
 
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (slli, _mm_slli_epi32, M128I_I32, M128I_I32)
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (slli, _mm_slli_epi32, M128I_U32, M128I_U32)
-				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (slli, _mm_slli_epi32, M128I_B32, M128I_B32)
 
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (slli, _mm_slli_epi64, M128I_I64, M128I_I64)
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (slli, _mm_slli_epi64, M128I_U64, M128I_U64)
-				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (slli, _mm_slli_epi64, M128I_B64, M128I_B64)
 
 				DEFINE_MMX_BINARY_FUNCTION (sra, _mm_sra_epi16, M128I_I16, M128I_U16, M128I_I16)
 				DEFINE_MMX_BINARY_FUNCTION (sra, _mm_sra_epi32, M128I_I32, M128I_U32, M128I_I32)
+
+				DEFINE_MMX_BINARY_FUNCTION (sra, _mm_srai_epi16, M128I_I16, int, M128I_I16)
+				DEFINE_MMX_BINARY_FUNCTION (sra, _mm_srai_epi32, M128I_I32, int, M128I_I32)
 
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srai, _mm_srai_epi16, M128I_I16, M128I_I16)
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srai, _mm_srai_epi32, M128I_I32, M128I_I32)
@@ -2602,27 +2779,30 @@ template <> struct FN##_function <ARG1*, ARG2 >													\
 
 				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srl_epi16, M128I_I16, M128I_U16, M128I_I16)
 				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srl_epi16, M128I_U16, M128I_U16, M128I_U16)
-				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srl_epi16, M128I_B16, M128I_U16, M128I_B16)
+
+				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srli_epi16, M128I_I16, int, M128I_I16)
+				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srli_epi16, M128I_U16, int, M128I_U16)
 
 				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srl_epi32, M128I_I32, M128I_U32, M128I_I32)
 				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srl_epi32, M128I_U32, M128I_U32, M128I_U32)
-				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srl_epi32, M128I_B32, M128I_U32, M128I_B32)
+
+				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srli_epi32, M128I_I32, int, M128I_I32)
+				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srli_epi32, M128I_U32, int, M128I_U32)
 
 				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srl_epi64, M128I_I64, M128I_U64, M128I_I64)
 				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srl_epi64, M128I_U64, M128I_U64, M128I_U64)
-				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srl_epi64, M128I_B64, M128I_U64, M128I_B64)
+
+				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srli_epi64, M128I_I64, int, M128I_I64)
+				DEFINE_MMX_BINARY_FUNCTION (srl, _mm_srli_epi64, M128I_U64, int, M128I_U64)
 
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srli, _mm_srli_epi16, M128I_I16, M128I_I16)
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srli, _mm_srli_epi16, M128I_U16, M128I_U16)
-				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srli, _mm_srli_epi16, M128I_B16, M128I_B16)
 
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srli, _mm_srli_epi32, M128I_I32, M128I_I32)
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srli, _mm_srli_epi32, M128I_U32, M128I_U32)
-				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srli, _mm_srli_epi32, M128I_B32, M128I_B32)
 
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srli, _mm_srli_epi64, M128I_I64, M128I_I64)
 				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srli, _mm_srli_epi64, M128I_U64, M128I_U64)
-				DEFINE_MMX_UNARY_FUNCTION_WITH_LITERAL (srli, _mm_srli_epi64, M128I_B64, M128I_B64)
 				
 				// SSE2 Integer Memory Intrinsics
 				
@@ -2756,7 +2936,7 @@ template <> struct FN##_function <ARG1*, ARG2 >													\
 				namespace impl
 					{
 						// sin (x) -- where x is in [-Pi/2, Pi/2]
-						inline vec <float, 4> sine_reduced (const vec <float, 4>& x)
+						INLINE const vec <float, 4> sine_reduced (const vec <float, 4>& x)
 							{
 								// minimax polynomial of degree 9, odd powers only on [0, Pi/2] -- because p(x) == -p(-x) this works also for [-Pi/2,0]
 								// NOTE: we got a minimax polynomial of degree 4 on sin(sqrt(x))/sqrt(x) on [0, (Pi^2)/4], then expanded it out
@@ -2787,7 +2967,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						return lhs;
 					}
@@ -2800,7 +2980,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> argument_type;
 				typedef macstl::vec <float, 4> result_type;
 
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 
@@ -2818,7 +2998,7 @@ namespace stdext
 				typedef macstl::vec <double, 2> argument_type;
 				typedef macstl::vec <double, 2> result_type;
 
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 
@@ -2846,7 +3026,7 @@ namespace stdext
 				typedef macstl::vec <T, n> argument_type;
 				typedef macstl::vec <T, n> result_type;
 
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 
@@ -2859,7 +3039,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 
-				result_type operator() (const argument_type&) const
+				INLINE const result_type operator() (const argument_type&) const
 					{
 						return argument_type::template fill <true> ();
 					}
@@ -2897,7 +3077,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> argument_type;
 				typedef macstl::vec <float, 4> result_type;
 				
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 
@@ -2927,9 +3107,6 @@ namespace stdext
 								mmx::vand (
 									vec <float, 4>::fill <0x80000000U> (),	// -0.0
 									reinterpret_cast <const __m128&> (neg)));
-						
-
-							
 					}	
 			};
 		
@@ -2969,7 +3146,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <float>, 4> second_argument_type;
 				typedef macstl::vec <macstl::boolean <float>, 4> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2985,7 +3162,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <double>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <double>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -2999,7 +3176,7 @@ namespace stdext
 				typedef macstl::vec <long long, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3014,7 +3191,7 @@ namespace stdext
 				typedef macstl::vec <unsigned long long, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3029,7 +3206,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3047,7 +3224,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
@@ -3062,7 +3239,7 @@ namespace stdext
 				typedef macstl::vec <unsigned char, 8> second_argument_type;
 				typedef macstl::vec <macstl::boolean <char>, 8> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
@@ -3084,7 +3261,7 @@ namespace stdext
 				typedef macstl::vec <unsigned short, 4> second_argument_type;
 				typedef macstl::vec <macstl::boolean <short>, 4> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
@@ -3106,7 +3283,7 @@ namespace stdext
 				typedef macstl::vec <unsigned int, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <int>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
@@ -3146,7 +3323,7 @@ namespace stdext
 				typedef macstl::vec <unsigned char, 16> second_argument_type;
 				typedef macstl::vec <macstl::boolean <char>, 16> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
@@ -3168,7 +3345,7 @@ namespace stdext
 				typedef macstl::vec <unsigned short, 8> second_argument_type;
 				typedef macstl::vec <macstl::boolean <short>, 8> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
@@ -3190,7 +3367,7 @@ namespace stdext
 				typedef macstl::vec <unsigned int, 4> second_argument_type;
 				typedef macstl::vec <macstl::boolean <int>, 4> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
@@ -3216,7 +3393,7 @@ namespace stdext
 				typedef macstl::vec <T, n> second_argument_type;
 				typedef typename macstl::vec <T, n>::vec_boolean result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						return !(rhs > lhs);
 					}
@@ -3252,7 +3429,7 @@ namespace stdext
 				typedef macstl::vec <T, n> second_argument_type;
 				typedef typename macstl::vec <T, n>::vec_boolean result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						return rhs > lhs;
 					}
@@ -3273,7 +3450,7 @@ namespace stdext
 				typedef macstl::vec <T, n> second_argument_type;
 				typedef typename macstl::vec <T, n>::vec_boolean result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						return !(lhs > rhs);
 					}
@@ -3308,7 +3485,7 @@ namespace stdext
 				typedef macstl::vec <T, n> second_argument_type;
 				typedef typename macstl::vec <T, n>::vec_boolean result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3331,7 +3508,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> second_argument_type;
 				typedef macstl::vec <macstl::boolean <float>, 4> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 						{
 							using namespace macstl;
 							
@@ -3352,7 +3529,7 @@ namespace stdext
 				typedef macstl::vec <double, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <double>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 						{
 							using namespace macstl;
 							
@@ -3375,7 +3552,7 @@ namespace stdext
 				typedef macstl::vec <T, n> argument_type;
 				typedef typename macstl::vec <T, n>::vec_boolean result_type;
 				
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 						
@@ -3388,7 +3565,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 
@@ -3404,7 +3581,7 @@ namespace stdext
 				typedef macstl::vec <T, n> second_argument_type;
 				typedef typename macstl::vec <T, n>::vec_boolean result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3428,7 +3605,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> second_argument_type;
 				typedef macstl::vec <macstl::boolean <float>, 4> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 						{
 							using namespace macstl;
 							
@@ -3449,7 +3626,7 @@ namespace stdext
 				typedef macstl::vec <double, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <double>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 						{
 							using namespace macstl;
 							
@@ -3473,7 +3650,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
@@ -3489,11 +3666,11 @@ namespace stdext
 				typedef macstl::vec <unsigned short, 4> second_argument_type;
 				typedef macstl::vec <unsigned short, 4> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
-						vec <short, 4> offset = vec <short, 4>::fill <0x8000U> ();
+						vec <short, 4> offset = vec <short, 4>::fill <-0x8000> ();
 						return data_cast <vec <unsigned short, 4> > (mmx::add (mmx::max (
 							mmx::sub (data_cast <vec <short, 4> > (lhs), offset),
 							mmx::sub (data_cast <vec <short, 4> > (rhs), offset)),
@@ -3537,11 +3714,11 @@ namespace stdext
 				typedef macstl::vec <unsigned short, 8> second_argument_type;
 				typedef macstl::vec <unsigned short, 8> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
-						vec <short, 8> offset = vec <short, 8>::fill <0x8000U> ();
+						vec <short, 8> offset = vec <short, 8>::fill <-0x8000> ();
 						return data_cast <vec <unsigned short, 8> > (mmx::add (mmx::max (
 							mmx::sub (data_cast <vec <short, 8> > (lhs), offset),
 							mmx::sub (data_cast <vec <short, 8> > (rhs), offset)),
@@ -3570,7 +3747,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
@@ -3586,11 +3763,11 @@ namespace stdext
 				typedef macstl::vec <unsigned short, 4> second_argument_type;
 				typedef macstl::vec <unsigned short, 4> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
-						vec <short, 4> offset = vec <short, 4>::fill <0x8000U> ();
+						vec <short, 4> offset = vec <short, 4>::fill <0x8000> ();
 						return data_cast <vec <unsigned short, 4> > (mmx::add (mmx::min (
 							mmx::sub (data_cast <vec <short, 4> > (lhs), offset),
 							mmx::sub (data_cast <vec <short, 4> > (rhs), offset)),
@@ -3630,11 +3807,11 @@ namespace stdext
 				typedef macstl::vec <unsigned short, 8> second_argument_type;
 				typedef macstl::vec <unsigned short, 8> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
-						vec <short, 8> offset = vec <short, 8>::fill <0x8000U> ();
+						vec <short, 8> offset = vec <short, 8>::fill <0x8000> ();
 						return data_cast <vec <unsigned short, 8> > (mmx::add (mmx::min (
 							mmx::sub (data_cast <vec <short, 8> > (lhs), offset),
 							mmx::sub (data_cast <vec <short, 8> > (rhs), offset)),
@@ -3667,7 +3844,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3684,7 +3861,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3743,7 +3920,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type&, const second_argument_type&) const
+				INLINE const result_type operator() (const first_argument_type&, const second_argument_type&) const
 					{
 						return result_type::template fill <false> ();
 					}
@@ -3779,7 +3956,7 @@ namespace stdext
 				typedef macstl::vec <T, n> argument_type;
 				typedef macstl::vec <T, n> result_type;
 				
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 						
@@ -3792,7 +3969,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						return lhs;
 					}
@@ -3806,7 +3983,7 @@ namespace stdext
 				typedef macstl::vec <T, n> second_argument_type;
 				typedef typename macstl::vec <T, n>::vec_boolean result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3827,7 +4004,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <float>, 4> second_argument_type;
 				typedef macstl::vec <macstl::boolean <float>, 4> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3849,7 +4026,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <double>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <double>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3863,7 +4040,7 @@ namespace stdext
 				typedef macstl::vec <long long, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3880,7 +4057,7 @@ namespace stdext
 				typedef macstl::vec <unsigned long long, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3897,7 +4074,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <long long>, 2> second_argument_type;
 				typedef macstl::vec <macstl::boolean <long long>, 2> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
@@ -3923,7 +4100,7 @@ namespace stdext
 				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
 				typedef macstl::vec <macstl::boolean <T>, n> result_type;
 				
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3951,7 +4128,7 @@ namespace stdext
 				typedef macstl::vec <T, n> third_argument_type;
 				typedef macstl::vec <T, n> result_type;
 
-				result_type operator() (const first_argument_type& lhs, const second_argument_type& mhs, const third_argument_type& rhs) const
+				INLINE const result_type operator() (const first_argument_type& lhs, const second_argument_type& mhs, const third_argument_type& rhs) const
 					{
 						using namespace macstl;
 						
@@ -3968,7 +4145,7 @@ namespace stdext
 				typedef macstl::vec <float, 4> argument_type;
 				typedef macstl::vec <float, 4> result_type;
 
-				result_type operator() (const argument_type& lhs) const
+				INLINE const result_type operator() (const argument_type& lhs) const
 					{
 						using namespace macstl;
 
@@ -3989,7 +4166,7 @@ namespace stdext
 									mmx::mul (mmx::cvt <vec <double, 2> > (mmx::shuffle <1, 0, 3, 2> (lhs_n)), pi))));
 
 						const __m128i neg = mmx::andnot (
-							mmx::cmpeq (reinterpret_cast <const vec <int, 4>&> (lhs), vec <int, 4>::fill <0x80000000U> ()),
+							mmx::cmpeq (reinterpret_cast <const vec <int, 4>&> (lhs), vec <int, 4>::fill <-0x7FFFFFFF - 1> ()),
 							mmx::cmpeq (mmx::vand (lhs_n, vec <int, 4>::fill <1> ()), vec <int, 4>::fill <0> ())).data ();
 							
 						return
@@ -4030,18 +4207,18 @@ namespace stdext
 		
 		#if defined(__MMX__) && defined(__SSE__)
 
-		inline macstl::boolean <char> accumulator <maximum <macstl::vec <macstl::boolean <char>, 8>, macstl::vec <macstl::boolean <char>, 8> > >::operator() (const macstl::vec <macstl::boolean <char>, 8>& lhs) const
+		INLINE const macstl::boolean <char> accumulator <maximum <macstl::vec <macstl::boolean <char>, 8>, macstl::vec <macstl::boolean <char>, 8> > >::operator() (const macstl::vec <macstl::boolean <char>, 8>& lhs) const
 			{
 				using namespace macstl;
 
 				return mmx::movemask (lhs) != 0;
 			}
 		
-		inline unsigned short accumulator <maximum <macstl::vec <unsigned short, 4>, macstl::vec <unsigned short, 4> > >::operator() (const macstl::vec <unsigned short, 4>& lhs) const
+		INLINE unsigned short accumulator <maximum <macstl::vec <unsigned short, 4>, macstl::vec <unsigned short, 4> > >::operator() (const macstl::vec <unsigned short, 4>& lhs) const
 			{
 				using namespace macstl;
 
-				const vec <short, 4> offset = vec <short, 4>::fill <0x8000U> ();
+				const vec <short, 4> offset = vec <short, 4>::fill <0x8000> ();
 				const vec <short, 4> lhs_offset = mmx::sub (data_cast <vec <short, 4> > (lhs), offset);
 				
 				const vec <short, 4> result = mmx::max (lhs_offset, mmx::shuffle <0, 3, 2, 1> (lhs_offset));
@@ -4050,7 +4227,7 @@ namespace stdext
 			}
 
 
-		inline short accumulator <maximum <macstl::vec <short, 4>, macstl::vec <short, 4> > >::operator() (const macstl::vec <short, 4>& lhs) const
+		INLINE short accumulator <maximum <macstl::vec <short, 4>, macstl::vec <short, 4> > >::operator() (const macstl::vec <short, 4>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4062,7 +4239,7 @@ namespace stdext
 		
 		#ifdef __SSE__
 		
-		inline float accumulator <maximum <macstl::vec <float, 4>, macstl::vec <float, 4> > >::operator() (const macstl::vec <float, 4>& lhs) const
+		INLINE float accumulator <maximum <macstl::vec <float, 4>, macstl::vec <float, 4> > >::operator() (const macstl::vec <float, 4>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4070,7 +4247,7 @@ namespace stdext
 				return mmx::max (result, mmx::shuffles <1, 0, 3, 2> (result, result)) [0];
 			}
 
-		inline macstl::boolean <float> accumulator <maximum <macstl::vec <macstl::boolean <float>, 4>, macstl::vec <macstl::boolean <float>, 4> > >::operator() (const macstl::vec <macstl::boolean <float>, 4>& lhs) const
+		INLINE const macstl::boolean <float> accumulator <maximum <macstl::vec <macstl::boolean <float>, 4>, macstl::vec <macstl::boolean <float>, 4> > >::operator() (const macstl::vec <macstl::boolean <float>, 4>& lhs) const
 			{
 				using namespace macstl;
 
@@ -4081,21 +4258,21 @@ namespace stdext
 
 		#ifdef __SSE2__
 		
-		inline double accumulator <maximum <macstl::vec <double, 2>, macstl::vec <double, 2> > >::operator() (const macstl::vec <double, 2>& lhs) const
+		INLINE double accumulator <maximum <macstl::vec <double, 2>, macstl::vec <double, 2> > >::operator() (const macstl::vec <double, 2>& lhs) const
 			{
 				using namespace macstl;
 				
 				return mmx::max (lhs, mmx::shuffled <0, 1> (lhs, lhs)) [0];
 			}
 
-		inline macstl::boolean <double> accumulator <maximum <macstl::vec <macstl::boolean <double>, 2>, macstl::vec <macstl::boolean <double>, 2> > >::operator() (const macstl::vec <macstl::boolean <double>, 2>& lhs) const
+		INLINE const macstl::boolean <double> accumulator <maximum <macstl::vec <macstl::boolean <double>, 2>, macstl::vec <macstl::boolean <double>, 2> > >::operator() (const macstl::vec <macstl::boolean <double>, 2>& lhs) const
 			{
 				using namespace macstl;
 
 				return mmx::movemask (lhs) != 0;
 			}
 
-		inline macstl::boolean <char> accumulator <maximum <macstl::vec <macstl::boolean <char>, 16>, macstl::vec <macstl::boolean <char>, 16> > >::operator() (const macstl::vec <macstl::boolean <char>, 16>& lhs) const
+		INLINE const macstl::boolean <char> accumulator <maximum <macstl::vec <macstl::boolean <char>, 16>, macstl::vec <macstl::boolean <char>, 16> > >::operator() (const macstl::vec <macstl::boolean <char>, 16>& lhs) const
 			{
 				using namespace macstl;
 
@@ -4108,18 +4285,18 @@ namespace stdext
 
 		#if defined(__MMX__) && defined(__SSE__)
 
-		inline macstl::boolean <char> accumulator <minimum <macstl::vec <macstl::boolean <char>, 8>, macstl::vec <macstl::boolean <char>, 8> > >::operator() (const macstl::vec <macstl::boolean <char>, 8>& lhs) const
+		INLINE const macstl::boolean <char> accumulator <minimum <macstl::vec <macstl::boolean <char>, 8>, macstl::vec <macstl::boolean <char>, 8> > >::operator() (const macstl::vec <macstl::boolean <char>, 8>& lhs) const
 			{
 				using namespace macstl;
 
 				return mmx::movemask (lhs) == 255;
 			}
 			
-		inline unsigned short accumulator <minimum <macstl::vec <unsigned short, 4>, macstl::vec <unsigned short, 4> > >::operator() (const macstl::vec <unsigned short, 4>& lhs) const
+		INLINE unsigned short accumulator <minimum <macstl::vec <unsigned short, 4>, macstl::vec <unsigned short, 4> > >::operator() (const macstl::vec <unsigned short, 4>& lhs) const
 			{
 				using namespace macstl;
 
-				const vec <short, 4> offset = vec <short, 4>::fill <0x8000U> ();
+				const vec <short, 4> offset = vec <short, 4>::fill <0x8000> ();
 				const vec <short, 4> lhs_offset = mmx::sub (data_cast <vec <short, 4> > (lhs), offset);
 				
 				const vec <short, 4> result = mmx::min (lhs_offset, mmx::shuffle <0, 3, 2, 1> (lhs_offset));
@@ -4127,7 +4304,7 @@ namespace stdext
 					mmx::add (mmx::min (result, mmx::shuffle <1, 0, 3, 2> (result)), offset));
 			}
 
-		inline short accumulator <minimum <macstl::vec <short, 4>, macstl::vec <short, 4> > >::operator() (const macstl::vec <short, 4>& lhs) const
+		INLINE short accumulator <minimum <macstl::vec <short, 4>, macstl::vec <short, 4> > >::operator() (const macstl::vec <short, 4>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4139,7 +4316,7 @@ namespace stdext
 		
 		#ifdef __SSE__
 		
-		inline float accumulator <minimum <macstl::vec <float, 4>, macstl::vec <float, 4> > >::operator() (const macstl::vec <float, 4>& lhs) const
+		INLINE float accumulator <minimum <macstl::vec <float, 4>, macstl::vec <float, 4> > >::operator() (const macstl::vec <float, 4>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4147,7 +4324,7 @@ namespace stdext
 				return mmx::min (result, mmx::shuffles <1, 0, 3, 2> (result, result)) [0];
 			}
 
-		inline macstl::boolean <float> accumulator <minimum <macstl::vec <macstl::boolean <float>, 4>, macstl::vec <macstl::boolean <float>, 4> > >::operator() (const macstl::vec <macstl::boolean <float>, 4>& lhs) const
+		INLINE const macstl::boolean <float> accumulator <minimum <macstl::vec <macstl::boolean <float>, 4>, macstl::vec <macstl::boolean <float>, 4> > >::operator() (const macstl::vec <macstl::boolean <float>, 4>& lhs) const
 			{
 				using namespace macstl;
 
@@ -4158,21 +4335,21 @@ namespace stdext
 
 		#ifdef __SSE2__
 		
-		inline double accumulator <minimum <macstl::vec <double, 2>, macstl::vec <double, 2> > >::operator() (const macstl::vec <double, 2>& lhs) const
+		INLINE double accumulator <minimum <macstl::vec <double, 2>, macstl::vec <double, 2> > >::operator() (const macstl::vec <double, 2>& lhs) const
 			{
 				using namespace macstl;
 				
 				return mmx::min (lhs, mmx::shuffled <0, 1> (lhs, lhs)) [0];
 			}
 
-		inline macstl::boolean <double> accumulator <minimum <macstl::vec <macstl::boolean <double>, 2>, macstl::vec <macstl::boolean <double>, 2> > >::operator() (const macstl::vec <macstl::boolean <double>, 2>& lhs) const
+		INLINE const macstl::boolean <double> accumulator <minimum <macstl::vec <macstl::boolean <double>, 2>, macstl::vec <macstl::boolean <double>, 2> > >::operator() (const macstl::vec <macstl::boolean <double>, 2>& lhs) const
 			{
 				using namespace macstl;
 
 				return mmx::movemask (lhs) == 3;
 			}
 
-		inline macstl::boolean <char> accumulator <minimum <macstl::vec <macstl::boolean <char>, 16>, macstl::vec <macstl::boolean <char>, 16> > >::operator() (const macstl::vec <macstl::boolean <char>, 16>& lhs) const
+		INLINE const macstl::boolean <char> accumulator <minimum <macstl::vec <macstl::boolean <char>, 16>, macstl::vec <macstl::boolean <char>, 16> > >::operator() (const macstl::vec <macstl::boolean <char>, 16>& lhs) const
 			{
 				using namespace macstl;
 
@@ -4185,7 +4362,7 @@ namespace stdext
 		
 		#if defined(__MMX__) && defined(__SSE__)
 		
-		inline unsigned short accumulator <plus <macstl::vec <unsigned short, 4>, macstl::vec <unsigned short, 4> > >::operator() (const macstl::vec <unsigned short, 4>& lhs) const
+		INLINE unsigned short accumulator <plus <macstl::vec <unsigned short, 4>, macstl::vec <unsigned short, 4> > >::operator() (const macstl::vec <unsigned short, 4>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4193,7 +4370,7 @@ namespace stdext
 				return mmx::extract <0> (mmx::add (result, mmx::shuffle <1, 0, 3, 2> (result)));
 			}
 
-		inline short accumulator <plus <macstl::vec <short, 4>, macstl::vec <short, 4> > >::operator() (const macstl::vec <short, 4>& lhs) const
+		INLINE short accumulator <plus <macstl::vec <short, 4>, macstl::vec <short, 4> > >::operator() (const macstl::vec <short, 4>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4205,7 +4382,7 @@ namespace stdext
 			
 		#ifdef __SSE__
 		
-		inline float accumulator <plus <macstl::vec <float, 4>, macstl::vec <float, 4> > >::operator() (const macstl::vec <float, 4>& lhs) const
+		INLINE float accumulator <plus <macstl::vec <float, 4>, macstl::vec <float, 4> > >::operator() (const macstl::vec <float, 4>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4217,14 +4394,14 @@ namespace stdext
 
 		#ifdef __SSE2__
 		
-		inline double accumulator <plus <macstl::vec <double, 2>, macstl::vec <double, 2> > >::operator() (const macstl::vec <double, 2>& lhs) const
+		INLINE double accumulator <plus <macstl::vec <double, 2>, macstl::vec <double, 2> > >::operator() (const macstl::vec <double, 2>& lhs) const
 			{
 				using namespace macstl;
 				
 				return mmx::add (lhs, mmx::shuffled <0, 1> (lhs, lhs)) [0];
 			}
 
-		inline unsigned int accumulator <plus <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> > >::operator() (const macstl::vec <unsigned int, 4>& lhs) const
+		INLINE unsigned int accumulator <plus <macstl::vec <unsigned int, 4>, macstl::vec <unsigned int, 4> > >::operator() (const macstl::vec <unsigned int, 4>& lhs) const
 			{
 				using namespace macstl;
 				
@@ -4232,7 +4409,7 @@ namespace stdext
 				return mmx::add (result, mmx::shuffle <1, 0, 3, 2> (result)) [0];
 			}
 
-		inline int accumulator <plus <macstl::vec <int, 4>, macstl::vec <int, 4> > >::operator() (const macstl::vec <int, 4>& lhs) const
+		INLINE int accumulator <plus <macstl::vec <int, 4>, macstl::vec <int, 4> > >::operator() (const macstl::vec <int, 4>& lhs) const
 			{
 				using namespace macstl;
 				

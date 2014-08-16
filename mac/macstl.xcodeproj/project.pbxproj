@@ -26,6 +26,7 @@
 		D83B19BA078C41C8001E7E8D /* valarray_mmx.h in Headers */ = {isa = PBXBuildFile; fileRef = D83B19B9078C41C8001E7E8D /* valarray_mmx.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		D8785A0D073846250011A618 /* vectest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8785A0C073846250011A618 /* vectest.cpp */; };
 		D881FEED07A526B50027F6CE /* com_ptr.h in Headers */ = {isa = PBXBuildFile; fileRef = D881FEEC07A526B50027F6CE /* com_ptr.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		D898DE6508ACC69A00B4DF22 /* valarray_refarray.h in Headers */ = {isa = PBXBuildFile; fileRef = D898DE6408ACC69A00B4DF22 /* valarray_refarray.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		D8B7B2E9078F7FE400C1976A /* valarray_statarray.h in Headers */ = {isa = PBXBuildFile; fileRef = D8B7B2E8078F7FE400C1976A /* valarray_statarray.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		D8B7B350078F8B0300C1976A /* mmaptest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B7B34F078F8B0300C1976A /* mmaptest.cpp */; };
 		D8B7B384078F8E7900C1976A /* mmapping.h in Headers */ = {isa = PBXBuildFile; fileRef = D82E9DC20761A57E00E16D99 /* mmapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -64,6 +65,17 @@
 		D8C5249607313FCE008CB8AF /* benchmark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8C5239207305151008CB8AF /* benchmark.cpp */; };
 		D8F56B71079AA1430064470A /* core_array.h in Headers */ = {isa = PBXBuildFile; fileRef = D8F56B70079AA1430064470A /* core_array.h */; settings = {ATTRIBUTES = (Private, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		D805898608B6013B00015489 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.gcc.3_3;
+			fileType = sourcecode.cpp;
+			isEditable = 1;
+			outputFiles = (
+			);
+		};
+/* End PBXBuildRule section */
 
 /* Begin PBXBuildStyle section */
 		4F0BB7ED011F40E904CA0E50 /* Optimized for gcc 4.0 on G5 */ = {
@@ -238,6 +250,7 @@
 		D8785A0A073845FF0011A618 /* vectest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = vectest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8785A0C073846250011A618 /* vectest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vectest.cpp; sourceTree = "<group>"; };
 		D881FEEC07A526B50027F6CE /* com_ptr.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = com_ptr.h; sourceTree = "<group>"; };
+		D898DE6408ACC69A00B4DF22 /* valarray_refarray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = valarray_refarray.h; sourceTree = "<group>"; };
 		D8B7B2E8078F7FE400C1976A /* valarray_statarray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = valarray_statarray.h; sourceTree = "<group>"; };
 		D8B7B34D078F8AC000C1976A /* mmaptest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mmaptest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8B7B34F078F8B0300C1976A /* mmaptest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mmaptest.cpp; sourceTree = "<group>"; };
@@ -448,6 +461,7 @@
 				D8C5238007305151008CB8AF /* valarray_mask.h */,
 				D8B7B4D8078FA00F00C1976A /* valarray_mmaparray.h */,
 				D83B19B9078C41C8001E7E8D /* valarray_mmx.h */,
+				D898DE6408ACC69A00B4DF22 /* valarray_refarray.h */,
 				D8C5238107305151008CB8AF /* valarray_shift.h */,
 				D8C5238207305151008CB8AF /* valarray_slice.h */,
 				D8B7B2E8078F7FE400C1976A /* valarray_statarray.h */,
@@ -525,6 +539,7 @@
 				D807CAD307A4721F003DE6EC /* refptr.h in Headers */,
 				D807CB7F07A488B0003DE6EC /* mach.h in Headers */,
 				D881FEED07A526B50027F6CE /* com_ptr.h in Headers */,
+				D898DE6508ACC69A00B4DF22 /* valarray_refarray.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -764,6 +779,7 @@
 				D8C5249207313FB1008CB8AF /* Frameworks */,
 			);
 			buildRules = (
+				D805898608B6013B00015489 /* PBXBuildRule */,
 			);
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
@@ -991,15 +1007,7 @@
 		D810E4240857B8D700735993 /* Optimized for G5 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_MODEL_CPU = G5;
 				INSTALL_PATH = /usr/local/bin;
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(value)",
-					"--param",
-					"large-function-growth=50000",
-					"--param",
-					"inline-unit-growth=50000",
-				);
 				PRODUCT_NAME = benchmark;
 			};
 			name = "Optimized for G5";
@@ -1009,13 +1017,6 @@
 			buildSettings = {
 				GCC_MODEL_CPU = G5;
 				INSTALL_PATH = /usr/local/bin;
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(value)",
-					"--param",
-					"large-function-growth=50000",
-					"--param",
-					"inline-unit-growth=50000",
-				);
 				PRODUCT_NAME = benchmark;
 			};
 			name = "Optimized for G4";
@@ -1023,7 +1024,6 @@
 		D810E4260857B8D700735993 /* Optimized for G5 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_MODEL_CPU = G5;
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = comtest;
 			};
@@ -1041,7 +1041,6 @@
 		D810E4280857B8D700735993 /* Optimized for G5 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_MODEL_CPU = G5;
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = coretest;
 			};
@@ -1059,7 +1058,6 @@
 		D810E42A0857B8D700735993 /* Optimized for G5 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_MODEL_CPU = G5;
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = exhaustive;
 			};
@@ -1077,7 +1075,6 @@
 		D810E42C0857B8D700735993 /* Optimized for G5 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_MODEL_CPU = G5;
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = machtest;
 			};
@@ -1095,7 +1092,6 @@
 		D810E42E0857B8D700735993 /* Optimized for G5 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_MODEL_CPU = G5;
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = mmaptest;
 			};
@@ -1113,7 +1109,6 @@
 		D810E4300857B8D700735993 /* Optimized for G5 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_MODEL_CPU = G5;
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = vectest;
 			};
@@ -1135,16 +1130,15 @@
 				GCC_ALTIVEC_EXTENSIONS = YES;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_PPC64 = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_STRICT_ALIASING = YES;
 				GCC_UNROLL_LOOPS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-falign-loops=16",
 					"-falign-jumps=16",
 					"-falign-functions=16",
-					"-finline-limit=10000",
 					"-mcpu=G5",
 				);
 			};
@@ -1165,7 +1159,6 @@
 					"-falign-loops=16",
 					"-falign-jumps=16",
 					"-falign-functions=16",
-					"-finline-limit=10000",
 					"-mcpu=G4",
 				);
 			};
@@ -1191,13 +1184,6 @@
 			buildSettings = {
 				GCC_MODEL_CPU = G5;
 				INSTALL_PATH = /usr/local/bin;
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(value)",
-					"--param",
-					"inline-unit-growth=50000",
-					"--param",
-					"large-function-growth=50000",
-				);
 				PRODUCT_NAME = benchmark;
 			};
 			name = "Optimized for PowerPC and Intel";
@@ -1264,20 +1250,19 @@
 					i386,
 				);
 				DEAD_CODE_STRIPPING = YES;
-				GCC_ALTIVEC_EXTENSIONS = YES;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_PPC64 = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_STRICT_ALIASING = YES;
-				GCC_UNROLL_LOOPS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-falign-loops=16",
 					"-falign-jumps=16",
 					"-falign-functions=16",
-					"-finline-limit=10000",
 				);
+				PER_ARCH_CFLAGS_i386 = "-msse3";
+				PER_ARCH_CFLAGS_ppc = "-faltivec -funroll-loops -mcpu=G5 -mtune=G5";
+				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = "Optimized for PowerPC and Intel";

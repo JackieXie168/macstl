@@ -182,7 +182,7 @@ int main (int, const char *)
 		using namespace macstl;
 		
 		#ifdef __VEC__
-		vec_mtvscr ((vector unsigned char) (0));	// in Altivec, use more accurate Java mode for testing
+		altivec::mtvscr (vec <unsigned char, 16>::fill <0> ());	// in Altivec, use more accurate Java mode for testing
 		#endif
 
 		test_type <vec <unsigned char, 32> >::call ("vec <unsigned char, 32>");

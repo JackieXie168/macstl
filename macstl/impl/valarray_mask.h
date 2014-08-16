@@ -77,8 +77,6 @@ namespace stdext
 									return *subterm_iter_;
 								}
 								
-							
-								
 							mask_iterator& operator++ ()
 								{
 									do

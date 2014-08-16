@@ -670,7 +670,7 @@
 				GCC_MODEL_PPC64 = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 3;
-				OTHER_CPLUSPLUSFLAGS = "-falign-loops=16 -falign-jumps=16 -falign-functions=16 -finline-limit=10000 -fstrict-aliasing -funroll-loops -mpowerpc-gpopt";
+				OTHER_CPLUSPLUSFLAGS = "-falign-loops=16 -falign-jumps=16 -falign-functions=16 -fstrict-aliasing -funroll-loops -mpowerpc-gpopt";
 				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
@@ -685,7 +685,7 @@
 				GCC_MODEL_CPU = G4;
 				GCC_MODEL_TUNING = G4;
 				GCC_OPTIMIZATION_LEVEL = 3;
-				OTHER_CPLUSPLUSFLAGS = "-falign-loops=16 -falign-jumps=16 -falign-functions=16 -finline-limit=50000 -fstrict-aliasing -funroll-loops";
+				OTHER_CPLUSPLUSFLAGS = "-falign-loops=16 -falign-jumps=16 -falign-functions=16 -fstrict-aliasing -funroll-loops";
 				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
@@ -1632,7 +1632,6 @@
 			);
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
-				OTHER_CPLUSPLUSFLAGS = "-finline-limit=10000 --param large-function-growth=50000 --param inline-unit-growth=50000";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = benchmark;

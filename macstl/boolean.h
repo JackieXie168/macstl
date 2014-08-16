@@ -173,5 +173,25 @@ namespace macstl
 				template <> struct boolean_sized <2>	{ typedef boolean <short> type; };
 				template <> struct boolean_sized <4>	{ typedef boolean <int> type; };
 			}
-	}	
+	}
+	
+namespace stdext
+	{
+		// forward declare of selection template from functional.h, then specialized for use with sized booleans
+		
+		template <typename T1, typename T2, typename T3> struct selection;
+		
+		template <typename T1, typename T2> struct selection <macstl::boolean <T1>, T2, T2>
+			{
+				typedef macstl::boolean <T1> first_argument_type;
+				typedef T2 second_argument_type;
+				typedef T2 third_argument_type;
+				typedef T2 result_type;
+				
+				const T2 operator() (const macstl::boolean <T1>& lhs, const T2& mhs, const T2& rhs) const
+					{
+						return lhs.data () ? mhs : rhs;
+					}
+			};
+	}
 #endif

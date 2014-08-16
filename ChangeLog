@@ -1,5 +1,20 @@
 Release history
 
+0.3.1	6 Sep 2005	
+	．Fixed class scope vector typedefs, missing PowerPC intrinsics header, vector initializer syntax for FSF 3.4 [ILi*].
+	．Added complex conj function for vec and valarray [ILi*].
+	．Improved valarray expression performance: v1 [slice].
+	．Improved valarray code generation: CSE, inlining limits, literal terms, array term elements, statarray construction, compiling -faltivec without -maltivec for Apple gcc 4.0.
+	．Added refarray class [PBa].
+	．Fixed buffer overflow in integral valarrays for SSE2; added optimizations for valarray expressions: v1 >> k and v1 << k for SSE2 [MSh].
+	．Fixed accumulate array dispatch, integer constant overflow, literal benchmark test for SSE2; fixed chunking iterator pessimization for gcc 3.3/4 [ILi, RBe].
+	．Added makefile for Linux x86 [ILi*].
+	．Added support for FSF gcc 3.4 on Cygwin 1.5.
+	．Added differently typed valarray construct and assign from terms, valarrays of sized booleans, select with sized booleans [ILi].
+	．Fixed unix makefile directory.
+	．Added macstlizer conversions: abs, abss, cmpeq, max, min.
+	．Improved readme file.
+
 0.3	28 Jun 2005	
 	．Added support for Apple gcc 4.0 on Mac OS X 10.4.
 	．Added support for FSF gcc 3.4 on Yellow Dog Linux [MLe*].

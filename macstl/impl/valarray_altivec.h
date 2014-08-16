@@ -48,42 +48,7 @@ namespace stdext
 				template <> struct chunk <float>							{ typedef macstl::vec <float, 4> type; };
 				template <> struct chunk <stdext::complex <float> >			{ typedef macstl::vec <stdext::complex <float>, 2> type; };
 				template <typename T> struct chunk <macstl::boolean <T> >	{ typedef macstl::vec <macstl::boolean <T>, 16 / sizeof (T)> type; };
-									
-				inline void* malloc_align16 (std::size_t size)
-					{
-					#if defined(__MACH__)
-						return std::malloc (size);
-					#elif defined(__linux__)
-						return ::memalign (16, size);
-					#else
-						#error "No 16-byte allocator defined."
-					#endif
-					}
-				
-				template <typename T> class valarray_base <T, typename enable_if <exists <typename array_term <T>::chunk_type>::value>::type>:
-					public array_term <T>
-					{
-						public:
-							typedef array_term <T> base;
-							
-							typedef typename array_term <T>::chunk_type chunk_type;
-							
-							/** Constructs with space for @a n elements. */
-							valarray_base (std::size_t n)
-								{
-									// allocate enough bytes to put equivalent of n elements of T, but as aligned chunks
-									base::init (
-										reinterpret_cast <chunk_type*> (malloc_align16 (sizeof (chunk_type) * ((n + chunk_type::length - 1) / chunk_type::length))),
-										n);
-								}
-
-							/** Destructs entire array. */
-							~valarray_base ()
-								{
-									std::free (base::data_);
-								}
-					};
-																																										
+																																																			
 				// optimize (v1 * v2) + v3 and v1 + (v2 * v3) for vec <short/float/complex> to use fused multiply add
 
 				template <typename T> struct has_fma									{ enum { value = false }; };
@@ -280,7 +245,7 @@ namespace stdext
 								{
 									return const_chunk_iterator (
 										that ().left_subterm_.chunk_begin (),
-										that ().right_subterm_.chunk_begin ());
+										that ().right_subterm_.subterm_.chunk_begin ());
 								}
 								
 						private:
@@ -383,7 +348,10 @@ namespace stdext
 
 				template <template <typename, typename> class Func, template <typename, typename> class BOp, typename LTerm, typename RTerm>
 					struct accumulate_array_dispatch <Func, binary_term <LTerm, RTerm, BOp>,
-					typename enable_if <exists <typename binary_term <LTerm, RTerm, BOp>::const_chunk_iterator>::value>::type,
+					typename enable_if <
+						exists <typename stdext::accumulator <Func <
+							typename std::iterator_traits <typename binary_term <LTerm, RTerm, BOp>::const_chunk_iterator>::value_type,
+							typename std::iterator_traits <typename binary_term <LTerm, RTerm, BOp>::const_chunk_iterator>::value_type> >::result_type>::value>::type,
 					typename enable_if <exists <typename predicator <Func, BOp, typename LTerm::const_chunk_iterator, typename RTerm::const_chunk_iterator>::type>::value>::type>
 					{
 						static bool tail (const binary_term <LTerm, RTerm, BOp>& expr, bool partial)
@@ -418,20 +386,6 @@ namespace stdext
 
 				// optimizations for expressions of the form v1 [slice]
 		
-				// stuff four vectors into one, selecting particular indices from each
-				template <typename T>
-					inline T stuff4 (const T& v1, const T& v2, const T& v3, const T& v4, std::size_t i1, std::size_t i2, std::size_t i3, std::size_t i4)
-						{
-							using namespace macstl;
-							
-							return
-								altivec::mergeh
-									(altivec::perm (v3, v1, altivec::sld <12> (altivec::lvsr (12 - (i1 * 4), (int*) NULL),
-										altivec::lvsl (i3 * 4, (int*) NULL))),
-									altivec::perm (v4, v2, altivec::sld <12> (altivec::lvsr (12 - (i2 * 4), (int*) NULL),
-										altivec::lvsl (i4 * 4, (int*) NULL))));
-						}
-				
 				template <typename TermIt> class slice4_iterator
 					{
 						public:
@@ -441,11 +395,17 @@ namespace stdext
 							typedef typename std::iterator_traits <TermIt>::pointer pointer;
 							typedef typename std::iterator_traits <TermIt>::reference reference;
 							
-							slice4_iterator (const TermIt& exprit, std::size_t start, std::size_t stride): termit_ (exprit), start_ (start), stride_ (stride)
+							INLINE slice4_iterator (const TermIt& exprit, std::size_t start, std::size_t stride): termit_ (exprit), stride_ (stride),
+								stride0_ (start / 4),
+								stride1_ ((start + 1 * stride) / 4),
+								stride2_ ((start + 2 * stride) / 4),
+								stride3_ ((start + 3 * stride) / 4),
+								splice_v3_v1_ (macstl::altivec::sld <12> (macstl::altivec::lvsr (12 - (start % 4 * 4), (int*) NULL), macstl::altivec::lvsl ((start + 2 * stride) % 4 * 4, (int*) NULL))),
+								splice_v4_v2_ (macstl::altivec::sld <12> (macstl::altivec::lvsr (12 - ((start + stride) % 4 * 4), (int*) NULL), macstl::altivec::lvsl ((start + 3 * stride) % 4 * 4, (int*) NULL)))
 								{
 								}
-								
-							value_type operator* () const
+									
+							INLINE const value_type operator* () const
 								{
 									// the neat thing about this is the compiler generally hoists all the invariants
 									// out of any loop, so all the start_ + n * stride_ stuff gets evaluated outside the loop!!
@@ -453,85 +413,92 @@ namespace stdext
 									TermIt iter2 = termit_;
 									TermIt iter3 = termit_;
 									TermIt iter4 = termit_;
-									std::advance (iter1, start_ / 4);
-									std::advance (iter2, (start_ + stride_) / 4);
-									std::advance (iter3, (start_ + 2 * stride_) / 4);
-									std::advance (iter4, (start_ + 3 * stride_) / 4);
+									std::advance (iter1, stride0_);
+									std::advance (iter2, stride1_);
+									std::advance (iter3, stride2_);
+									std::advance (iter4, stride3_);
 									return stuff4 (
 										*iter1,
 										*iter2,
 										*iter3,
-										*iter4,
-										start_ % 4,
-										(start_ + stride_) % 4,
-										(start_ + 2 * stride_) % 4,
-										(start_ + 3 * stride_) % 4);
+										*iter4);
 								}
 								
-							value_type operator[] (difference_type n) const
+							INLINE const value_type operator[] (difference_type n) const
 								{
-									// the neat thing about this is the compiler generally hoists all the invariants
-									// out of any loop, so all the start_ + n * stride_ stuff gets evaluated outside the loop!!
-									TermIt iter = termit_ + n * stride_;
-									
+									const TermIt iter = termit_ + n * stride_;
 									return stuff4 (
-										*iter,
-										iter [(start_ + 1 * stride_) / 4],
-										iter [(start_ + 2 * stride_) / 4],
-										iter [(start_ + 3 * stride_) / 4],
-										start_ % 4,
-										(start_ + stride_) % 4,
-										(start_ + 2 * stride_) % 4,
-										(start_ + 3 * stride_) % 4);
+										iter [stride0_],
+										iter [stride1_],
+										iter [stride2_],
+										iter [stride3_]);
 								}
 							
-							slice4_iterator& operator++ ()						{ std::advance (termit_, stride_); return *this; }
-							slice4_iterator operator++ (int)					{ slice4_iterator copy (*this); return ++copy; }
-							slice4_iterator& operator+= (difference_type n)		{ termit_ += n * stride_; return *this; }
+							INLINE slice4_iterator& operator++ ()					{ std::advance (termit_, stride_); return *this; }
+							INLINE slice4_iterator operator++ (int)					{ slice4_iterator copy (*this); return ++copy; }
+							INLINE slice4_iterator& operator+= (difference_type n)	{ termit_ += n * stride_; return *this; }
 			
-							slice4_iterator& operator-- ()						{ std::advance (termit_, -stride_); return *this; }
-							slice4_iterator operator-- (int)					{ slice4_iterator copy (*this); return --copy; }
-							slice4_iterator& operator-= (difference_type n)		{ termit_ -= n * stride_; return *this; }
+							INLINE slice4_iterator& operator-- ()					{ std::advance (termit_, -stride_); return *this; }
+							INLINE slice4_iterator operator-- (int)					{ slice4_iterator copy (*this); return --copy; }
+							INLINE slice4_iterator& operator-= (difference_type n)	{ termit_ -= n * stride_; return *this; }
 								
-							friend slice4_iterator operator+ (const slice4_iterator& left, difference_type right)
+							friend INLINE slice4_iterator operator+ (const slice4_iterator& left, difference_type right)
 								{
-									return slice4_iterator (left.termit_, right * left.stride_, left.stride_);
+									return slice4_iterator (left) += right;
 								}
 			
-							friend slice4_iterator operator+ (difference_type left, const slice4_iterator& right)
+							friend INLINE slice4_iterator operator+ (difference_type left, const slice4_iterator& right)
 								{
-									return slice4_iterator (right.termit_, left * right.stride_, right.stride_);
+									return slice4_iterator (right) += left;
 								}
 			
-							friend slice4_iterator operator- (const slice4_iterator& left, difference_type right)
+							friend INLINE slice4_iterator operator- (const slice4_iterator& left, difference_type right)
 								{
-									return slice4_iterator (left.termit_, -right * left.stride_, left.stride_);
+									return slice4_iterator (left) -= right;
 								}
 							
-							friend difference_type operator- (const slice4_iterator& left, const slice4_iterator& right)
+							friend INLINE difference_type operator- (const slice4_iterator& left, const slice4_iterator& right)
 								{
 									return (left.termit_ - right.termit_) / left.stride_;
 								}
 								
-							friend bool operator== (const slice4_iterator& left, const slice4_iterator& right)
+							friend INLINE bool operator== (const slice4_iterator& left, const slice4_iterator& right)
 								{
 									return left.termit_ == right.termit_;
 								}
 								
-							friend bool operator!= (const slice4_iterator& left, const slice4_iterator& right)
+							friend INLINE bool operator!= (const slice4_iterator& left, const slice4_iterator& right)
 								{
 									return left.termit_ != right.termit_;
 								}
 		
-							friend bool operator< (const slice4_iterator& left, const slice4_iterator& right)
+							friend INLINE bool operator< (const slice4_iterator& left, const slice4_iterator& right)
 								{
 									return left.termit_ < right.termit_;
 								}
 								
 						private:
 							TermIt termit_;
-							const std::size_t start_;
+							
 							const std::size_t stride_;
+							
+							const std::size_t stride0_;
+							const std::size_t stride1_;
+							const std::size_t stride2_;
+							const std::size_t stride3_;
+							
+							const macstl::vec <unsigned char, 16> splice_v3_v1_;
+							const macstl::vec <unsigned char, 16> splice_v4_v2_;
+								
+							INLINE const value_type stuff4 (const value_type& v1, const value_type& v2, const value_type& v3, const value_type& v4) const
+								{
+							 		using namespace macstl;
+									
+									return
+										altivec::mergeh (
+											altivec::perm (v3, v1, splice_v3_v1_),
+											altivec::perm (v4, v2, splice_v4_v2_));
+								}
 					};
 					
 				template <typename Term> class slice_term_base;
@@ -564,6 +531,3 @@ namespace stdext
 	
 
 #endif
-		
-
-	

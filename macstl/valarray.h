@@ -87,6 +87,7 @@ namespace stdext
 #include "impl/valarray_gslice.h"
 #include "impl/valarray_mask.h"
 #include "impl/valarray_indirect.h"
+#include "impl/valarray_refarray.h"
 #include "impl/valarray_statarray.h"
 #include "impl/valarray_mmaparray.h"
 

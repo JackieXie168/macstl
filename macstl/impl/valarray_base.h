@@ -320,6 +320,7 @@ namespace stdext
 				DEFINE_VALARRAY_UNARY_FUNCTION (asin, arc_sine)
 				DEFINE_VALARRAY_UNARY_FUNCTION (atan, arc_tangent)
 				DEFINE_VALARRAY_BINARY_FUNCTION (atan2, arc_tangent2)
+				DEFINE_VALARRAY_UNARY_FUNCTION (conj, conjugate)
 				DEFINE_VALARRAY_UNARY_FUNCTION (cos, cosine)
 				DEFINE_VALARRAY_UNARY_FUNCTION (cosh, hyperbolic_cosine)
 				DEFINE_VALARRAY_UNARY_FUNCTION (exp, exponent)
@@ -339,6 +340,11 @@ namespace stdext
 
 				//@}
 					
+				template <typename Term,
+					typename Enable1 = void, typename Enable2 = void, typename Enable3 = void, typename Enable4 = void> class chunker
+					{
+					};
+					
 				/// Expression template array term.
 				
 				/// @internal
@@ -350,12 +356,14 @@ namespace stdext
 				/// @note	This object has an implicit copy constructor and intentionally allows slicing:
 				///			subclasses use this term as a reference to their data.
 				
-				template <typename T, typename Enable = void> class array_term: public term <T, array_term <T> >
+				template <typename T, typename Enable = void> class array_term:
+					public term <T, array_term <T> >, public chunker <array_term <T> >
 					{
 						public:
 							/// The element type, see stdext::valarray. */
 							typedef T value_type;
-		
+							typedef T value_data;
+							
 							/// The iterator that allows element access.
 							typedef const T* const_iterator;
 							
@@ -371,49 +379,180 @@ namespace stdext
 							using term <T, array_term <T> >::operator[];
 
 							/// Gets the element at index n.
-							value_type operator[] (std::size_t n) const	{ return data_ [n]; }
+							const value_type& operator[] (std::size_t n) const	{ return values_ [n]; }
 							
 							/// Gets the element at index n
-							value_type& operator[] (std::size_t n)		{ return data_ [n]; }
+							value_type& operator[] (std::size_t n)		{ return values_ [n]; }
 
 							/// Gets an iterator to the first element.
-							const_iterator begin () const			{ return data_; }
+							const_iterator begin () const			{ return values_; }
 							
 							/// Gets an iterator to the first element.
-							iterator begin ()						{ return data_; }
+							iterator begin ()						{ return values_; }
 
 							/// Gets an iterator past the last element.
-							const_iterator end () const				{ return data_ + size_; }
+							const_iterator end () const				{ return values_ + size_; }
 							
 							/// Gets an iterator past the last element
-							iterator end ()							{ return data_ + size_; }
+							iterator end ()							{ return values_ + size_; }
 
 						protected:
-							value_type* data_;
+							value_data* values_;
 							std::size_t size_;
 							
-							void init (value_type* data, std::size_t size)
+							array_term (value_data* values, std::size_t size): values_ (values), size_ (size)
 								{
-									data_ = data;
-									size_ = size;
 								}
 		
 							void swap (array_term& other)
 								{
-									std::swap (data_, other.data_);
+									std::swap (values_, other.values_);
 									std::swap (size_, other.size_);
 								}
+								
+							template <typename Term2, typename Enable1, typename Enable2, typename Enable3, typename Enable4> friend class chunker;
+					};
+
+				template <typename T> class array_iterator
+					{
+						public:
+							typedef typename std::iterator_traits <T*>::value_type value_type;
+							typedef typename if_c <is_const <T>::value, const typename T::data_type, typename T::data_type>::type value_data;
+							
+							typedef std::random_access_iterator_tag iterator_category;
+							typedef std::ptrdiff_t difference_type;
+							typedef typename std::iterator_traits <T*>::pointer pointer;
+							typedef typename std::iterator_traits <T*>::reference reference;
+														
+							explicit INLINE array_iterator (value_data* ptr): ptr_ (ptr)
+								{
+								}
+								
+							INLINE reference operator* () const
+								{
+									// reinterpret_cast is kosher by aliasing rules, since value_type is expected to be a struct containing value_data_type e.g. boolean <T>
+									return reinterpret_cast <reference> (*ptr_);
+								}
+								
+							INLINE reference operator[] (difference_type n) const
+								{
+									// reinterpret_cast is kosher by aliasing rules, since value_type is expected to be a struct containing value_data_type e.g. boolean <T>
+									return reinterpret_cast <reference> (ptr_ [n]);
+								}
+								
+							INLINE array_iterator& operator++ ()					{ ++ptr_; return *this; }
+							INLINE array_iterator operator++ (int)					{ return ++array_iterator (*this); }
+							INLINE array_iterator& operator+= (difference_type n)	{ ++ptr_ += n; return *this; }
+		
+							INLINE array_iterator& operator-- ()					{ --ptr_; return *this; }
+							INLINE array_iterator operator-- (int)					{ return --array_iterator (*this); }
+							INLINE array_iterator& operator-= (difference_type n)	{ ptr_ -= n; return *this; }
+								
+							friend INLINE array_iterator operator+ (const array_iterator& left, difference_type right)
+								{
+									return array_iterator (left) += right;
+								}
+		
+							friend INLINE array_iterator operator+ (difference_type left, const array_iterator& right)
+								{
+									return array_iterator (right) += left;
+								}
+		
+							friend INLINE array_iterator operator- (const array_iterator& left, difference_type right)
+								{
+									return array_iterator (left) -= right;
+								}
+							
+							friend INLINE difference_type operator- (const array_iterator& left, const array_iterator& right)
+								{
+									return left.ptr_ - right.ptr_;
+								}
+								
+							friend INLINE bool operator== (const array_iterator& left, const array_iterator& right)
+								{
+									return left.ptr_ == right.ptr_;
+								}
+								
+							friend INLINE bool operator!= (const array_iterator& left, const array_iterator& right)
+								{
+									return left.ptr_ != right.ptr_;
+								}
+		
+							friend INLINE bool operator< (const array_iterator& left, const array_iterator& right)
+								{
+									return left.ptr_ < right.ptr_;
+								}
+								
+						private:
+							value_data* ptr_;
+					};
+
+				template <typename T> class array_term <T, typename enable_if <exists <typename T::data_type>::value>::type>:
+					public term <T, array_term <T> >, public chunker <array_term <T> >
+					{
+						public:
+							/// The element type, see stdext::valarray. */
+							typedef T value_type;
+							typedef typename T::data_type value_data;
+							
+							/// The iterator that allows element access.
+							typedef array_iterator <const T> const_iterator;
+							
+							/// The iterator that allows element access and change.
+							typedef array_iterator <T> iterator;
+							
+							/// The element reference.
+							typedef T& reference;
+							
+							/// Gets the number of elements.
+							std::size_t size () const					{ return size_; }
+							
+							using term <T, array_term <T> >::operator[];
+
+							/// Gets the element at index n.
+							const value_type& operator[] (std::size_t n) const
+								{
+									// reinterpret_cast is kosher by aliasing rules, since value_type is expected to be a struct containing value_data_type e.g. boolean <T>
+									return reinterpret_cast <const value_type&> (values_ [n]);
+								}
+							
+							/// Gets the element at index n
+							value_type& operator[] (std::size_t n)
+								{
+									// reinterpret_cast is kosher by aliasing rules, since value_type is expected to be a struct containing value_data_type e.g. boolean <T>
+									return reinterpret_cast <value_type&> (values_ [n]);
+								}
+
+							/// Gets an iterator to the first element.
+							const_iterator begin () const			{ return const_iterator (values_); }
+							
+							/// Gets an iterator to the first element.
+							iterator begin ()						{ return iterator (values_); }
+
+							/// Gets an iterator past the last element.
+							const_iterator end () const				{ return const_iterator (values_ + size_); }
+							
+							/// Gets an iterator past the last element
+							iterator end ()							{ return iterator (values_ + size_); }
+
+						protected:
+							value_data* values_;
+							std::size_t size_;
+							
+							array_term (value_data* values, std::size_t size): values_ (values), size_ (size)
+								{
+								}
+		
+							void swap (array_term& other)
+								{
+									std::swap (values_, other.values_);
+									std::swap (size_, other.size_);
+								}
+								
+							template <typename Term2, typename Enable1, typename Enable2, typename Enable3, typename Enable4> friend class chunker;
 					};
 					
-				template <typename Term,
-					typename Enable1 = void, typename Enable2 = void, typename Enable3 = void, typename Enable4 = void> class chunker
-					{
-					};
 			}
-			
-		#ifdef __IBMCPP__
-		using impl::operator*;
-		#endif
 	}
 	
 #endif

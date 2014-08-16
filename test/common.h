@@ -96,8 +96,10 @@ unsigned int difference (double left, double right)
 				unsigned long long i;
 			};
 			
-		un uleft = {left};
-		un uright = {right};
+		un uleft;
+		uleft.d = left;
+		un uright;
+		uright.d = right;
 		
 		bool leftnanorinf = (uleft.i & 0x7FF0000000000000ULL) == 0x7FF0000000000000ULL;	/// exponent al ones => nan or inf
 		bool rightnanorinf = (uright.i & 0x7FF0000000000000ULL) == 0x7FF0000000000000ULL;

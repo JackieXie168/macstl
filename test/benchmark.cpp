@@ -72,22 +72,14 @@ const int step2 = 6;
 const int step3 = 7;
 
 #if defined(__GNUC__)
-#define NOINLINE __attribute((noinline))
+#define NOINLINE __attribute__((noinline))
 #elif defined(_MSC_VER)
 #define NOINLINE __declspec(noinline)
 #else
 #define NOINLINE
 #endif
 
-template <typename Fn> NOINLINE void loop (Fn& fn);
-
-template <typename Fn> void loop (Fn& fn)
-	{
-		for (std::size_t j = 0; j != tries; ++j)
-			fn ();
-	}
-
-template <typename Fn> inline clock_t bench ()
+template <typename Fn> NOINLINE clock_t bench ()
 	{
 		Fn fn;
 
@@ -121,7 +113,8 @@ template <typename V> class polynomial
 				
 			void operator() ()
 				{
-					vr = 3.0f * v1 * v1 + 2.0f * v1 + 1.0f;
+					typedef typename V::value_type value_type;
+					vr = ((value_type) 3) * v1 * v1 + ((value_type) 2) * v1 + ((value_type) 1);
 				}
 				
 		private:
@@ -148,7 +141,7 @@ template <typename T> class polynomial <T*>
 			void operator() ()
 				{
 					for (std::size_t i = 0; i != size; ++i)
-						vr [i] = 3.0f * v1 [i] * v1 [i] + 2.0f * v1 [i] + 1.0f;
+						vr [i] = ((T) 3) * v1 [i] * v1 [i] + ((T) 2) * v1 [i] + ((T) 1);
 				}
 
 		private:
@@ -662,7 +655,7 @@ int main (int, const char *)
 		benchmark <trigonometric,
 			std::valarray <float>,
 			stdext::valarray <float>,
-			float*> ("trigonometric");
+			float*> ("trigonometric");				
 	}
 	
 

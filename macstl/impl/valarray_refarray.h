@@ -1,8 +1,8 @@
 /*
- *  valarray_mmaparray.h
+ *  valarray_refarray.h
  *  macstl
  *
- *  Created by Glen Low on Jan 8 2005.
+ *  Created by Glen Low on Aug 12 2005.
  *
  *  Copyright (c) 2005 Pixelglow Software, all rights reserved.
  *  http://www.pixelglow.com/macstl/
@@ -32,73 +32,51 @@
  *  or repaired, at the Licensor's option. 
  */
 
-#ifndef MACSTL_IMPL_VALARRAY_MMAPARRAY_H
-#define MACSTL_IMPL_VALARRAY_MMAPARRAY_H
-
-#ifdef HAVE_MMAP	// to include Windows implementation...
+#ifndef MACSTL_IMPL_VALARRAY_REFARRAY_H
+#define MACSTL_IMPL_VALARRAY_REFARRAY_H
 
 namespace stdext
 	{
-		namespace impl
-			{
-				/// Allocating base for mmaparray.
-				 
-				/// @internal
-				/// This class allocates but does not initialize memory so that its subclass mmaparray will not
-				/// leak memory if an exception is thrown during construction. Partial specializations may
-				/// allocate memory differently e.g. with a different alignment or type, to fulfill chunking
-				/// requirements.
-				///
-				/// @param	T		The element type.
-				
-				template <typename T> class mmaparray_base
-					{
-						protected:
-							mmaparray_base (const macstl::channel& chan, macstl::mmap_mode::mode mode, std::size_t n, std::size_t pos):
-								mmap_ (chan, mode, n, pos)
-								{
-								}
-
-						private:
-							macstl::mmapping <typename array_term <T>::value_data> mmap_;
-					};
-				
-			}
-			
-		/// Memory-mapped numeric (n-at-a-time) array.
+		/// Referenced numeric (n-at-a-time) array.
 		
-		/// This class is similar to stdext::valarray but is based on memory-mapped files. This makes the class useful
-		/// to avoid special coding for I/O and for sharing between processes.
+		/// This class is similar to stdext::valarray but does not copy or keep its own storage. This makes the class useful
+		/// for memory already allocated by a different method. You are responsible for correct alignment and disposal of the memory.
 		///
 		/// @param	T	The value type, which shall satisfy the following requirements:
 		///				- not an abstract class, reference type or cv-qualified type
 		///				- if a class, must publicly define: default constructor, copy constructor, destructor and assignment operator
 		///				- Default construct + assign == copy construct
 		///				- Destruct + copy construct == assign
-		///				- Independent of the address space of the object.
 		///				.
 		///				For example, built-in arithmetic types like char, short, int, float, double.
 		///
-		/// @note	Since the values are simply mapped in from the file, neither value constructor nor value destructor are called. Also you cannot
-		///			copy this array, since it represents an external resource.
-		///
 		/// @header	#include <macstl/valarray.h>
-		///
-		/// @see	macstl::mmapping
-
-		template <typename T> class mmaparray: private impl::mmaparray_base <T>, public impl::array_term <T>
+		
+		template <typename T> class refarray: public impl::array_term <T>
 			{
 				public:
-					typedef typename impl::array_term <T>::value_type value_type;
+					/// @name Constructors and Destructors
 					
-					/// Constructs an array, memory-mapped from channel chan.
-					mmaparray (const macstl::channel& chan, macstl::mmap_mode::mode mode = macstl::mmap_mode::rdonly, std::size_t n = 0, std::size_t pos = 0):
-						impl::mmaparray_base <T> (chan, mode, n, pos), impl::array_term <T> (mmap_.begin (), n)
+					//@{
+					
+					/// Constructs an array with no reference.
+					refarray (): impl::array_term <T> (NULL, 0)
 						{
 						}
-
+						
+					/// Constructs an array referencing @a n elements at @a data.
+					refarray (typename impl::array_term <T>::value_data* data, std::size_t n): impl::array_term <T> (data, n)
+						{
+						}
+		
+					//@}
+					
+					/// @name Assignments
+					
+					//@{
+					
 					/// Assigns the other array.
-					mmaparray& operator= (const mmaparray& other)
+					refarray& operator= (const refarray& other)
 						{
 							if (this != &other)
 								impl::copy_array (*this, other);
@@ -106,24 +84,35 @@ namespace stdext
 						}
 					
 					/// Assigns the other term.
-					template <typename Expr>
-						typename impl::enable_if <impl::is_convertible <T1, T>::value, mmaparray&>::type operator= (const impl::term <T1, Expr>& other)
+					template <typename T1, typename Term>
+						typename impl::enable_if <impl::is_convertible <T1, T>::value, refarray&>::type operator= (const impl::term <T1, Term>& other)
 						{
 							impl::copy_array (*this, other.that ());
 							return *this;
 						}					
 
 					/// Assigns x to each element.
-					mmaparray& operator= (const T& x)
+					refarray& operator= (const T& x)
 						{
 							impl::fill_array (*this, x);
 							return *this;
 						}
-	
-				private:
-					mmaparray (const mmaparray& other);	// disallow copying
+						
+					//@}
+					
+					/// Reset
+					
+					//@{
+					
+					/// Changes the data and size.
+					void reset (typename impl::array_term <T>::value_data* data, std::size_t n)
+						{
+							refarray resetted (data, n);
+							swap (resetted);
+						}
+						
+					//@}
 			};
 	}
-	
-#endif
+
 #endif

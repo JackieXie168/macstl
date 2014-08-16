@@ -39,7 +39,7 @@ namespace macstl
 	{
 		/// Casts from @a lhs to type @a T1, if T1 is compatible with lhs.data ().
 		template <typename T1, typename T2>
-			inline T1 data_cast (const T2& lhs)
+			INLINE const T1 data_cast (const T2& lhs)
 			{
 				return T1 ((typename T1::data_type) lhs.data ());
 			}

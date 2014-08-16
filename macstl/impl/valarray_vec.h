@@ -39,6 +39,177 @@ namespace stdext
 	{
 		namespace impl
 			{
+			
+			#ifndef NO_CHUNKING_ITERATOR
+			
+				template <typename V> class chunking_iterator
+					{
+						public:
+							typedef V value_type;
+							typedef typename V::value_data element_type;
+							
+							typedef std::random_access_iterator_tag iterator_category;
+							typedef std::ptrdiff_t difference_type;
+							typedef value_type* pointer;
+							
+							class reference
+								{
+									public:
+										INLINE reference (element_type* ptr, difference_type n): ptr_ (ptr), n_ (n)
+											{
+											}
+											
+										INLINE reference& operator= (const value_type& lhs)
+											{
+												lhs.store (ptr_, n_);
+												return *this;
+											}
+											
+										INLINE operator const value_type () const
+											{
+												return value_type::load (ptr_, n_);
+											}
+											
+									private:
+										element_type* const ptr_;
+										const difference_type n_;
+								};
+							
+							explicit INLINE chunking_iterator (element_type* ptr): ptr_ (ptr)
+								{
+								}
+								
+							INLINE reference operator* () const
+								{
+									return reference (ptr_, 0);
+								}
+								
+							INLINE reference operator[] (difference_type n) const
+								{
+									return reference (ptr_, n);
+								}
+								
+							INLINE chunking_iterator& operator++ ()						{ ptr_ += value_type::length; return *this; }
+							INLINE chunking_iterator operator++ (int)					{ return ++chunking_iterator (*this); }
+							INLINE chunking_iterator& operator+= (difference_type n)	{ ptr_ += value_type::length * n; return *this; }
+		
+							INLINE chunking_iterator& operator-- ()						{ ptr_ -= value_type::length; return *this; }
+							INLINE chunking_iterator operator-- (int)					{ return --chunking_iterator (*this); }
+							INLINE chunking_iterator& operator-= (difference_type n)	{ ptr_ -= value_type::length * n; return *this; }
+								
+							friend INLINE chunking_iterator operator+ (const chunking_iterator& left, difference_type right)
+								{
+									return chunking_iterator (left) += right;
+								}
+		
+							friend INLINE chunking_iterator operator+ (difference_type left, const chunking_iterator& right)
+								{
+									return chunking_iterator (right) += left;
+								}
+		
+							friend INLINE chunking_iterator operator- (const chunking_iterator& left, difference_type right)
+								{
+									return chunking_iterator (left) -= right;
+								}
+							
+							friend INLINE difference_type operator- (const chunking_iterator& left, const chunking_iterator& right)
+								{
+									return (left.ptr_ - right.ptr_) / value_type::length;
+								}
+								
+							friend INLINE bool operator== (const chunking_iterator& left, const chunking_iterator& right)
+								{
+									return left.ptr_ == right.ptr_;
+								}
+								
+							friend INLINE bool operator!= (const chunking_iterator& left, const chunking_iterator& right)
+								{
+									return left.ptr_ != right.ptr_;
+								}
+		
+							friend INLINE bool operator< (const chunking_iterator& left, const chunking_iterator& right)
+								{
+									return left.ptr_ < right.ptr_;
+								}
+								
+						private:
+							element_type* ptr_;
+					};
+
+				template <typename V> class chunking_iterator <const V>
+					{
+						public:
+							typedef V value_type;
+							typedef typename V::value_data element_type;
+							
+							typedef std::random_access_iterator_tag iterator_category;
+							typedef std::ptrdiff_t difference_type;
+							typedef const value_type* pointer;
+							typedef value_type reference;
+							
+							explicit INLINE chunking_iterator (const element_type* ptr): ptr_ (ptr)
+								{
+								}
+								
+							INLINE const value_type operator* () const
+								{
+									return value_type::load (ptr_, 0);
+								}
+								
+							INLINE const value_type operator[] (difference_type n) const
+								{
+									return value_type::load (ptr_, n);
+								}
+								
+							INLINE chunking_iterator& operator++ ()						{ ptr_ += value_type::length; return *this; }
+							INLINE chunking_iterator operator++ (int)					{ return ++chunking_iterator (*this); }
+							INLINE chunking_iterator& operator+= (difference_type n)	{ ptr_ += value_type::length * n; return *this; }
+		
+							INLINE chunking_iterator& operator-- ()						{ ptr_ -= value_type::length; return *this; }
+							INLINE chunking_iterator operator-- (int)					{ return --chunking_iterator (*this); }
+							INLINE chunking_iterator& operator-= (difference_type n)	{ ptr_ -= value_type::length * n; return *this; }
+								
+							friend INLINE chunking_iterator operator+ (const chunking_iterator& left, difference_type right)
+								{
+									return chunking_iterator (left) += right;
+								}
+		
+							friend INLINE chunking_iterator operator+ (difference_type left, const chunking_iterator& right)
+								{
+									return chunking_iterator (right) += left;
+								}
+		
+							friend INLINE chunking_iterator operator- (const chunking_iterator& left, difference_type right)
+								{
+									return chunking_iterator (left) -= right;
+								}
+							
+							friend INLINE difference_type operator- (const chunking_iterator& left, const chunking_iterator& right)
+								{
+									return (left.ptr_ - right.ptr_) / value_type::length;
+								}
+								
+							friend INLINE bool operator== (const chunking_iterator& left, const chunking_iterator& right)
+								{
+									return left.ptr_ == right.ptr_;
+								}
+								
+							friend INLINE bool operator!= (const chunking_iterator& left, const chunking_iterator& right)
+								{
+									return left.ptr_ != right.ptr_;
+								}
+		
+							friend INLINE bool operator< (const chunking_iterator& left, const chunking_iterator& right)
+								{
+									return left.ptr_ < right.ptr_;
+								}
+								
+						private:
+							const element_type* ptr_;
+					};
+			
+			#endif
+					
 				/// Chunking type.
 				
 				/// @internal
@@ -46,271 +217,63 @@ namespace stdext
 				///
 				/// @param	T	The scalar type.
 				
-				template <typename T> struct chunk
-					{
-						/// The chunking type. The default is the same type, but specializations may change this.
-						typedef T type;
-					};
-
-				template <typename V> class dechunk_iterator
-					{
-						public:
-							typedef V chunk_type;
-							
-							typedef std::random_access_iterator_tag iterator_category;
-							typedef typename chunk_type::value_type value_type; 
-							typedef std::ptrdiff_t difference_type;
-							typedef const value_type* pointer;
-							typedef typename chunk_type::reference reference;
-							
-							dechunk_iterator (chunk_type* it, std::size_t index): it_ (it), index_ (index)
-								{
-								}
-
-							dechunk_iterator (const dechunk_iterator <const V>& other): it_ (other.it_), index_ (other.index_)
-								{
-								}
-								
-							reference operator* () const
-								{
-									std::size_t index = index_;
-									return it_ [index / chunk_type::length] [index % chunk_type::length];
-								}
-							
-							typename chunk_type::reference operator[] (difference_type n) const
-								{
-									std::size_t index = n + index_;
-									return it_ [index / chunk_type::length] [index % chunk_type::length];
-								}
-							
-							dechunk_iterator& operator++ ()
-								{
-									++index_;
-									return *this;
-								}
-								
-							dechunk_iterator operator++ (int)
-								{
-									return dechunk_iterator (it_, index_ + 1);
-								}
-								
-							dechunk_iterator& operator+= (difference_type n)
-								{
-									index_ += n;
-									return *this;
-								}
-		
-							dechunk_iterator& operator-- ()
-								{
-									--index_;
-									return *this;
-								}
-								
-							dechunk_iterator operator-- (int)
-								{
-									return dechunk_iterator (it_, index_ - 1);
-								}
-								
-							dechunk_iterator& operator-= (difference_type n)
-								{
-									index_ -= n;
-									return *this;
-								}
-								
-							friend dechunk_iterator operator+ (const dechunk_iterator& left, difference_type right)
-								{
-									return dechunk_iterator (left.it_, left.index_ + right);
-								}
-		
-							friend dechunk_iterator operator+ (difference_type left, const dechunk_iterator& right)
-								{
-									return dechunk_iterator (right.it_, left + right.index_);
-								}
-		
-							friend dechunk_iterator operator- (const dechunk_iterator& left, difference_type right)
-								{
-									return dechunk_iterator (left.it_, left.index_ - right);
-								}
-
-							friend difference_type operator- (const dechunk_iterator& left, const dechunk_iterator& right)
-								{
-									return left.index_ - right.index_;
-								}
-								
-							friend bool operator== (const dechunk_iterator& left, const dechunk_iterator& right)
-								{
-									return left.it_ == right.it_ && left.index_ == right.index_;
-								}
-								
-							friend bool operator!= (const dechunk_iterator& left, const dechunk_iterator& right)
-								{
-									return left.it_ != right.it_ || left.index_ != right.index_;
-								}
-		
-							friend bool operator< (const dechunk_iterator& left, const dechunk_iterator& right)
-								{
-									return left.index_ < right.index_;
-								}
-									
-						private:
-							chunk_type* it_;
-							std::size_t index_;
-					};
-
-				template <typename V> class dechunk_iterator <const V>
-					{
-						public:
-							typedef const V chunk_type;
-							
-							typedef std::random_access_iterator_tag iterator_category;
-							typedef typename chunk_type::value_type value_type;
-							typedef std::ptrdiff_t difference_type;
-							typedef const value_type* pointer;
-							typedef value_type reference;
-
-							dechunk_iterator (const chunk_type* it, std::size_t index): it_ (it), index_ (index)
-								{
-								}
-								
-							value_type operator* () const
-								{
-									std::size_t index = index_;
-									return it_ [index / chunk_type::length] [index % chunk_type::length];
-								}
-							
-							value_type operator[] (difference_type n) const
-								{
-									std::size_t index = n + index_;
-									return it_ [index / chunk_type::length] [index % chunk_type::length];
-								}
-							
-							dechunk_iterator& operator++ ()
-								{
-									++index_;
-									return *this;
-								}
-								
-							dechunk_iterator operator++ (int)
-								{
-									return dechunk_iterator (it_, index_ + 1);
-								}
-								
-							dechunk_iterator& operator+= (difference_type n)
-								{
-									index_ += n;
-									return *this;
-								}
-		
-							dechunk_iterator& operator-- ()
-								{
-									--index_;
-									return *this;
-								}
-								
-							dechunk_iterator operator-- (int)
-								{
-									return dechunk_iterator (it_, index_ - 1);
-								}
-								
-							dechunk_iterator& operator-= (difference_type n)
-								{
-									index_ -= n;
-									return *this;
-								}
-								
-							friend dechunk_iterator operator+ (const dechunk_iterator& left, difference_type right)
-								{
-									return dechunk_iterator (left.it_, left.index_ + right);
-								}
-		
-							friend dechunk_iterator operator+ (difference_type left, const dechunk_iterator& right)
-								{
-									return dechunk_iterator (right.it_, left + right.index_);
-								}
-		
-							friend dechunk_iterator operator- (const dechunk_iterator& left, difference_type right)
-								{
-									return dechunk_iterator (left.it_, left.index_ - right);
-								}
-							
-							friend difference_type operator- (const dechunk_iterator& left, const dechunk_iterator& right)
-								{
-									return left.index_ - right.index_;
-								}
-								
-							friend bool operator== (const dechunk_iterator& left, const dechunk_iterator& right)
-								{
-									return left.it_ == right.it_ && left.index_ == right.index_;
-								}
-								
-							friend bool operator!= (const dechunk_iterator& left, const dechunk_iterator& right)
-								{
-									return left.it_ != right.it_ || left.index_ != right.index_;
-								}
-		
-							friend bool operator< (const dechunk_iterator& left, const dechunk_iterator& right)
-								{
-									return left.index_ < right.index_;
-								}
-								
-							friend class dechunk_iterator <V>;
-		
-						private:
-							const chunk_type* it_;
-							std::size_t index_;
-					};
+				template <typename T> struct chunk;
 					
-				template <typename T> class array_term <T, typename enable_if <is_same <typename chunk <T>::type, T>::value == 0>::type>:
-					public term <T, array_term <T> >
+				template <typename T, typename Enable2, typename Enable3, typename Enable4> class chunker <array_term <T>,
+					typename enable_if <exists <typename chunk <T>::type>::value>::type,
+					Enable2,
+					Enable3,
+					Enable4>
 					{
 						public:
-							typedef T value_type;
 							typedef typename chunk <T>::type chunk_type;
 							
-							using term <T, array_term <T> >::operator[];
-														
-							typedef dechunk_iterator <const chunk_type> const_iterator;
-							typedef dechunk_iterator <chunk_type> iterator;
-							typedef typename chunk_type::reference reference;
+						#ifdef NO_CHUNKING_ITERATOR
+						
+							// in gcc 3.x, the chunking iterator's reference proxy slows down code, so we use a type not subject to type-based alias analysis instead
+						
+							typedef chunk_type __attribute__ ((may_alias))* chunk_iterator;
+							typedef const chunk_type __attribute__ ((may_alias))* const_chunk_iterator;
 							
-							value_type operator[] (std::size_t n) const
+							const_chunk_iterator chunk_begin () const
 								{
-									return static_cast <const chunk_type*> (data_) [n / chunk_type::length] [n % chunk_type::length];
+									return reinterpret_cast <const_chunk_iterator> (that ().values_);
 								}
-							
-							reference operator[] (std::size_t n)
+
+							chunk_iterator chunk_begin ()
 								{
-									return data_ [n / chunk_type::length] [n % chunk_type::length];
-								}							
-
-							const_iterator begin () const	{ return const_iterator (data_, 0); }							
-							iterator begin ()				{ return iterator (data_, 0); }
-
-							typedef const chunk_type* const_chunk_iterator;
-							typedef chunk_type* chunk_iterator;
-							
-							std::size_t size () const			{ return size_; }
-
-							const_chunk_iterator chunk_begin () const	{ return data_; }
-							chunk_iterator chunk_begin ()				{ return data_; }
-							
-						protected:
-							chunk_type* data_;
-							std::size_t size_;
-							
-							void init (chunk_type* data, std::size_t size)
-								{
-									data_ = data;
-									size_ = size;
+									return reinterpret_cast <chunk_iterator> (that ().values_);
 								}
-		
-							void swap (array_term& other)
+								
+						#else
+							
+							typedef chunking_iterator <chunk_type> chunk_iterator;
+							typedef chunking_iterator <const chunk_type> const_chunk_iterator;
+							
+							const_chunk_iterator chunk_begin () const
 								{
-									std::swap (data_, other.data_);
-									std::swap (size_, other.size_);
+									return const_chunk_iterator (that ().values_);
+								}
+
+							chunk_iterator chunk_begin ()
+								{
+									return chunk_iterator (that ().values_);
+								}
+						
+						#endif							
+																									
+						private:
+							const array_term <T>& that () const
+								{
+									return static_cast <const array_term <T>&> (*this);
+								}
+								
+							array_term <T>& that ()
+								{
+									return static_cast <array_term <T>&> (*this);
 								}
 					};
-					
+
 				#if 0
 
 				template <std::size_t n> struct boolean_of;
@@ -336,42 +299,45 @@ namespace stdext
 							/** Returns the element at index @a n. */
 							value_type operator[] (std::size_t n) const
 								{
-									return data_of (static_cast <const chunk_type*> (data_) [n / chunk_type::length] [n % chunk_type::length]);
+									return data_of (static_cast <const chunk_type*> (values_) [n / chunk_type::length] [n % chunk_type::length]);
 								}
 							
 							/** Returns a reference to the element at index @a n. */
 							chunk_type::reference operator[] (std::size_t n)
 								{ 
-									return data_ [n / chunk_type::length] [n % chunk_type::length];
+									return values_ [n / chunk_type::length] [n % chunk_type::length];
 								}
 								
-							const_iterator begin () const	{ return const_iterator (data_, 0); }
-							iterator begin ()				{ return iterator (data_, 0); }
+							const_iterator begin () const	{ return const_iterator (values_, 0); }
+							iterator begin ()				{ return iterator (values_, 0); }
 													
 							typedef chunk_type* chunk_iterator;
 							
 							/** Returns the number of elements. */
 							std::size_t size () const			{ return size_; }
 
-							chunk_iterator chunk_begin ()				{ return data_; }
+							chunk_iterator chunk_begin ()				{ return values_; }
 							
 						protected:
-							chunk_type* data_;
+							chunk_type* values_;
 							std::size_t size_;
 							
 							void init (chunk_type* data, std::size_t size)
 								{
-									data_ = data;
+									values_ = data;
 									size_ = size;
 								}
 		
 							void swap (array_term& other)
 								{
-									std::swap (data_, other.data_);
+									std::swap (values_, other.values_);
 									std::swap (size_, other.size_);
 								}
 					};																															
 				#endif
+
+
+
 			}
 	}
 	
