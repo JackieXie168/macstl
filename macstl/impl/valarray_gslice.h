@@ -186,7 +186,7 @@ namespace stdext
 				/// @param	Term	The subterm type.
 				/// @param	Enable	If void, enables a particular template specialization.
 				
-				template <typename Term, typename Enable> class gslice_term:
+				template <typename Term> class gslice_term:
 					public term <typename Term::value_type, gslice_term <Term> >
 					{
 						public:

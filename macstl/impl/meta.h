@@ -66,7 +66,7 @@ namespace stdext
 				
 				template <typename T> struct exists
 					{
-						static const int value = 1;
+						static const bool value = 1;
 					};
 					
 				// is_unary_function, is_binary_function

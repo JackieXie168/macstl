@@ -42,12 +42,12 @@ namespace macstl
 	{
 		namespace impl
 			{
-				template <typename T> T boolean_of (bool b)
+				template <typename T> inline T boolean_of (bool b)
 					{
 						return -static_cast <T> (b);
 					}
 					
-				template <> float boolean_of <float> (bool b)
+				template <> inline float boolean_of <float> (bool b)
 					{
 						union
 							{
@@ -57,7 +57,7 @@ namespace macstl
 						return iun.f;
 					}
 
-				template <> double boolean_of <double> (bool b)
+				template <> inline double boolean_of <double> (bool b)
 					{
 						union
 							{
@@ -143,7 +143,8 @@ namespace macstl
 					friend bool operator&& (const boolean& lhs, const boolean& rhs)		{ return static_cast <bool> (lhs.value_) && static_cast <bool> (rhs.value_); }
 					friend bool operator|| (const boolean& lhs, const boolean& rhs)		{ return static_cast <bool> (lhs.value_) || static_cast <bool> (rhs.value_); }
 					
-					friend const boolean abs (const boolean& lhs)		{ return lhs; }
+					friend const boolean abs (const boolean& lhs)						{ return lhs; }
+					friend const boolean mulhi (const boolean&, const boolean&)			{ return boolean (false); }
 
 				private:
 					T value_;

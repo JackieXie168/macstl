@@ -44,8 +44,8 @@
 	// maximize inlining
 	#pragma inline_depth(255)
 	
-	// macstl uses bool according to the C++ spec, but MSC tends to be overly pendantic about it...
-	#pragma warning(disable:4800)	// don't warn bool conversions!!
+	#pragma warning(disable:4675)	// don't warn resolved overload through ADL
+	#pragma warning(disable:4800)	// don't warn bool conversions
 	#pragma warning(disable:4804)	// don't warn unsafe use of bool
 #endif
 

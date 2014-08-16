@@ -107,13 +107,12 @@
 				DEAD_CODE_STRIPPING = YES;
 				GCC_ALTIVEC_EXTENSIONS = YES;
 				GCC_DYNAMIC_NO_PIC = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_CPU = G5;
 				GCC_MODEL_PPC64 = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 3;
-				OTHER_CPLUSPLUSFLAGS = "-falign-loops=16 -falign-jumps=16 -falign-functions=16 -finline-limit=50000 -fstrict-aliasing -funroll-loops -mpowerpc-gpopt";
+				OTHER_CPLUSPLUSFLAGS = "-falign-loops=16 -falign-jumps=16 -falign-functions=16 -finline-limit=50000 -fstrict-aliasing -mpowerpc-gpopt";
 				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
@@ -692,12 +691,11 @@
 				DEAD_CODE_STRIPPING = YES;
 				GCC_ALTIVEC_EXTENSIONS = YES;
 				GCC_DYNAMIC_NO_PIC = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_CPU = G4;
 				GCC_MODEL_TUNING = G4;
 				GCC_OPTIMIZATION_LEVEL = 3;
-				OTHER_CPLUSPLUSFLAGS = "-finline-limit=10000 -fstrict-aliasing -funroll-loops";
+				OTHER_CPLUSPLUSFLAGS = "-falign-loops=16 -falign-jumps=16 -falign-functions=16 -finline-limit=50000 -fstrict-aliasing -funroll-loops";
 				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;

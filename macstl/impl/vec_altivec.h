@@ -3718,7 +3718,90 @@ namespace stdext
 							altivec::add (exponent_log, mantissa_log);
 					}
 			};
+			
+		// multiplies_high
 				
+		template <> struct multiplies_high <macstl::vec <unsigned char, 16> >
+			{
+				typedef macstl::vec <unsigned char, 16> first_argument_type;
+				typedef macstl::vec <unsigned char, 16> second_argument_type;
+				typedef macstl::vec <unsigned char, 16> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <result_type> (altivec::perm (
+							altivec::mule (lhs, rhs),
+							altivec::mulo (lhs, rhs),
+							vec <unsigned char, 16>::set <0x00U, 0x10U, 0x02U, 0x12U, 0x04U, 0x14U, 0x06U, 0x16U, 0x08U, 0x18U, 0x0AU, 0x1AU, 0x0CU, 0x1CU, 0x0EU, 0x1EU> ())); 
+					}
+			};
+
+		template <> struct multiplies_high <macstl::vec <signed char, 16> >
+			{
+				typedef macstl::vec <signed char, 16> first_argument_type;
+				typedef macstl::vec <signed char, 16> second_argument_type;
+				typedef macstl::vec <signed char, 16> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <result_type> (altivec::perm (
+							altivec::mule (lhs, rhs),
+							altivec::mulo (lhs, rhs),
+							vec <unsigned char, 16>::set <0x00U, 0x10U, 0x02U, 0x12U, 0x04U, 0x14U, 0x06U, 0x16U, 0x08U, 0x18U, 0x0AU, 0x1AU, 0x0CU, 0x1CU, 0x0EU, 0x1EU> ())); 
+					}
+			};
+
+		template <> struct multiplies_high <macstl::vec <unsigned short, 8> >
+			{
+				typedef macstl::vec <unsigned short, 8> first_argument_type;
+				typedef macstl::vec <unsigned short, 8> second_argument_type;
+				typedef macstl::vec <unsigned short, 8> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return data_cast <result_type> (altivec::perm (
+							altivec::mule (lhs, rhs),
+							altivec::mulo (lhs, rhs),
+							vec <unsigned char, 16>::set <0x00U, 0x01U, 0x10U, 0x11U, 0x04U, 0x05U, 0x14U, 0x15U, 0x08U, 0x09U, 0x18U, 0x19U, 0x0CU, 0x0DU, 0x1CU, 0x1DU> ())); 
+					}
+			};
+			
+		template <> struct multiplies_high <macstl::vec <short, 8> >
+			{
+				typedef macstl::vec <short, 8> first_argument_type;
+				typedef macstl::vec <short, 8> second_argument_type;
+				typedef macstl::vec <short, 8> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						using namespace macstl;
+						
+						return data_cast <result_type> (altivec::perm (
+							altivec::mule (lhs, rhs),
+							altivec::mulo (lhs, rhs),
+							vec <unsigned char, 16>::set <0x00U, 0x01U, 0x10U, 0x11U, 0x04U, 0x05U, 0x14U, 0x15U, 0x08U, 0x09U, 0x18U, 0x19U, 0x0CU, 0x0DU, 0x1CU, 0x1DU> ())); 
+ 					}
+			};
+			
+		template <typename T, std::size_t n> struct multiplies_high <macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+				
+				result_type operator() (const first_argument_type&, const second_argument_type&) const
+					{
+						return result_type::template fill <false> ();
+					}
+			};
 						
 		// multiplies_plus
 

@@ -37,9 +37,65 @@
 
 #include <cmath>
 #include <functional>
+#include <limits>
+
+#if defined(__PPC__) || defined(__PPC64__)
+#include <ppc_intrinsics.h>
+#endif
+
+#include "impl/meta.h"
 
 namespace stdext
 	{
+	
+		namespace impl
+			{
+				template <typename T> struct smaller_than_half_int
+					{
+						enum { value = sizeof (T) > sizeof (int) / 2 };
+					};
+			}
+
+		template <typename T> inline typename impl::enable_if <impl::smaller_than_half_int <T>::value, T>::type mulhi (const T& lhs, const T& rhs)
+			{
+				// if lhs * rhs will fit into an int, just do the multiply and grab the high word
+				return (lhs * rhs) >> (sizeof (T) * CHAR_BIT);
+			}
+			
+		template <typename T> inline typename impl::enable_if <impl::smaller_than_half_int <T>::value == 0, T>::type mulhi (const T& lhs, const T& rhs)
+			{
+				// if lhs * rhs won't fit into an int, split into high and low words and do it the schoolyard way...
+				
+				static const int half_size = sizeof (T) * CHAR_BIT / 2;
+				static const T lo_mask = (1 << half_size) - 1;
+				
+				T lhs_hi = lhs >> half_size;
+				T lhs_lo = lhs & lo_mask;
+				T rhs_hi = rhs >> half_size;
+				T rhs_lo = rhs & lo_mask;
+				
+				T mid = ((lhs_lo * rhs_lo) >> half_size) + (lhs_lo * rhs_hi);
+				T mid_hi = mid >> half_size;
+				T mid_lo = mid & lo_mask;
+				
+				return lhs_hi * rhs_hi + mid_hi + ((mid_lo + lhs_hi * rhs_lo) >> half_size);
+			}
+			
+		#if defined(__PPC__) || defined(__PPC64__)
+
+		inline int mulhi (int lhs, int rhs)
+			{
+				return __mulhw (lhs, rhs);
+			}
+
+		inline unsigned int mulhi (unsigned int lhs, unsigned int rhs)
+			{
+				return __mulhwu (lhs, rhs);
+			}
+
+
+		#endif
+
 		template <typename T> struct identity: public std::unary_function <T, T>
 			{
 				T operator() (const T& x) const	
@@ -80,6 +136,16 @@ namespace stdext
 					}
 			};
 		
+		template <typename T> struct multiplies_high: public std::binary_function <T, T, T>
+			{
+				T operator() (const T& x, const T& y) const
+					{
+						return mulhi (x, y);
+					}
+			};
+
+		template <typename T> struct multiplies_plus;
+
 		template <typename T> struct shift_left: public std::binary_function <T, T, T>
 			{
 				T operator() (const T& x, const T& y) const
@@ -96,7 +162,6 @@ namespace stdext
 					}
 			};
 
-		template <typename T> struct multiplies_plus;
 				
 		template <typename T> struct absolute: public std::unary_function <T, T>
 			{

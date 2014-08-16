@@ -138,7 +138,7 @@ namespace stdext
 				/// @param	BTerm	The mask subterm type. Element type should be bool.
 				/// @param	Enable	If void, enables a particular template specialization.
 
-				template <typename Term, typename BTerm, typename Enable> class mask_term:
+				template <typename Term, typename BTerm> class mask_term:
 					public term <typename Term::value_type, mask_term <Term, BTerm> >
 					{
 						public:

@@ -58,18 +58,18 @@ namespace stdext
 			{
 				// forward declares
 				
-				template <typename Term, typename Enable = void> class literal_term;
-				template <typename Term, template <typename> class UOp, typename Enable = void> class unary_term;					
-				template <typename Term, typename Fn, typename Enable = void> class apply_term;					
-				template <typename LTerm, typename RTerm, template <typename> class BOp, typename Enable = void> class binary_term;
+				template <typename Term> class literal_term;
+				template <typename Term, template <typename> class UOp> class unary_term;					
+				template <typename Term, typename Fn> class apply_term;					
+				template <typename LTerm, typename RTerm, template <typename> class BOp> class binary_term;
 		
-				template <typename Term, typename Enable = void> class shift_term;
-				template <typename Term, typename Enable = void> class cshift_term;
+				template <typename Term> class shift_term;
+				template <typename Term> class cshift_term;
 				
-				template <typename Term, typename Enable = void> class slice_term;
-				template <typename Term, typename Enable = void> class gslice_term;
-				template <typename Term, typename BTerm, typename Enable = void> class mask_term;
-				template <typename Term, typename InTerm, typename Enable = void> class indirect_term;
+				template <typename Term> class slice_term;
+				template <typename Term> class gslice_term;
+				template <typename Term, typename BTerm> class mask_term;
+				template <typename Term, typename InTerm> class indirect_term;
 				
 				template <typename T, typename Enable = void> class valarray_base;
 

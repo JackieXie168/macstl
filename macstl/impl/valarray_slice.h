@@ -133,14 +133,17 @@ namespace stdext
 							const std::size_t stride_;
 					};
 					
-				/// Base for slice term.
+				/// Expression template slice term.
 				
 				/// @internal
-				/// This base defines all common types and functions for both chunked and unchunked slice terms.
+				/// This branch term selects a slice out of the subterm. A slice expression is not const chunkable, except for
+				/// Altivec int, unsigned int and float.
 				///
 				/// @param	Term	The subterm type.
 															
-				template <typename Term> class slice_term_base
+				template <typename Term> class slice_term:
+					public term <typename Term::value_type, slice_term <Term> >,
+					public chunker <slice_term <Term> >
 					{
 						public:
 							typedef typename Term::value_type value_type;
@@ -151,6 +154,11 @@ namespace stdext
 							/// Iterator to access or change elements.
 							typedef slice_iterator <typename Term::iterator> iterator;
 							typedef typename Term::reference reference;
+							
+							slice_term (const Term& subterm, const stdext::slice& sliced):
+								subterm_ (subterm), slice_ (sliced)
+								{
+								}
 							
 							/// Gets the element at index @a n.
 							value_type operator[] (std::size_t index) const	{ return subterm_ [index * slice_.stride () + slice_.start ()]; }
@@ -171,37 +179,6 @@ namespace stdext
 							iterator begin ()
 								{
 									return iterator (subterm_.begin (), slice_.start (), slice_.stride ());
-								}
-
-						protected:
-							Term subterm_;
-							const stdext::slice slice_;
-
-							slice_term_base (const Term& subterm, const stdext::slice& sliced):
-								subterm_ (subterm), slice_ (sliced)
-								{
-								}
-					};
-
-				/// Expression template slice term.
-				
-				/// @internal
-				/// This branch term selects a slice out of the subterm. A slice expression is not const chunkable, except for
-				/// Altivec int, unsigned int and float.
-				///
-				/// @param	Term	The subterm type.
-				/// @param	Enable	If void, enables a particular template specialization.
-								 
-				template <typename Term, typename Enable> class slice_term:
-					public slice_term_base <Term>,
-					public term <typename Term::value_type, slice_term <Term> >
-					{
-						public:
-							typedef slice_term_base <Term> base;
-							
-							slice_term (const Term& subterm, const stdext::slice& sliced):
-								base (subterm, sliced)
-								{
 								}
 
 							/// Assigns the @a other slice term.
@@ -226,10 +203,13 @@ namespace stdext
 									return *this;
 								}
 
-							using base::operator[];
-							using term <typename Term::value_type, slice_term <Term> >::operator[];
-
+						private:
+							Term subterm_;
+							const stdext::slice slice_;
+							
+							template <typename Term2, typename Enable1, typename Enable2, typename Enable3, typename Enable4> friend class chunker;
 					};
+
 			}
 	}
 	

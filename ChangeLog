@@ -1,5 +1,10 @@
 Release history
 
+0.2.2	28 Mar 2005	
+	．Fixed error when linking more than 1 object file, template function should be inline [KHe].
+	．Added mulhi function for vec and valarray [MSh].
+	．Improved valarray expression template and iterator design.
+
 0.2.1	14 Feb 2005	
 	．Fixed member and binary min and max for vec <unsigned short, 4> [PBa].
 	．Fixed #include error with own projects [DCh].

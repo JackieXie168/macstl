@@ -2597,6 +2597,20 @@ namespace std
 			
 		// multiplies
 
+		template <typename T, std::size_t n> struct multiplies <macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+						
+						return mmx::vand (lhs, rhs);
+					}
+			};
+
 		#ifdef __MMX__
 		
 		template <> struct multiplies <macstl::vec <unsigned short, 4> >:
@@ -3984,6 +3998,43 @@ namespace stdext
 			};
 
 	#endif
+	
+		// multiplies_high
+		
+		template <typename T, std::size_t n> struct multiplies_high <macstl::vec <macstl::boolean <T>, n> >
+			{
+				typedef macstl::vec <macstl::boolean <T>, n> first_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> second_argument_type;
+				typedef macstl::vec <macstl::boolean <T>, n> result_type;
+				
+				result_type operator() (const first_argument_type&, const second_argument_type&) const
+					{
+						return result_type::template fill <false> ();
+					}
+			};
+
+		#ifdef __MMX__
+		
+		template <> struct multiplies_high <macstl::vec <short, 4> >:
+			public macstl::mmx::mulhi_function <macstl::vec <short, 4>, macstl::vec <short, 4> >
+			{
+			};
+			
+		#endif
+
+		#ifdef __SSE2__
+		
+		template <> struct multiplies_high <macstl::vec <unsigned short, 8> >:
+			public macstl::mmx::mulhi_function <macstl::vec <unsigned short, 8>, macstl::vec <unsigned short, 8> >
+			{
+			};
+
+		template <> struct multiplies_high <macstl::vec <short, 8> >:
+			public macstl::mmx::mulhi_function <macstl::vec <short, 8>, macstl::vec <short, 8> >
+			{
+			};
+
+		#endif
 
 		// sine
 		

@@ -332,6 +332,7 @@ namespace stdext
 				DEFINE_VALARRAY_UNARY_FUNCTION (exp, exponent)
 				DEFINE_VALARRAY_UNARY_FUNCTION (log, logarithm)
 				DEFINE_VALARRAY_UNARY_FUNCTION (log10, logarithm10)
+				DEFINE_VALARRAY_BINARY_FUNCTION (mulhi, multiplies_high)
 				DEFINE_VALARRAY_BINARY_FUNCTION (pow, power)
 				DEFINE_VALARRAY_UNARY_FUNCTION (sin, sine)
 				DEFINE_VALARRAY_UNARY_FUNCTION (sinh, hyperbolic_sine)
@@ -406,7 +407,11 @@ namespace stdext
 									std::swap (size_, other.size_);
 								}
 					};
-
+					
+				template <typename Term,
+					typename Enable1 = void, typename Enable2 = void, typename Enable3 = void, typename Enable4 = void> class chunker
+					{
+					};
 			}
 			
 		#ifdef __IBMCPP__

@@ -145,6 +145,7 @@ template <typename T> struct test_type <T, typename stdext::impl::enable_if <std
 				test_func <stdext::logarithm, T>::call ("log");
 				test_func <stdext::maximum, T>::call ("max");
 				test_func <stdext::minimum, T>::call ("min");
+				test_func <stdext::multiplies_high, T>::call ("mulhi");
 			//	test_func <stdext::multiplies_plus, T>::call ("fma");
 				test_func <stdext::power, T>::call ("pow");
 				test_func <stdext::sine, T>::call ("sin");

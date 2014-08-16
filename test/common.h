@@ -254,7 +254,7 @@ float denan (float x)
 float reduce (float x)
 	{
 		using namespace std;
-		return fmod ((double) x, pow (2.0, 20.0));
+		return (float) fmod ((double) x, pow (2.0, 20.0));
 	}
 
 template <> struct validate_lhs <stdext::sine, float>

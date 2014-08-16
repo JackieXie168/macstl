@@ -114,7 +114,7 @@ namespace stdext
 				/// @param	Term	The subterm type.
 				/// @param	Enable	If void, enables a particular template specialization.
 					
-				template <typename Term, typename Enable> class shift_term:
+				template <typename Term> class shift_term:
 					public term <typename Term::value_type, shift_term <Term> >
 					{
 						public:
@@ -224,7 +224,7 @@ namespace stdext
 				/// @param	Term	The subterm type.
 				/// @param	Enable	If void, enables a particular template specialization.
 							
-				template <typename Term, typename Enable> class cshift_term:
+				template <typename Term> class cshift_term:
 					public term <typename Term::value_type, cshift_term <Term> >
 					{
 						public:

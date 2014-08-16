@@ -123,7 +123,7 @@ namespace stdext
 				/// @param	InTerm	The indirect subterm type. Element type should be std::size_t.
 				/// @param	Enable	If void, enables a particular template specialization.
 
-				template <typename Term, typename InTerm, typename Enable> class indirect_term:
+				template <typename Term, typename InTerm> class indirect_term:
 					public term <typename Term::value_type, indirect_term <Term, InTerm> >
 					{
 						public:
