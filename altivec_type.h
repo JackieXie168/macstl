@@ -464,8 +464,9 @@ namespace macstl
 			{																					\
 				template <typename Type> struct OPER##_result									\
 					{																			\
-						typedef typename tag_to_type <sizeof (*type_to_tag (					\
-							OPER (*(typename altivec <Type>::vector_type*) NULL)))>::type type;	\
+						enum { tag = sizeof (*type_to_tag (										\
+							OPER (*(typename altivec <Type>::vector_type*) NULL))) };			\
+						typedef typename tag_to_type <tag>::type type;							\
 					};																			\
 			}																					\
 																								\
@@ -484,9 +485,10 @@ namespace macstl
 			{																					\
 				template <typename Type1, typename Type2> struct OPER##_result					\
 					{																			\
-						typedef typename tag_to_type <sizeof (*type_to_tag (					\
+						enum { tag = sizeof (*type_to_tag (										\
 							OPER (*(typename altivec <Type1>::vector_type*) NULL,				\
-							*(typename altivec <Type2>::vector_type*) NULL)))>::type type;		\
+							*(typename altivec <Type2>::vector_type*) NULL))) };				\
+						typedef typename tag_to_type <tag>::type type;							\
 					};																			\
 			}																					\
 																								\
@@ -506,9 +508,10 @@ namespace macstl
 			{																					\
 				template <typename Type1, typename Type2> struct OPER##_result					\
 					{																			\
-						typedef typename tag_to_type <sizeof (*type_to_tag (					\
+						enum { tag = sizeof (*type_to_tag (										\
 							OPER (*(typename altivec <Type1>::vector_type*) NULL,				\
-							*(typename altivec <Type2>::vector_type*) NULL)))>::type type;		\
+							*(typename altivec <Type2>::vector_type*) NULL))) };				\
+						typedef typename tag_to_type <tag>::type type;							\
 					};																			\
 				template <typename Type> struct OPER##_result <Type, Type>;						\
 			}																					\
@@ -529,10 +532,11 @@ namespace macstl
 			{																					\
 				template <typename Type1, typename Type2, typename Type3> struct OPER##_result	\
 					{																			\
-						typedef typename tag_to_type <sizeof (*type_to_tag (					\
+						enum { tag = sizeof (*type_to_tag (										\
 							OPER (*(typename altivec <Type1>::vector_type*) NULL,				\
 							*(typename altivec <Type2>::vector_type*) NULL,						\
-							*(typename altivec <Type3>::vector_type*) NULL)))>::type type;		\
+							*(typename altivec <Type3>::vector_type*) NULL))) };				\
+						typedef typename tag_to_type <tag>::type type;							\
 					};																			\
 			}																					\
 																								\
@@ -552,9 +556,9 @@ namespace macstl
 			{																					\
 				template <typename Type> struct OPER##_result									\
 					{																			\
-						typedef typename tag_to_type <sizeof (*type_to_tag (					\
-							OPER (*(typename altivec <Type>::vector_type*) NULL,				\
-							0)))>::type type;													\
+						enum { tag = sizeof (*type_to_tag (										\
+							OPER (*(typename altivec <Type>::vector_type*) NULL, 0))) };		\
+						typedef typename tag_to_type <tag>::type type;							\
 					};																			\
 			}																					\
 																								\
@@ -573,9 +577,10 @@ namespace macstl
 			{																					\
 				template <typename Type1, typename Type2> struct OPER##_result					\
 					{																			\
-						typedef typename tag_to_type <sizeof (*type_to_tag (					\
+						enum { tag = sizeof (*type_to_tag (										\
 							OPER (*(typename altivec <Type1>::vector_type*) NULL, 				\
-							*(typename altivec <Type2>::vector_type*) NULL, 0)))>::type type;	\
+							*(typename altivec <Type2>::vector_type*) NULL, 0))) };				\
+						typedef typename tag_to_type <tag>::type type;							\
 					};																			\
 			}																					\
 																								\
@@ -623,8 +628,8 @@ namespace macstl
 			{																					\
 				template <typename Type> struct OPER##_result									\
 					{																			\
-						typedef typename tag_to_type <sizeof (*type_to_tag (					\
-							OPER (0, (Type*) NULL)))>::type type;								\
+						enum { tag = sizeof (*type_to_tag (OPER (0, (Type*) NULL))) };			\
+						typedef typename tag_to_type <tag>::type type;							\
 					};																			\
 			}																					\
 																								\
@@ -685,7 +690,7 @@ namespace macstl
 		
 		/** @name arithmetic */
 		//@{
-		__DEFINE_ALTIVEC_UNARY_OPERATION(abs,vec_abs)
+	//	__DEFINE_ALTIVEC_UNARY_OPERATION(abs,vec_abs)
 		__DEFINE_ALTIVEC_UNARY_OPERATION(abss,vec_abss)
 		__DEFINE_ALTIVEC_BINARY_OPERATION_WITH_OVERLOAD(operator+,vec_add)
 		__DEFINE_ALTIVEC_BINARY_OPERATION(addc,vec_addc)

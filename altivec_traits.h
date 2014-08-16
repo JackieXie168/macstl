@@ -990,6 +990,8 @@ namespace macstl
 				/** Returns each element of @a x multiplied by the corresponding element of @a y. */
 				static __vector signed int multiplies (__vector signed int x, __vector signed int y)
 					{
+						__vector signed int zero = (__vector signed int) (0);
+						
 						// unsigned multiply
 						__vector signed int result = static_cast <__vector signed int>
 							(altivec_traits <unsigned long>::multiplies (
@@ -999,8 +1001,7 @@ namespace macstl
 						// if both signs negative or positive, select the unsigned result
 						// if one sign negative and the other positive, select the negative of the unsigned result
 						return vec_sel (result,
-							vec_sub ((__vector signed int) (0), result),
-							vec_cmpgt ((__vector signed int) (0), vec_xor (x, y)));
+							vec_sub (zero, result), vec_cmpgt (zero, vec_xor (x, y)));
 					}
 			};
 			

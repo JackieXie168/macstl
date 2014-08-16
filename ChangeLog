@@ -1,5 +1,13 @@
 Release history
 
+0.1.5	3 Nov 2003	
+	．Now builds with Xcode 1.0 [*CBe].
+	．Fixed altivec functions not compiling in gcc 3.1: “tree_list not supported by dump_expr” [JLWi].
+	．Reduced download size by removing build directories [ASt].
+	．Fixed altivec abs ambiguity.
+	．Fixed internal valarray #includes.
+	．Fixed uninitialized_copy_n not compiling with non-random access iterators.
+
 0.1.4	29 Sep 2003	
 	．Added shift member to altivec class.
 	．Enabled generated constants only for NDEBUG builds [HBe].

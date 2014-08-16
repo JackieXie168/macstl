@@ -101,7 +101,7 @@ namespace stdext
 								++first;
 								++result;
 							}
-						return std::pair <InIter, OutIter> (first + n, result + n);
+						return std::pair <InIter, OutIter> (first, result);
 					}
 				catch (...)
 					{

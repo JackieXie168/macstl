@@ -296,19 +296,19 @@ namespace std
 			}
 	}
 
-#include <valarray_algorithm.h>
-#include <valarray_base.h>
-#include <valarray_function.h>
-#include <valarray_shift.h>
-#include <valarray_valarray.h>
-#include <valarray_slice.h>
+#include <internal/valarray_algorithm.h>
+#include <internal/valarray_base.h>
+#include <internal/valarray_function.h>
+#include <internal/valarray_shift.h>
+#include <internal/valarray_valarray.h>
+#include <internal/valarray_slice.h>
 
 #ifdef __VEC__
-#include <valarray_altivec.h>
+#include <internal/valarray_altivec.h>
 #endif
 
-#include <valarray_gslice.h>
-#include <valarray_mask.h>
-#include <valarray_indirect.h>
+#include <internal/valarray_gslice.h>
+#include <internal/valarray_mask.h>
+#include <internal/valarray_indirect.h>
 
 #endif

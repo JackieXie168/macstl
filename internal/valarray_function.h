@@ -184,7 +184,7 @@ namespace std
 					};
 					
 				// inhibit chunking for apply value
-				template <typename Val, typename Expr> struct unary_term_dispatch <Expr, apply_value, Val, true>:
+				template <typename Val, typename Expr> class unary_term_dispatch <Expr, apply_value, Val, true>:
 					public unary_term_base <Expr, apply_value, false>
 					{
 						protected:
