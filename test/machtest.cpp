@@ -33,8 +33,8 @@
  */
 
 
-#include <stdlib.h>
 #include <time.h>
+#include <cstdlib>
 #include <iostream>
 #include <macstl/mach.h>
 
@@ -80,7 +80,7 @@ int main ()
 						case 0:
 							{
 							int insert_size = random () % factor;
-							int* insertion = (int*) malloc (sizeof (int) * insert_size);
+							int* insertion = (int*) std::malloc (sizeof (int) * insert_size);
 							for (int i = 0; i != insert_size; ++i)
 								insertion [i] = random ();
 							
@@ -92,7 +92,7 @@ int main ()
 							v1.insert (v1.begin () + insert_pos, insertion, insertion + insert_size);
 							v2.insert (v2.begin () + insert_pos, insertion, insertion + insert_size);
 							
-							free (insertion);
+							std::free (insertion);
 							}
 							break;
 						

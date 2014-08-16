@@ -66,21 +66,21 @@ unsigned int difference (float left, float right)
 		un uleft = {left};
 		un uright = {right};
 		
-		bool leftnanorinf = (uleft.i & 0x7F800000) == 0x7F800000;		// exponent all ones => nan or inf
-		bool rightnanorinf = (uright.i & 0x7F800000) == 0x7F800000;
-		bool leftnan = uleft.i & 0x7FFFFF;		// any mantissa bits => nan
-		bool rightnan = uright.i & 0x7FFFFF;
+		bool leftnanorinf = (uleft.i & 0x7F800000U) == 0x7F800000;		// exponent all ones => nan or inf
+		bool rightnanorinf = (uright.i & 0x7F800000U) == 0x7F800000;
+		bool leftnan = uleft.i & 0x7FFFFFU;		// any mantissa bits => nan
+		bool rightnan = uright.i & 0x7FFFFFU;
 		
 		if (leftnanorinf && rightnanorinf && leftnan && rightnan)	// both are nan
 			return 0;
-		else if (!((uleft.i ^ uright.i) & 0x80000000))	// both signs the same
+		else if (!((uleft.i ^ uright.i) & 0x80000000U))	// both signs the same
 			{
 				if (leftnanorinf && rightnanorinf && !leftnan && !rightnan)	// both are inf (of the same sign)
 					return 0;
 				else
 					{
 						// both are finite and non-nan, just take the absolute difference of exponent & mantissa as one integer
-						unsigned int diff = std::abs (((int) (uleft.i & 0x7FFFFFFF)) - ((int) (uright.i & 0x7FFFFFFF)));
+						unsigned int diff = std::abs (((int) (uleft.i & 0x7FFFFFFFU)) - ((int) (uright.i & 0x7FFFFFFF)));
 						if (diff < max_difference)
 							return diff;
 					}			
@@ -99,22 +99,22 @@ unsigned int difference (double left, double right)
 		un uleft = {left};
 		un uright = {right};
 		
-		bool leftnanorinf = (uleft.i & 0x7FF0000000000000LL) == 0x7FF0000000000000LL;	/// exponent al ones => nan or inf
-		bool rightnanorinf = (uright.i & 0x7FF0000000000000LL) == 0x7FF0000000000000LL;
-		bool leftnan =  uleft.i & 0xFFFFFFFFFFFFFLL;	// any mantissa bits => nan
-		bool rightnan = uright.i & 0xFFFFFFFFFFFFFLL;
+		bool leftnanorinf = (uleft.i & 0x7FF0000000000000ULL) == 0x7FF0000000000000ULL;	/// exponent al ones => nan or inf
+		bool rightnanorinf = (uright.i & 0x7FF0000000000000ULL) == 0x7FF0000000000000ULL;
+		bool leftnan =  uleft.i & 0xFFFFFFFFFFFFFULL;	// any mantissa bits => nan
+		bool rightnan = uright.i & 0xFFFFFFFFFFFFFULL;
 
 		if (leftnanorinf && rightnanorinf && leftnan && rightnan)	// both are nan
 			return 0;
-		else if (!((uleft.i ^ uright.i) & 0x8000000000000000LL))	// both signs the same
+		else if (!((uleft.i ^ uright.i) & 0x8000000000000000ULL))	// both signs the same
 			{
 				if (leftnanorinf && rightnanorinf && !leftnan && !rightnan)	// both are inf (of the same sign)
 					return 0;
 				else
 					{
 						// both are finite and non-nan, just take the absolute difference of exponent & mantissa as one integer
-						unsigned int diff = std::abs ((int) (((long long) (uleft.i & 0x7FFFFFFFFFFFFFFFLL)) - 
-							((long long) (uright.i & 0x7FFFFFFFFFFFFFFFLL))));
+						unsigned int diff = std::abs ((int) (((long long) (uleft.i & 0x7FFFFFFFFFFFFFFFULL)) - 
+							((long long) (uright.i & 0x7FFFFFFFFFFFFFFFULL))));
 						if (diff < max_difference)
 							return diff;
 					}
@@ -143,7 +143,7 @@ unsigned char randch ()
 		static unsigned int source = 0;
 		
 		#ifdef _MSC_VER
-		return rand () & 0xFF;
+		return rand () & 0xFFU;
 		#else
 		
 		if (random_bytes == 2)
@@ -157,7 +157,7 @@ unsigned char randch ()
 				source >>= 8;
 			}
 			
-		return source & 0xFF;
+		return source & 0xFFU;
 		
 		#endif
 	}
@@ -243,7 +243,7 @@ float denan (float x)
 					};
 					
 				un u = {x};
-				u.i &= 0x7F800000;	// change the NAN into a denormal
+				u.i &= 0x7F800000U;	// change the NAN into a denormal
 				return u.f;
 			}
 	}
@@ -253,12 +253,8 @@ float denan (float x)
 
 float reduce (float x)
 	{
-	#ifdef _MSC_VER
-		return x;	// in Windows don't reduce trig functions for now...
-	#else
 		using namespace std;
-		return copysignf (fmod (x, (float) exp2 (20)), x);
-	#endif
+		return fmod ((double) x, pow (2.0, 20.0));
 	}
 
 template <> struct validate_lhs <stdext::sine, float>
@@ -333,16 +329,16 @@ template <template <typename> class UOp, typename T> inline void test
 		macstl::mmx::empty ();	// empty out MMX state after possible use of MMX
 		#endif
 		
-		for (std::size_t i = 0; i != T::length; ++i)
+		for (std::size_t j = 0; j != T::length; ++j)
 			{
 				typedef UOp <typename T::value_type> scalar_operation;
-				typename scalar_operation::result_type r = scalar_operation () (lhs [i]);
-				unsigned int diff = difference ((typename vector_operation::result_type::value_type) result [i], r);
+				typename scalar_operation::result_type r = scalar_operation () (lhs [j]);
+				unsigned int diff = difference ((typename vector_operation::result_type::value_type) result [j], r);
 				if (diff > threshold)
 					{
 						std::cout << std::setprecision (30) << "\t\t" << diff << ": " <<
-							(typename vector_operation::result_type::value_type) result [i] << " != " << r << " == " << op << " (" <<
-							(typename T::value_type) lhs [i] << ").\n";
+							(typename vector_operation::result_type::value_type) result [j] << " != " << r << " == " << op << " (" <<
+							(typename T::value_type) lhs [j] << ").\n";
 						threshold = diff;
 					}
 			}
@@ -358,8 +354,8 @@ template <template <typename> class BOp, typename T> inline void test
 		randomize <typename T::value_type> () (rhs, T::length);
 		for (std::size_t i = 0; i != T::length; ++i)
 			lhs [i] = validate_lhs <BOp, typename T::value_type> () (lhs [i]);
-		for (std::size_t i = 0; i != T::length; ++i)
-			rhs [i] = validate_rhs <BOp, typename T::value_type> () (rhs [i]);
+		for (std::size_t j = 0; j != T::length; ++j)
+			rhs [j] = validate_rhs <BOp, typename T::value_type> () (rhs [j]);
 		
 		typedef BOp <T> vector_operation;
 		typename vector_operation::result_type result = vector_operation () (lhs, rhs);
@@ -368,17 +364,17 @@ template <template <typename> class BOp, typename T> inline void test
 		macstl::mmx::empty ();	// empty out MMX state after possible use of MMX
 		#endif
 		
-		for (std::size_t i = 0; i != T::length; ++i)
+		for (std::size_t k = 0; k != T::length; ++k)
 			{
 				typedef BOp <typename T::value_type> scalar_operation;
-				typename scalar_operation::result_type r = scalar_operation () (lhs [i], rhs [i]);
-				unsigned int diff = difference ((typename vector_operation::result_type::value_type) result [i], r);
+				typename scalar_operation::result_type r = scalar_operation () (lhs [k], rhs [k]);
+				unsigned int diff = difference ((typename vector_operation::result_type::value_type) result [k], r);
 				if (diff > threshold)
 					{
 						std::cout << std::setprecision (30) << "\t\t" << diff << ": " <<
-							(typename vector_operation::result_type::value_type) result [i] << " != " << r << " == " << op << " (" <<
-							(typename T::value_type) lhs [i] << ", " <<
-							(typename T::value_type) rhs [i] << ").\n";
+							(typename vector_operation::result_type::value_type) result [k] << " != " << r << " == " << op << " (" <<
+							(typename T::value_type) lhs [k] << ", " <<
+							(typename T::value_type) rhs [k] << ").\n";
 						threshold = diff;
 					}
 			}

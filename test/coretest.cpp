@@ -50,6 +50,11 @@ struct dumper
 class T
 	{
 		public:
+			T (): i_ ()
+				{
+					++count;
+				}
+				
 			T (int i): i_ (i)
 				{
 					++count;
@@ -169,14 +174,11 @@ int main ()
 			cout << "Making a new reference to the array.\n";
 			refptr <core_array <T> > ref (&ca);
 			dump (*ref);
-			
 			cout << "Clear.\n";
 			ca.clear ();
 			dump (ca);
 		}
-		
 		// this result should be zero, which proves that all that retaining and releasing counting worked OK...
 		cout << "At the end of the day, we are at " << T::count << "!";
-	
 	}
 

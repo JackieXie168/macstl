@@ -231,7 +231,7 @@ namespace stdext
 							typedef literal_term_base <Term> base;
 							
 							/// Constructs from a single value and a subterm.
-							literal_term (const typename Term::value_type& literal, Term& term):
+							literal_term (const typename Term::value_type& literal, const Term& term):
 								base (literal, term)
 								{
 								}
@@ -582,8 +582,11 @@ namespace stdext
 		
 				template <typename Cat1, typename Cat2> struct iterator_ranker
 					{
-						static const int first_category_rank = iterator_category_rank <Cat1>::value;
-						static const int second_category_rank = iterator_category_rank <Cat2>::value;
+						enum
+							{
+								first_category_rank = iterator_category_rank <Cat1>::value,
+								second_category_rank = iterator_category_rank <Cat2>::value
+							};
 						
 						typedef typename iterator_rank_category
 							<first_category_rank < second_category_rank ? first_category_rank : second_category_rank>::type	type;

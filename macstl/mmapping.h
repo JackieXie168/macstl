@@ -35,15 +35,16 @@
 #ifndef MACSTL_MMAPPING_H
 #define MACSTL_MMAPPING_H
 
-#ifdef HAS_MMAP	// will eventually have a Windows implementation
-
 #include <cstddef>
 #include <new>
 
-#include <sys/types.h>
-#include <sys/mman.h>
+#include "impl/config.h"
+
+#ifdef HAS_MMAP	// will eventually have a Windows implementation
 
 #include "channel.h"
+#include <sys/types.h>
+#include <sys/mman.h>
 
 namespace macstl
 	{

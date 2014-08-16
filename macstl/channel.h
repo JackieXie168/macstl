@@ -41,6 +41,8 @@
 
 #include <iostream>
 
+#include "impl/config.h"
+
 namespace macstl
 	{
 		template <typename T> class mmapping;

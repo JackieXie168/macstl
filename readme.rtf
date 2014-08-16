@@ -27,19 +27,17 @@ Build files for Mac OS X are in directory
 
 \f0\b How to Build
 \f1\b0 \
-Out of the box, you can build several suites in Apple Xcode 1.5, Metrowerks CodeWarrior 9.3 (Mac OS X) or Microsoft Visual Studio .NET 2003 (Windows). Simply open in the respective IDE and do a complete build. These will build into the 
+Out of the box, you can build several suites in Apple Xcode 1.5, Metrowerks CodeWarrior 9.3 (Mac OS X) or Microsoft Visual Studio .NET 2003 (Windows). These will build into the 
 \f2\i build
 \f1\i0  subdirectory of 
 \f2\i mac
 \f1\i0  or 
 \f2\i win
 \f1\i0 , and make command-line programs suitable for that platform.\
-You can install macstl by copying the 
+Simply open in the respective IDE and do a complete build. The Xcode project builds for G5 by default; select the \'d2gcc, G4\'d3 build style to build for G4 instead. The Visual Studio solution builds for P4 by default; adjust the options appropriately for other Intel CPUs.\
+You can install macstl for your own programs by pointing the -I option of your compiler to the outermost 
 \f2\i macstl
-\f1\i0  directory to wherever your compiler will pick it up e.g. on Mac OS X or Unix systems, 
-\f2\i /usr/include/
-\f0\i0\b  
-\f1\b0 is a good location. Alternatively, you may use Xcode 1.5 to build a header-only framework called 
+\f1\i0  directory. Alternatively, you may use Xcode to build a header-only framework called 
 \f2\i macstl.framework
 \f1\i0 , and in your projects use 
 \f2\i Add to Project... 
@@ -62,9 +60,8 @@ Mailing list:	{\field{\*\fldinst{HYPERLINK "http://www.pixelglow.com/lists/listi
 \pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\sb120\ql\qnatural
 \cf0 Thank you for evaluating macstl and I do hope it boosts your development and program performance!\
 \
-\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\sb120\ql\qnatural
 
-\f2\i \cf0 Cheers, Glen Low\
+\f2\i Cheers, Glen Low\
 pixelglow software | simply brilliant stuff\
 www.pixelglow.com\
 }

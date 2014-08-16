@@ -197,7 +197,7 @@ namespace macstl
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3,
 						init_type v4, init_type v5, init_type v6, init_type v7>
-						static vec set ()
+						static vec <unsigned char, 8> set ()
 						{
 							return impl::generator_m64 <
 								(v3 << 24) | (v2 << 16) | (v1 << 8) | v0,
@@ -205,7 +205,7 @@ namespace macstl
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <unsigned char, 8> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
@@ -252,7 +252,7 @@ namespace macstl
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3,
 						init_type v4, init_type v5, init_type v6, init_type v7>
-						static vec set ()
+						static vec <signed char, 8> set ()
 						{
 							return impl::generator_m64 <
 								(((unsigned char) v3) << 24) | (((unsigned char) v2) << 16) | (((unsigned char) v1) << 8) | ((unsigned char) v0),
@@ -260,7 +260,7 @@ namespace macstl
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <signed char, 8> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
@@ -309,15 +309,15 @@ namespace macstl
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3,
 						init_type v4, init_type v5, init_type v6, init_type v7>
-						static vec set ()
+						static vec <boolean <char>, 8> set ()
 						{
 							return impl::generator_m64 <
-								(v3 ? 0xFF000000 : 0) | (v2 ? 0x00FF0000 : 0) | (v1 ? 0x0000FF00 : 0) | (v0 ? 0x000000FF : 0),
-								(v7 ? 0xFF000000 : 0) | (v6 ? 0x00FF0000 : 0) | (v5 ? 0x0000FF00 : 0) | (v4 ? 0x000000FF : 0)> () ();
+								(v3 ? 0xFF000000U : 0) | (v2 ? 0x00FF0000U : 0) | (v1 ? 0x0000FF00U : 0) | (v0 ? 0x000000FFU : 0),
+								(v7 ? 0xFF000000U : 0) | (v6 ? 0x00FF0000U : 0) | (v5 ? 0x0000FF00U : 0) | (v4 ? 0x000000FFU : 0)> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <boolean <char>, 8> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
@@ -362,14 +362,14 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec set ()
+						static vec <unsigned short, 4> set ()
 						{
 							return impl::generator_m64 <
 								(v1 << 16) | v0, (v3 << 16) | v2> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <unsigned short, 4> fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
@@ -414,14 +414,14 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec set ()
+						static vec <short, 4> set ()
 						{
 							return impl::generator_m64 <
 								(((unsigned short) v1) << 16) | ((unsigned short) v0), (((unsigned short) v3) << 16) | ((unsigned short) v2)> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <short, 4> fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
@@ -467,14 +467,14 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec set ()
+						static vec <boolean <short>, 4> set ()
 						{
 							return impl::generator_m64 <
-								(v1 ? 0xFFFF0000 : 0) | (v0 ? 0x0000FFFF : 0), (v3 ? 0xFFFF0000 : 0) | (v2 ? 0x0000FFFF : 0)> () ();
+								(v1 ? 0xFFFF0000U : 0) | (v0 ? 0x0000FFFFU : 0), (v3 ? 0xFFFF0000U : 0) | (v2 ? 0x0000FFFFU : 0)> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <boolean <short>, 4> fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
@@ -519,13 +519,13 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1>
-						static vec set ()
+						static vec <unsigned int, 2> set ()
 						{
 							return impl::generator_m64 <v0, v1> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <unsigned int, 2> fill ()
 						{
 							return set <v0, v0> ();
 						}
@@ -570,13 +570,13 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1>
-						static vec set ()
+						static vec <int, 2> set ()
 						{
 							return impl::generator_m64 <(int) v0, (int) v1> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <int, 2> fill ()
 						{
 							return set <v0, v0> ();
 						}
@@ -622,13 +622,13 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1>
-						static vec set ()
+						static vec <boolean <int>, 2> set ()
 						{
-							return impl::generator_m64 <v0 ? 0xFFFFFFFF : 0, v1 ? 0xFFFFFFFF : 0> () ();
+							return impl::generator_m64 <v0 ? 0xFFFFFFFFU : 0, v1 ? 0xFFFFFFFFU : 0> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <boolean <int>, 2> fill ()
 						{
 							return set <v0, v0> ();
 						}
@@ -677,13 +677,13 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec set ()
+						static vec <float, 4> set ()
 						{
 							return impl::generator_m128 <v0, v1, v2, v3> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <float, 4> fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
@@ -727,13 +727,13 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec set ()
+						static vec <boolean <float>, 4> set ()
 						{
-							return impl::generator_m128 <v0 ? 0xFFFFFFFF : 0, v1 ? 0xFFFFFFFF : 0, v2 ? 0xFFFFFFFF : 0, v3 ? 0xFFFFFFFF : 0> () ();
+							return impl::generator_m128 <v0 ? 0xFFFFFFFFU : 0, v1 ? 0xFFFFFFFFU : 0, v2 ? 0xFFFFFFFFU : 0, v3 ? 0xFFFFFFFFU : 0> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <boolean <float>, 4> fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
@@ -782,15 +782,15 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1>
-						static vec set ()
+						static vec <double, 2> set ()
 						{
 							return impl::generator_m128d <
-								v0 & 0x00000000FFFFFFFFLL, (v0 & 0xFFFFFFFF00000000LL) >> 32, 
-								v1 & 0x00000000FFFFFFFFLL, (v1 & 0xFFFFFFFF00000000LL) >> 32> () ();
+								v0 & 0x00000000FFFFFFFFULL, (v0 & 0xFFFFFFFF00000000ULL) >> 32, 
+								v1 & 0x00000000FFFFFFFFULL, (v1 & 0xFFFFFFFF00000000ULL) >> 32> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <double, 2> fill ()
 						{
 							return set <v0, v0> ();
 						}
@@ -836,15 +836,15 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1>
-						static vec set ()
+						static vec <boolean <double>, 2> set ()
 						{
 							return impl::generator_m128d <
-								v0 ? 0xFFFFFFFF : 0x00000000, v0 ? 0xFFFFFFFF : 0x00000000,
-								v1 ? 0xFFFFFFFF : 0x00000000, v1 ? 0xFFFFFFFF : 0x00000000> () ();
+								v0 ? 0xFFFFFFFFU : 0x00000000U, v0 ? 0xFFFFFFFFU : 0x00000000U,
+								v1 ? 0xFFFFFFFFU : 0x00000000U, v1 ? 0xFFFFFFFFU : 0x00000000U> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <boolean <double>, 2> fill ()
 						{
 							return set <v0, v0> ();
 						}
@@ -896,7 +896,7 @@ namespace macstl
 						init_type v4, init_type v5, init_type v6, init_type v7,
 						init_type v8, init_type v9, init_type v10, init_type v11,
 						init_type v12, init_type v13, init_type v14, init_type v15>
-						static vec set ()
+						static vec <unsigned char, 16> set ()
 						{
 							return impl::generator_m128i <
 								(v3 << 24) | (v2 << 16) | (v1 << 8) | v0,
@@ -906,7 +906,7 @@ namespace macstl
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <unsigned char, 16> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
@@ -957,7 +957,7 @@ namespace macstl
 						init_type v4, init_type v5, init_type v6, init_type v7,
 						init_type v8, init_type v9, init_type v10, init_type v11,
 						init_type v12, init_type v13, init_type v14, init_type v15>
-						static vec set ()
+						static vec <signed char, 16> set ()
 						{
 							return impl::generator_m128i <
 								(((unsigned char) v3) << 24) | (((unsigned char) v2) << 16) | (((unsigned char) v1) << 8) | ((unsigned char) v0),
@@ -967,7 +967,7 @@ namespace macstl
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <signed char, 16> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
@@ -1022,17 +1022,17 @@ namespace macstl
 						init_type v4, init_type v5, init_type v6, init_type v7,
 						init_type v8, init_type v9, init_type v10, init_type v11,
 						init_type v12, init_type v13, init_type v14, init_type v15>
-						static vec set ()
+						static vec <boolean <char>, 16> set ()
 						{
 							return impl::generator_m128i <
-								(v3 ? 0xFF000000 : 0) | (v2 ? 0x00FF0000 : 0) | (v1 ? 0x0000FF00 : 0) | (v0 ? 0x000000FF : 0),
-								(v7 ? 0xFF000000 : 0) | (v6 ? 0x00FF0000 : 0) | (v5 ? 0x0000FF00 : 0) | (v4 ? 0x000000FF : 0),
-								(v11 ? 0xFF000000 : 0) | (v10 ? 0x00FF0000 : 0) | (v9 ? 0x0000FF00 : 0) | (v8 ? 0x000000FF : 0),
-								(v15 ? 0xFF000000 : 0) | (v14 ? 0x00FF0000 : 0) | (v13 ? 0x0000FF00 : 0) | (v12 ? 0x000000FF : 0)> () ();
+								(v3 ? 0xFF000000U : 0) | (v2 ? 0x00FF0000U : 0) | (v1 ? 0x0000FF00U : 0) | (v0 ? 0x000000FFU : 0),
+								(v7 ? 0xFF000000U : 0) | (v6 ? 0x00FF0000U : 0) | (v5 ? 0x0000FF00U : 0) | (v4 ? 0x000000FFU : 0),
+								(v11 ? 0xFF000000U : 0) | (v10 ? 0x00FF0000U : 0) | (v9 ? 0x0000FF00U : 0) | (v8 ? 0x000000FFU : 0),
+								(v15 ? 0xFF000000U : 0) | (v14 ? 0x00FF0000U : 0) | (v13 ? 0x0000FF00U : 0) | (v12 ? 0x000000FFU : 0)> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <boolean <char>, 16> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
@@ -1079,7 +1079,7 @@ namespace macstl
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3,
 						init_type v4, init_type v5, init_type v6, init_type v7>
-						static vec set ()
+						static vec <unsigned short, 8> set ()
 						{
 							return impl::generator_m128i <
 								(v1 << 16) | v0, (v3 << 16) | v2,
@@ -1087,7 +1087,7 @@ namespace macstl
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <unsigned short, 8> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
@@ -1134,7 +1134,7 @@ namespace macstl
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3,
 						init_type v4, init_type v5, init_type v6, init_type v7>
-						static vec set ()
+						static vec <short, 8> set ()
 						{
 							return impl::generator_m128i <
 								(((unsigned short) v1) << 16) | ((unsigned short) v0), (((unsigned short) v3) << 16) | ((unsigned short) v2),
@@ -1142,7 +1142,7 @@ namespace macstl
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <short, 8> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
@@ -1191,15 +1191,15 @@ namespace macstl
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3,
 						init_type v4, init_type v5, init_type v6, init_type v7>
-						static vec set ()
+						static vec <boolean <short>, 8> set ()
 						{
 							return impl::generator_m128i <
-								(v1 ? 0xFFFF0000 : 0) | (v0 ? 0x0000FFFF : 0), (v3 ? 0xFFFF0000 : 0) | (v2 ? 0x0000FFFF : 0),
-								(v5 ? 0xFFFF0000 : 0) | (v4 ? 0x0000FFFF : 0), (v7 ? 0xFFFF0000 : 0) | (v6 ? 0x0000FFFF : 0)> () ();
+								(v1 ? 0xFFFF0000U : 0) | (v0 ? 0x0000FFFFU : 0), (v3 ? 0xFFFF0000U : 0) | (v2 ? 0x0000FFFFU : 0),
+								(v5 ? 0xFFFF0000U : 0) | (v4 ? 0x0000FFFFU : 0), (v7 ? 0xFFFF0000U : 0) | (v6 ? 0x0000FFFFU : 0)> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <boolean <short>, 8> fill ()
 						{
 							return set <v0, v0, v0, v0, v0, v0, v0, v0> ();
 						}
@@ -1244,13 +1244,13 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec set ()
+						static vec <unsigned int, 4> set ()
 						{
 							return impl::generator_m128i <v0, v1, v2, v3> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <unsigned int, 4> fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
@@ -1295,13 +1295,13 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec set ()
+						static vec <int, 4> set ()
 						{
 							return impl::generator_m128i <(int) v0, (int) v1, (int) v2, (int) v3> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <int, 4> fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
@@ -1347,13 +1347,13 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1, init_type v2, init_type v3>
-						static vec set ()
+						static vec <boolean <int>, 4> set ()
 						{
-							return impl::generator_m128i <v0 ? 0xFFFFFFFF : 0, v1 ? 0xFFFFFFFF : 0, v2 ? 0xFFFFFFFF : 0, v3 ? 0xFFFFFFFF : 0> () ();
+							return impl::generator_m128i <v0 ? 0xFFFFFFFFU : 0, v1 ? 0xFFFFFFFFU : 0, v2 ? 0xFFFFFFFFU : 0, v3 ? 0xFFFFFFFFU : 0> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <boolean <int>, 4> fill ()
 						{
 							return set <v0, v0, v0, v0> ();
 						}
@@ -1399,15 +1399,15 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1>
-						static vec set ()
+						static vec <unsigned long long, 2> set ()
 						{
 							return impl::generator_m128i <
-								v0 & 0x00000000FFFFFFFFLL, (v0 & 0xFFFFFFFF00000000LL) >> 32,
-								v1 & 0x00000000FFFFFFFFLL, (v1 & 0xFFFFFFFF00000000LL) >> 32> () ();
+								v0 & 0x00000000FFFFFFFFULL, (v0 & 0xFFFFFFFF00000000ULL) >> 32,
+								v1 & 0x00000000FFFFFFFFULL, (v1 & 0xFFFFFFFF00000000ULL) >> 32> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <unsigned long long, 2> fill ()
 						{
 							return set <v0, v0> ();
 						}
@@ -1453,15 +1453,15 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1>
-						static vec set ()
+						static vec <long long, 2> set ()
 						{
 							return impl::generator_m128i <
-								((unsigned long long) v0) & 0x00000000FFFFFFFFLL, (((unsigned long long) v0) & 0xFFFFFFFF00000000LL) >> 32,
-								((unsigned long long) v1) & 0x00000000FFFFFFFFLL, (((unsigned long long) v1) & 0xFFFFFFFF00000000LL) >> 32> () ();
+								((unsigned long long) v0) & 0x00000000FFFFFFFFULL, (((unsigned long long) v0) & 0xFFFFFFFF00000000ULL) >> 32,
+								((unsigned long long) v1) & 0x00000000FFFFFFFFULL, (((unsigned long long) v1) & 0xFFFFFFFF00000000ULL) >> 32> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <long long, 2> fill ()
 						{
 							return set <v0, v0> ();
 						}
@@ -1507,15 +1507,15 @@ namespace macstl
 						
 					template <
 						init_type v0, init_type v1>
-						static vec set ()
+						static vec <boolean <long long>, 2> set ()
 						{
 							return impl::generator_m128i <
-								v0 ? 0xFFFFFFFF : 0x00000000, v0 ? 0xFFFFFFFF : 0x00000000,
-								v1 ? 0xFFFFFFFF : 0x00000000, v1 ? 0xFFFFFFFF : 0x00000000> () ();
+								v0 ? 0xFFFFFFFFU : 0x00000000U, v0 ? 0xFFFFFFFFU : 0x00000000U,
+								v1 ? 0xFFFFFFFFU : 0x00000000U, v1 ? 0xFFFFFFFFU : 0x00000000U> () ();
 						}
 					
 					template <init_type v0>
-						static vec fill ()
+						static vec <boolean <long long>, 2> fill ()
 						{
 							return set <v0, v0> ();
 						}
@@ -2528,11 +2528,11 @@ template <unsigned int i> struct FN##_function <i, ARG1, ARG2 >						\
 											mmx::add (mmx::mul (
 												mmx::add (mmx::mul (
 													mmx::add (mmx::mul (
-														xx, vec <float, 4>::fill <0x362E9C5B> ()),	// 2.60190306765133772461701600763e-6 x^9
-														vec <float, 4>::fill <0xB94FB223> ()),		// -0.000198074187274269112790200299439 x^7
-													xx), vec <float, 4>::fill <0x3C08873E> ()),		// 0.00833302513896936648486927563199 x^5
-												xx), vec <float, 4>::fill <0xBE2AAAA4> ()),			// -0.166666566840071513511254831176 x^3
-											xx), vec <float, 4>::fill <0x3F800000> ()),				// 0.999999994686007336962522087826 x
+														xx, vec <float, 4>::fill <0x362E9C5BU> ()),	// 2.60190306765133772461701600763e-6 x^9
+														vec <float, 4>::fill <0xB94FB223U> ()),		// -0.000198074187274269112790200299439 x^7
+													xx), vec <float, 4>::fill <0x3C08873EU> ()),		// 0.00833302513896936648486927563199 x^5
+												xx), vec <float, 4>::fill <0xBE2AAAA4U> ()),			// -0.166666566840071513511254831176 x^3
+											xx), vec <float, 4>::fill <0x3F800000U> ()),				// 0.999999994686007336962522087826 x
 										x);
 							}
 					}
@@ -2923,7 +2923,7 @@ namespace std
 					{
 						using namespace macstl;
 
-						vec <unsigned char, 8> offset = vec <unsigned char, 8>::fill <0x80> ();
+						vec <unsigned char, 8> offset = vec <unsigned char, 8>::fill <0x80U> ();
 						return mmx::cmpgt (
 							data_cast <vec <signed char, 8> > (mmx::sub (lhs, offset)),
 							data_cast <vec <signed char, 8> > (mmx::sub (rhs, offset)));
@@ -2945,7 +2945,7 @@ namespace std
 					{
 						using namespace macstl;
 
-						vec <unsigned short, 4> offset = vec <unsigned short, 4>::fill <0x8000> ();
+						vec <unsigned short, 4> offset = vec <unsigned short, 4>::fill <0x8000U> ();
 						return mmx::cmpgt (
 							data_cast <vec <short, 4> > (mmx::sub (lhs, offset)),
 							data_cast <vec <short, 4> > (mmx::sub (rhs, offset)));
@@ -2967,7 +2967,7 @@ namespace std
 					{
 						using namespace macstl;
 
-						vec <unsigned int, 2> offset = vec <unsigned int, 2>::fill <0x80000000> ();
+						vec <unsigned int, 2> offset = vec <unsigned int, 2>::fill <0x80000000U> ();
 						return mmx::cmpgt (
 							data_cast <vec <int, 2> > (mmx::sub (lhs, offset)),
 							data_cast <vec <int, 2> > (mmx::sub (rhs, offset)));
@@ -3007,7 +3007,7 @@ namespace std
 					{
 						using namespace macstl;
 
-						vec <unsigned char, 16> offset = vec <unsigned char, 16>::fill <0x80> ();
+						vec <unsigned char, 16> offset = vec <unsigned char, 16>::fill <0x80U> ();
 						return mmx::cmpgt (
 							data_cast <vec <signed char, 16> > (mmx::sub (lhs, offset)),
 							data_cast <vec <signed char, 16> > (mmx::sub (rhs, offset)));
@@ -3029,7 +3029,7 @@ namespace std
 					{
 						using namespace macstl;
 
-						vec <unsigned short, 8> offset = vec <unsigned short, 8>::fill <0x8000> ();
+						vec <unsigned short, 8> offset = vec <unsigned short, 8>::fill <0x8000U> ();
 						return mmx::cmpgt (
 							data_cast <vec <short, 8> > (mmx::sub (lhs, offset)),
 							data_cast <vec <short, 8> > (mmx::sub (rhs, offset)));
@@ -3051,7 +3051,7 @@ namespace std
 					{
 						using namespace macstl;
 
-						vec <unsigned int, 4> offset = vec <unsigned int, 4>::fill <0x80000000> ();
+						vec <unsigned int, 4> offset = vec <unsigned int, 4>::fill <0x80000000U> ();
 						return mmx::cmpgt (
 							data_cast <vec <int, 4> > (mmx::sub (lhs, offset)),
 							data_cast <vec <int, 4> > (mmx::sub (rhs, offset)));
@@ -3313,6 +3313,24 @@ namespace stdext
 					}
 			};
 
+		template <> struct accumulator <maximum <macstl::vec <unsigned short, 4> > >
+			{
+				typedef macstl::vec <unsigned short, 4> argument_type;
+				typedef unsigned short result_type;
+				
+				result_type operator() (const argument_type& lhs) const
+					{
+						using namespace macstl;
+
+						const vec <short, 4> offset = vec <short, 4>::fill <0x8000U> ();
+						const vec <short, 4> lhs_offset = mmx::sub (data_cast <vec <short, 4> > (lhs), offset);
+						
+						const vec <short, 4> result = mmx::max (lhs_offset, mmx::shuffle <0, 3, 2, 1> (lhs_offset));
+						return mmx::extract <0> (
+							mmx::add (mmx::max (result, mmx::shuffle <1, 0, 3, 2> (result)), offset));
+					}
+			};
+
 		template <> struct accumulator <maximum <macstl::vec <short, 4> > >
 			{
 				typedef macstl::vec <short, 4> argument_type;
@@ -3420,6 +3438,24 @@ namespace stdext
 					}
 			};
 			
+		template <> struct accumulator <minimum <macstl::vec <unsigned short, 4> > >
+			{
+				typedef macstl::vec <unsigned short, 4> argument_type;
+				typedef unsigned short result_type;
+				
+				result_type operator() (const argument_type& lhs) const
+					{
+						using namespace macstl;
+
+						const vec <short, 4> offset = vec <short, 4>::fill <0x8000U> ();
+						const vec <short, 4> lhs_offset = mmx::sub (data_cast <vec <short, 4> > (lhs), offset);
+						
+						const vec <short, 4> result = mmx::min (lhs_offset, mmx::shuffle <0, 3, 2, 1> (lhs_offset));
+						return mmx::extract <0> (
+							mmx::add (mmx::min (result, mmx::shuffle <1, 0, 3, 2> (result)), offset));
+					}
+			};
+
 		template <> struct accumulator <minimum <macstl::vec <short, 4> > >
 			{
 				typedef macstl::vec <short, 4> argument_type;
@@ -3631,7 +3667,7 @@ namespace stdext
 					{
 						using namespace macstl;
 
-						return mmx::andnot (argument_type::fill <0x80000000> (), lhs);
+						return mmx::vand (argument_type::fill <0x7FFFFFFFU> (), lhs);
 					}
 			};
 
@@ -3649,7 +3685,7 @@ namespace stdext
 					{
 						using namespace macstl;
 
-						return mmx::andnot (argument_type::fill <0x8000000000000000LL> (), lhs);
+						return mmx::andnot (argument_type::fill <0x7FFFFFFFFFFFFFFFULL> (), lhs);
 					}
 			};
 
@@ -3728,11 +3764,11 @@ namespace stdext
 					{
 						using namespace macstl;
 
-						const vec <double, 2> pi = vec <double, 2>::fill <0x400921FB54442D18LL> ();	// pi
-						const vec <double, 2> half_pi = vec <double, 2>::fill <0x3FF921FB54442D18LL> ();	// pi/2
+						const vec <double, 2> pi = vec <double, 2>::fill <0x400921FB54442D18ULL> ();	// pi
+						const vec <double, 2> half_pi = vec <double, 2>::fill <0x3FF921FB54442D18ULL> ();	// pi/2
 						
 						const vec <int, 4> lhs_n = mmx::cvt <vec <int, 4> > (
-							mmx::mul (lhs, vec <float, 4>::fill <0x3EA2F983> ()));	// 1/pi
+							mmx::mul (lhs, vec <float, 4>::fill <0x3EA2F983U> ()));	// 1/pi
 						const vec <float, 4> lhs_reduced =
 							mmx::movelh (
 								// low two floats
@@ -3748,7 +3784,7 @@ namespace stdext
 							mmx::vxor (
 								mmx::impl::sine_reduced (lhs_reduced),
 								mmx::vand (
-									 vec <float, 4>::fill <0x80000000> (),	// -0.0
+									 vec <float, 4>::fill <0x80000000U> (),	// -0.0
 									reinterpret_cast <const vec <float, 4>&> (mmx::cmpeq (
 										mmx::vand (lhs_n, vec <int, 4>::fill <1> ()),
 										vec <int, 4>::fill <0> ()).data ())));
@@ -3776,22 +3812,22 @@ namespace stdext
 					}
 			};
 
-#if defined(__MMX__) && defined(__SSE__)
+	#if defined(__MMX__) && defined(__SSE__)
 
-		template <> struct maximum <macstl::vec <unsigned short, 8> >
+		template <> struct maximum <macstl::vec <unsigned short, 4> >
 			{
-				typedef macstl::vec <unsigned short, 8> first_argument_type;
-				typedef macstl::vec <unsigned short, 8> second_argument_type;
-				typedef macstl::vec <unsigned short, 8> result_type;
+				typedef macstl::vec <unsigned short, 4> first_argument_type;
+				typedef macstl::vec <unsigned short, 4> second_argument_type;
+				typedef macstl::vec <unsigned short, 4> result_type;
 				
 				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
-						vec <short, 8> offset = vec <short, 8>::fill <0x8000> ();
-						return data_cast <vec <unsigned short, 8> > (mmx::add (mmx::max (
-							mmx::sub (data_cast <vec <short, 8> > (lhs), offset),
-							mmx::sub (data_cast <vec <short, 8> > (rhs), offset)),
+						vec <short, 4> offset = vec <short, 4>::fill <0x8000U> ();
+						return data_cast <vec <unsigned short, 4> > (mmx::add (mmx::max (
+							mmx::sub (data_cast <vec <short, 4> > (lhs), offset),
+							mmx::sub (data_cast <vec <short, 4> > (rhs), offset)),
 							offset));
 					}
 			};
@@ -3807,9 +3843,9 @@ namespace stdext
 			};
 
 
-#endif
+	#endif
 
-#ifdef __SSE__
+	#ifdef __SSE__
 
 		template <> struct maximum <macstl::vec <float, 4> >:
 			public macstl::mmx::max_function <macstl::vec <float, 4>, macstl::vec <float, 4> >
@@ -3826,6 +3862,24 @@ namespace stdext
 			{
 			};
 
+		template <> struct maximum <macstl::vec <unsigned short, 8> >
+			{
+				typedef macstl::vec <unsigned short, 8> first_argument_type;
+				typedef macstl::vec <unsigned short, 8> second_argument_type;
+				typedef macstl::vec <unsigned short, 8> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+
+						vec <short, 8> offset = vec <short, 8>::fill <0x8000U> ();
+						return data_cast <vec <unsigned short, 8> > (mmx::add (mmx::max (
+							mmx::sub (data_cast <vec <short, 8> > (lhs), offset),
+							mmx::sub (data_cast <vec <short, 8> > (rhs), offset)),
+							offset));
+					}
+			};
+			
 		template <> struct maximum <macstl::vec <short, 8> >:
 			public macstl::mmx::max_function <macstl::vec <short, 8>, macstl::vec <short, 8> >
 			{
@@ -3857,20 +3911,20 @@ namespace stdext
 
 	#if defined(__MMX__) && defined(__SSE__)
 
-		template <> struct minimum <macstl::vec <unsigned short, 8> >
+		template <> struct minimum <macstl::vec <unsigned short, 4> >
 			{
-				typedef macstl::vec <unsigned short, 8> first_argument_type;
-				typedef macstl::vec <unsigned short, 8> second_argument_type;
-				typedef macstl::vec <unsigned short, 8> result_type;
+				typedef macstl::vec <unsigned short, 4> first_argument_type;
+				typedef macstl::vec <unsigned short, 4> second_argument_type;
+				typedef macstl::vec <unsigned short, 4> result_type;
 				
 				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
 					{
 						using namespace macstl;
 
-						vec <short, 8> offset = vec <short, 8>::fill <0x8000> ();
-						return data_cast <vec <unsigned short, 8> > (mmx::add (mmx::min (
-							mmx::sub (data_cast <vec <short, 8> > (lhs), offset),
-							mmx::sub (data_cast <vec <short, 8> > (rhs), offset)),
+						vec <short, 4> offset = vec <short, 4>::fill <0x8000U> ();
+						return data_cast <vec <unsigned short, 4> > (mmx::add (mmx::min (
+							mmx::sub (data_cast <vec <short, 4> > (lhs), offset),
+							mmx::sub (data_cast <vec <short, 4> > (rhs), offset)),
 							offset));
 					}
 			};
@@ -3901,6 +3955,24 @@ namespace stdext
 			{
 			};
 
+		template <> struct minimum <macstl::vec <unsigned short, 8> >
+			{
+				typedef macstl::vec <unsigned short, 8> first_argument_type;
+				typedef macstl::vec <unsigned short, 8> second_argument_type;
+				typedef macstl::vec <unsigned short, 8> result_type;
+				
+				result_type operator() (const first_argument_type& lhs, const second_argument_type& rhs) const
+					{
+						using namespace macstl;
+
+						vec <short, 8> offset = vec <short, 8>::fill <0x8000U> ();
+						return data_cast <vec <unsigned short, 8> > (mmx::add (mmx::min (
+							mmx::sub (data_cast <vec <short, 8> > (lhs), offset),
+							mmx::sub (data_cast <vec <short, 8> > (rhs), offset)),
+							offset));
+					}
+			};
+
 		template <> struct minimum <macstl::vec <short, 8> >:
 			public macstl::mmx::min_function <macstl::vec <short, 8>, macstl::vec <short, 8> >
 			{
@@ -3926,11 +3998,11 @@ namespace stdext
 					{
 						using namespace macstl;
 
-						const vec <double, 2> pi = vec <double, 2>::fill <0x400921FB54442D18LL> ();	// pi
+						const vec <double, 2> pi = vec <double, 2>::fill <0x400921FB54442D18ULL> ();	// pi
 						
 						// force lhs to [-pi/2, pi/2]
 						const vec <int, 4> lhs_n = mmx::cvt <vec <int, 4> > (
-							mmx::mul (lhs, vec <float, 4>::fill <0x3EA2F983> ()));
+							mmx::mul (lhs, vec <float, 4>::fill <0x3EA2F983U> ()));
 						const vec <float, 4> lhs_reduced =
 							mmx::movelh (
 								// low two floats
@@ -3948,9 +4020,9 @@ namespace stdext
 								mmx::andnot (
 									// if lhs == -0.0 or lhs_n is odd, need to invert sign of result
 									reinterpret_cast <const vec <float, 4>&> (mmx::andnot (
-										mmx::cmpeq (reinterpret_cast <const vec <int, 4>&> (lhs), vec <int, 4>::fill <0x80000000> ()),
+										mmx::cmpeq (reinterpret_cast <const vec <int, 4>&> (lhs), vec <int, 4>::fill <0x80000000U> ()),
 										mmx::cmpeq (mmx::vand (lhs_n, vec <int, 4>::fill <1> ()), vec <int, 4>::fill <0> ()))),
-									vec <float, 4>::fill <0x80000000> ()));
+									vec <float, 4>::fill <0x80000000U> ()));
 						
 					}	
 					

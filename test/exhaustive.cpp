@@ -41,6 +41,12 @@
 #define OPERATION stdext::sine
 #endif
 
+// make 16-byte vec the default since TYPE cannot contain any commas...
+namespace macstl
+	{
+		template <typename T, size_t n = 16 / sizeof (T)> class vec;
+	}
+	
 #ifndef TYPE
 #define TYPE macstl::vec <float>
 #endif

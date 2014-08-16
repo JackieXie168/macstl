@@ -238,6 +238,25 @@ namespace stdext
 						return binary_term <LTerm, literal_term <LTerm>, OPER>												\
 							(lhs.that (), literal_term <LTerm> (rhs, lhs.that ()));											\
 					}														
+					
+				// XLC doesn't like foreign namespace qualified template template params in template functions -- say that three times fast...
+				// so we bring in all the ones we need from the std namespace...
+				
+				using std::negate;
+				using std::logical_not;
+				using std::multiplies;
+				using std::divides;
+				using std::modulus;        
+				using std::plus;
+				using std::minus;
+				using std::equal_to;
+				using std::not_equal_to;
+				using std::less;
+				using std::greater;
+				using std::less_equal;
+				using std::greater_equal;
+				using std::logical_and;
+				using std::logical_or;			
 
 				/// @name Unary Arithmetic
 				/// @relates term
@@ -245,9 +264,9 @@ namespace stdext
 				
 				//@{
 				
-				DEFINE_VALARRAY_UNARY_FUNCTION (operator+, stdext::identity)
-				DEFINE_VALARRAY_UNARY_FUNCTION (operator-, std::negate)
-				DEFINE_VALARRAY_UNARY_FUNCTION (operator~, stdext::bitwise_not)
+				DEFINE_VALARRAY_UNARY_FUNCTION (operator+, identity)
+				DEFINE_VALARRAY_UNARY_FUNCTION (operator-, negate)
+				DEFINE_VALARRAY_UNARY_FUNCTION (operator~, bitwise_not)
 				
 				//@}
 				
@@ -257,7 +276,7 @@ namespace stdext
 				
 				//@{
 				
-				DEFINE_VALARRAY_UNARY_FUNCTION (operator!, std::logical_not)
+				DEFINE_VALARRAY_UNARY_FUNCTION (operator!, logical_not)
 				
 				//@}
 
@@ -267,16 +286,16 @@ namespace stdext
 
 				//@{
 				
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator*, std::multiplies)
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator/, std::divides)
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator%, std::modulus)            
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator+, std::plus)
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator-, std::minus)
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator^, stdext::bitwise_xor)
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator&, stdext::bitwise_and)
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator|, stdext::bitwise_or)
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator<<, stdext::shift_left)
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator>>, stdext::shift_right)
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator*, multiplies)
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator/, divides)
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator%, modulus)            
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator+, plus)
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator-, minus)
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator^, bitwise_xor)
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator&, bitwise_and)
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator|, bitwise_or)
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator<<, shift_left)
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator>>, shift_right)
 				
 				//@}
 				
@@ -286,14 +305,14 @@ namespace stdext
 				
 				//@{
 				
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator==, std::equal_to)
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator!=, std::not_equal_to)
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator<, std::less)
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator>, std::greater)
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator<=, std::less_equal)
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator>=, std::greater_equal)
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator&&, std::logical_and)
-				DEFINE_VALARRAY_BINARY_FUNCTION (operator||, std::logical_or)
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator==, equal_to)
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator!=, not_equal_to)
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator<, less)
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator>, greater)
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator<=, less_equal)
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator>=, greater_equal)
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator&&, logical_and)
+				DEFINE_VALARRAY_BINARY_FUNCTION (operator||, logical_or)
 				
 				//@}
 				
@@ -303,22 +322,22 @@ namespace stdext
 				
 				//@{
 				
-				DEFINE_VALARRAY_UNARY_FUNCTION (abs, stdext::absolute)
-				DEFINE_VALARRAY_UNARY_FUNCTION (acos, stdext::arc_cosine)
-				DEFINE_VALARRAY_UNARY_FUNCTION (asin, stdext::arc_sine)
-				DEFINE_VALARRAY_UNARY_FUNCTION (atan, stdext::arc_tangent)
-				DEFINE_VALARRAY_BINARY_FUNCTION (atan2, stdext::arc_tangent2)
-				DEFINE_VALARRAY_UNARY_FUNCTION (cos, stdext::cosine)
-				DEFINE_VALARRAY_UNARY_FUNCTION (cosh, stdext::hyperbolic_cosine)
-				DEFINE_VALARRAY_UNARY_FUNCTION (exp, stdext::exponent)
-				DEFINE_VALARRAY_UNARY_FUNCTION (log, stdext::logarithm)
-				DEFINE_VALARRAY_UNARY_FUNCTION (log10, stdext::logarithm10)
-				DEFINE_VALARRAY_BINARY_FUNCTION (pow, stdext::power)
-				DEFINE_VALARRAY_UNARY_FUNCTION (sin, stdext::sine)
-				DEFINE_VALARRAY_UNARY_FUNCTION (sinh, stdext::hyperbolic_sine)
-				DEFINE_VALARRAY_UNARY_FUNCTION (sqrt, stdext::square_root)
-				DEFINE_VALARRAY_UNARY_FUNCTION (tan, stdext::tangent)
-				DEFINE_VALARRAY_UNARY_FUNCTION (tanh, stdext::hyperbolic_tangent)
+				DEFINE_VALARRAY_UNARY_FUNCTION (abs, absolute)
+				DEFINE_VALARRAY_UNARY_FUNCTION (acos, arc_cosine)
+				DEFINE_VALARRAY_UNARY_FUNCTION (asin, arc_sine)
+				DEFINE_VALARRAY_UNARY_FUNCTION (atan, arc_tangent)
+				DEFINE_VALARRAY_BINARY_FUNCTION (atan2, arc_tangent2)
+				DEFINE_VALARRAY_UNARY_FUNCTION (cos, cosine)
+				DEFINE_VALARRAY_UNARY_FUNCTION (cosh, hyperbolic_cosine)
+				DEFINE_VALARRAY_UNARY_FUNCTION (exp, exponent)
+				DEFINE_VALARRAY_UNARY_FUNCTION (log, logarithm)
+				DEFINE_VALARRAY_UNARY_FUNCTION (log10, logarithm10)
+				DEFINE_VALARRAY_BINARY_FUNCTION (pow, power)
+				DEFINE_VALARRAY_UNARY_FUNCTION (sin, sine)
+				DEFINE_VALARRAY_UNARY_FUNCTION (sinh, hyperbolic_sine)
+				DEFINE_VALARRAY_UNARY_FUNCTION (sqrt, square_root)
+				DEFINE_VALARRAY_UNARY_FUNCTION (tan, tangent)
+				DEFINE_VALARRAY_UNARY_FUNCTION (tanh, hyperbolic_tangent)
 
 				//@}
 					
@@ -388,21 +407,11 @@ namespace stdext
 								}
 					};
 
-				/// Chunking type.
-				
-				/// @internal
-				/// Template typedef to declare the chunking type corresponding to a scalar type.
-				///
-				/// @param	T	The scalar type.
-				
-				template <typename T> struct chunk
-					{
-						/// The chunking type. The default is the same type, but specializations may change this.
-						typedef T type;
-					};
-
-
 			}
+			
+		#ifdef __IBMCPP__
+		using impl::operator*;
+		#endif
 	}
 	
 #endif

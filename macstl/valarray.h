@@ -35,8 +35,8 @@
 #ifndef MACSTL_VALARRAY_H
 #define MACSTL_VALARRAY_H
 
-#include <stdlib.h>
-#include <assert.h>
+#include <cstdlib>
+#include <cassert>
 
 #include "impl/config.h"
 #include "impl/data.h"
@@ -45,6 +45,7 @@
 #include "algorithm.h"
 #include "functional.h"
 #include "mmapping.h"
+#include "vec.h"
 
 namespace stdext
 	{
@@ -68,13 +69,17 @@ namespace stdext
 				template <typename Term, typename Enable = void> class slice_term;
 				template <typename Term, typename Enable = void> class gslice_term;
 				template <typename Term, typename BTerm, typename Enable = void> class mask_term;
-				template <typename Term, typename InTerm, typename Enable = void> class indirect_term;						
+				template <typename Term, typename InTerm, typename Enable = void> class indirect_term;
+				
+				template <typename T, typename Enable = void> class valarray_base;
+
 			}
 	}
 	
 #include "impl/valarray_algorithm.h"
 #include "impl/valarray_base.h"
 #include "impl/valarray_function.h"
+#include "impl/valarray_vec.h"
 #include "impl/valarray_shift.h"
 #include "impl/valarray_valarray.h"
 #include "impl/valarray_slice.h"
@@ -83,6 +88,5 @@ namespace stdext
 #include "impl/valarray_indirect.h"
 #include "impl/valarray_statarray.h"
 #include "impl/valarray_mmaparray.h"
-#include "impl/valarray_vec.h"
 
 #endif

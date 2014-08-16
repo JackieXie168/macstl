@@ -66,7 +66,7 @@
 
 const std::size_t prime_caches = 100;
 const std::size_t size = 1000;
-const std::size_t tries = 500000;
+const std::size_t tries = 100000;
 
 const int step1 = 5;
 const int step2 = 6;
@@ -78,7 +78,7 @@ template <typename Fn> inline clock_t bench ()
 		for (unsigned int i = 0; i != prime_caches; ++i)
 			fn ();
 		clock_t start = clock ();
-		for (unsigned int i = 0; i != tries; ++i)
+		for (unsigned int j = 0; j != tries; ++j)
 			fn ();
 		clock_t finish = clock ();
 		return finish - start;	

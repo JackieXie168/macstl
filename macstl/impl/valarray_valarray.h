@@ -50,19 +50,19 @@ namespace stdext
 				 /// @param	T		The element type.
 				 /// @param	Enable	If void, enables a particular specialization
 				 
-				template <typename T, typename Enable = void> class valarray_base: public array_term <T>
+				template <typename T, typename Enable> class valarray_base: public array_term <T>
 					{
 						protected:
 							typedef array_term <T> base;
 							
 							valarray_base (std::size_t n)
 								{
-									base::init (reinterpret_cast <T*> (malloc (sizeof (T) * n)), n);
+									base::init (reinterpret_cast <T*> (std::malloc (sizeof (T) * n)), n);
 								}
 
 							~valarray_base ()
 								{
-									free (base::data_);
+									std::free (base::data_);
 								}
 					};
 					

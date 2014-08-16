@@ -37,8 +37,11 @@
 
 #include <vector>
 
-#include <mach/mach.h>
-
+extern "C"	// Metrowerks prefers this...
+	{
+		#include <mach/mach.h>
+	}
+	
 #include "impl/meta.h"
 #include "impl/allocator.h"
 #include "impl/mach_allocator.h"

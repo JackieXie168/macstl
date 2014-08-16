@@ -43,7 +43,7 @@ namespace macstl
 		///
 		/// @header	#include <macstl/com.h>
 		
-		class com_error: std::runtime_error
+		class com_error: public std::runtime_error
 			{
 				public:
 					/** Constructs from a COM HRESULT @a hr. */
@@ -100,7 +100,7 @@ namespace macstl
 						}
 			
 					/// Constructs a copy of @a other.
-					com_ptr (com_ptr& other): ptr_ (other.ptr_)
+					com_ptr (const com_ptr& other): ptr_ (other.ptr_)
 						{
 							if (ptr_) ptr_->AddRef ();
 						}

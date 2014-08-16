@@ -19,6 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="3"
+				OptimizeForProcessor="3"
 				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;__MMX__;__SSE__;__SSE2__"
 				RuntimeLibrary="2"

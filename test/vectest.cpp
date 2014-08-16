@@ -161,7 +161,7 @@ int main (int, const char *)
 		#ifdef __VEC__
 		vec_mtvscr ((vector unsigned char) (0));	// in Altivec, use more accurate Java mode for testing
 		#endif
-	
+
 		test_type <vec <unsigned char, 32> >::call ("vec <unsigned char, 32>");
 		test_type <vec <unsigned char, 16> >::call ("vec <unsigned char, 16>");
 		test_type <vec <unsigned char, 8> >::call ("vec <unsigned char, 8>");

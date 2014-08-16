@@ -254,10 +254,10 @@ namespace macstl
 						static vec set ()
 						{
 							return static_cast <__vector bool char> (impl::generator <
-								(v0 ? 0xFF000000 : 0) | (v1 ? 0x00FF0000 : 0) | (v2 ? 0x0000FF00 : 0) | (v3 ? 0x000000FF : 0),
-								(v4 ? 0xFF000000 : 0) | (v5 ? 0x00FF0000 : 0) | (v6 ? 0x0000FF00 : 0) | (v7 ? 0x000000FF : 0),
-								(v8 ? 0xFF000000 : 0) | (v9 ? 0x00FF0000 : 0) | (v10 ? 0x0000FF00 : 0) | (v11 ? 0x000000FF : 0),
-								(v12 ? 0xFF000000 : 0) | (v13 ? 0x00FF0000 : 0) | (v14 ? 0x0000FF00 : 0) | (v15 ? 0x000000FF : 0)> () ());
+								(v0 ? 0xFF000000U : 0) | (v1 ? 0x00FF0000U : 0) | (v2 ? 0x0000FF00U : 0) | (v3 ? 0x000000FFU : 0),
+								(v4 ? 0xFF000000U : 0) | (v5 ? 0x00FF0000U : 0) | (v6 ? 0x0000FF00U : 0) | (v7 ? 0x000000FFU : 0),
+								(v8 ? 0xFF000000U : 0) | (v9 ? 0x00FF0000U : 0) | (v10 ? 0x0000FF00U : 0) | (v11 ? 0x000000FFU : 0),
+								(v12 ? 0xFF000000U : 0) | (v13 ? 0x00FF0000U : 0) | (v14 ? 0x0000FF00U : 0) | (v15 ? 0x000000FFU : 0)> () ());
 						}
 
 					template <init_type v0>
@@ -429,8 +429,8 @@ namespace macstl
 						static vec set ()
 						{
 							return static_cast <__vector bool short> (impl::generator <
-								(v0 ? 0xFFFF0000 : 0) | (v1 ? 0x0000FFFF : 0), (v2 ? 0xFFFF0000 : 0) | (v3 ? 0x0000FFFF : 0),
-								(v4 ? 0xFFFF0000 : 0) | (v5 ? 0x0000FFFF : 0), (v6 ? 0xFFFF0000 : 0) | (v7 ? 0x0000FFFF : 0)> () ());
+								(v0 ? 0xFFFF0000U : 0) | (v1 ? 0x0000FFFFU : 0), (v2 ? 0xFFFF0000U : 0) | (v3 ? 0x0000FFFFU : 0),
+								(v4 ? 0xFFFF0000U : 0) | (v5 ? 0x0000FFFFU : 0), (v6 ? 0xFFFF0000U : 0) | (v7 ? 0x0000FFFFU : 0)> () ());
 						}
 						
 					template <init_type v0>
@@ -644,7 +644,7 @@ namespace macstl
 						init_type v0, init_type v1, init_type v2, init_type v3>
 						static vec set ()
 						{
-							return static_cast <__vector bool int> (impl::generator <v0 ? 0xFFFFFFFF : 0, v1 ? 0xFFFFFFFF : 0, v2 ? 0xFFFFFFFF : 0, v3 ? 0xFFFFFFFF : 0> () ());
+							return static_cast <__vector bool int> (impl::generator <v0 ? 0xFFFFFFFFU : 0, v1 ? 0xFFFFFFFFU : 0, v2 ? 0xFFFFFFFFU : 0, v3 ? 0xFFFFFFFFU : 0> () ());
 						}
 
 					template <init_type v0>
@@ -701,8 +701,8 @@ namespace macstl
 						static vec set ()
 						{
 							return static_cast <__vector float> (impl::generator <
-								(v0 & 0xFFFFFFFF00000000LL) >> 32, v0 & 0x00000000FFFFFFFFLL,
-								(v1 & 0xFFFFFFFF00000000LL) >> 32, v1 & 0x00000000FFFFFFFFLL> () ());
+								(v0 & 0xFFFFFFFF00000000ULL) >> 32, v0 & 0x00000000FFFFFFFFULL,
+								(v1 & 0xFFFFFFFF00000000ULL) >> 32, v1 & 0x00000000FFFFFFFFULL> () ());
 						}
 
 					template <unsigned long long v0>
@@ -756,8 +756,8 @@ namespace macstl
 						static vec set ()
 						{
 							return static_cast <__vector bool int> (impl::generator <
-								v0 ? 0xFFFFFFFF : 0x00000000, v0 ? 0xFFFFFFFF : 0x00000000,
-								v1 ? 0xFFFFFFFF : 0x00000000, v1 ? 0xFFFFFFFF : 0x00000000> () ());
+								v0 ? 0xFFFFFFFFU : 0x00000000U, v0 ? 0xFFFFFFFFU : 0x00000000U,
+								v1 ? 0xFFFFFFFFU : 0x00000000U, v1 ? 0xFFFFFFFFU : 0x00000000U> () ());
 						}
 
 					template <init_type v0>
@@ -1166,7 +1166,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 								// estimate reciprocal then do one pass of Newton-Raphson
 								vec <float, 4> estimate = altivec::re (lhs);
 								return altivec::madd (
-									altivec::nmsub (estimate, lhs, vec <float, 4>::fill <0x3F800000> ()), // 1.0f
+									altivec::nmsub (estimate, lhs, vec <float, 4>::fill <0x3F800000U> ()), // 1.0f
 									estimate,
 									estimate);
 							}
@@ -1176,7 +1176,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 							{
 								// the high long of multiplying lhs and rhs, but ignoring any carry from the low long
 								
-								vec <unsigned int, 4> sixteen = vec <unsigned int, 4>::fill <0xFFFFFFF0> ();
+								vec <unsigned int, 4> sixteen = vec <unsigned int, 4>::fill <0xFFFFFFF0U> ();
 								vec <unsigned short, 8> rhs_shift = data_cast <vec <unsigned short, 8> > (altivec::rl (rhs, sixteen));
 
 								vec <unsigned int, 4> lhs_low_rhs_high = altivec::mulo (data_cast <vec <unsigned short, 8> > (lhs), rhs_shift);
@@ -1193,7 +1193,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 						inline vec <unsigned int, 4> multiply
 							(const vec <unsigned int, 4>& lhs, const vec <unsigned int, 4>& rhs)
 							{
-								vec <unsigned int, 4> sixteen = vec <unsigned int, 4>::fill <0xFFFFFFF0> ();
+								vec <unsigned int, 4> sixteen = vec <unsigned int, 4>::fill <0xFFFFFFF0U> ();
 								
 								// low order of result = low order of lhs * low order of rhs
 								vec <unsigned int, 4> low = altivec::mulo (
@@ -1221,7 +1221,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 									altivec::add (data_cast <vec <unsigned int, 4> > (reciprocal (altivec::ctf <0> (divisor))), (vector unsigned int) (1 << 28))));
 								
 								// compute 2 (0.32) - divisor (int) * reciprocal (0.32)
-								// NOTE: divisor * reciprocal is either 0x1 0000 xxxx OR 0x0 FFFF xxxx, so to calculate high word it is sufficient to check whether low word is "negative" 
+								// NOTE: divisor * reciprocal is either 0x1U 0000 xxxx OR 0x0U FFFF xxxx, so to calculate high word it is sufficient to check whether low word is "negative" 
 								vec <unsigned int, 4> divisor_reciprocal_low = multiply (divisor, divisor_reciprocal);
 								vec <unsigned int, 4> two_minus_divisor_reciprocal_low = altivec::sub ((vector unsigned int) (0), divisor_reciprocal_low);
 								vec <boolean <int>, 4> two_minus_divisor_reciprocal_high =
@@ -1330,7 +1330,7 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 									
 									altivec::vxor (
 										altivec::perm (mhs2, mhs2, altivec::vor (inc, four)),	// f f h h
-										vec <float, 4>::set <0x80000000, 0, 0x80000000, 0> ()),	// -f f -h h
+										vec <float, 4>::set <0x80000000U, 0, 0x80000000U, 0> ()),	// -f f -h h
 									
 									altivec::madd (
 										lhs2,
@@ -1343,20 +1343,20 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 						// perform floating point divide assuming y is not denormal
 						inline vec <float, 4> divide_normal (const vec <float, 4>& x, const vec <float, 4>& y)
 							{
-								const vec <float, 4> zero = vec <float, 4>::fill <0x80000000> ();	// -0.0f
+								const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();	// -0.0f
 								
 								const vec <float, 4> estimate = altivec::re (y);
-								const vec <float, 4> two_minus_estimate_y = altivec::nmsub (estimate, y, vec <float, 4>::fill <0x40000000> ()); // 2.0f
+								const vec <float, 4> two_minus_estimate_y = altivec::nmsub (estimate, y, vec <float, 4>::fill <0x40000000U> ()); // 2.0f
 								const vec <float, 4> two_minus_estimate_y_no_nan =
 									altivec::sel (
-										vec <float, 4>::fill <0x3F800000> (),		// when result is nan, y is either +/-0 or +/-inf, therefore est is accurate and we may substitute 1.0f for this term
+										vec <float, 4>::fill <0x3F800000U> (),		// when result is nan, y is either +/-0 or +/-inf, therefore est is accurate and we may substitute 1.0f for this term
 										two_minus_estimate_y,	// not a nan, so keep the value
 										altivec::cmpeq (two_minus_estimate_y, two_minus_estimate_y));
 										
 								const vec <float, 4> estimate_x = altivec::madd (estimate, x, zero);
 								const vec <boolean <int>, 4> estimate_x_not_overflow = // check if estimate * scale_x didn't overflow
 									altivec::cmpeq (
-										altivec::cmpb (estimate_x, vec <float, 4>::fill <0x7F7FFFFF> ()),
+										altivec::cmpb (estimate_x, vec <float, 4>::fill <0x7F7FFFFFU> ()),
 										vec <int, 4>::fill <0> ());
 								
 								return
@@ -1375,13 +1375,13 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 						// sin (x - n * Pi) -- where x - n * Pi is in [-Pi/2, Pi/2]
 						inline vec <float, 4> sine_n (const vec <float, 4>& x, const vec <float, 4>& n)
 							{
-								const vec <float, 4> zero = vec <float, 4>::fill <0x80000000> ();	// -0.0
+								const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();	// -0.0
 								const vec <float, 4> x_reduced = altivec::madd (
-									n, vec <float, 4>::fill <0xA84234C4> (), // minus third 24 bits of Pi
+									n, vec <float, 4>::fill <0xA84234C4U> (), // minus third 24 bits of Pi
 									altivec::madd (
-										n, vec <float, 4>::fill <0xB4222168> (),	// minus second 24 bits of Pi
+										n, vec <float, 4>::fill <0xB4222168U> (),	// minus second 24 bits of Pi
 										altivec::madd (
-											n, vec <float, 4>::fill <0xC0490FDA> (), // minus first 24 bits of Pi
+											n, vec <float, 4>::fill <0xC0490FDAU> (), // minus first 24 bits of Pi
 											x)));
 								
 								// minimax polynomial of degree 9, odd powers only on [0, Pi/2] -- because p(x) == -p(-x) this works also for [-Pi/2,0]
@@ -1393,11 +1393,11 @@ template <typename T1, std::size_t n1, typename T2, std::size_t n2> struct FN##_
 											altivec::madd (
 												altivec::madd (
 													altivec::madd (
-														xx, vec <float, 4>::fill <0x362E9C5B> (),	// 2.60190306765133772461701600763e-6 x^9
-														vec <float, 4>::fill <0xB94FB223> ()),		// -0.000198074187274269112790200299439 x^7
-													xx, vec <float, 4>::fill <0x3C08873E> ()),		// 0.00833302513896936648486927563199 x^5
-												xx, vec <float, 4>::fill <0xBE2AAAA4> ()),			// -0.166666566840071513511254831176 x^3
-											xx, vec <float, 4>::fill <0x3F800000> ()),				// 0.999999994686007336962522087826 x
+														xx, vec <float, 4>::fill <0x362E9C5BU> (),	// 2.60190306765133772461701600763e-6 x^9
+														vec <float, 4>::fill <0xB94FB223U> ()),		// -0.000198074187274269112790200299439 x^7
+													xx, vec <float, 4>::fill <0x3C08873EU> ()),		// 0.00833302513896936648486927563199 x^5
+												xx, vec <float, 4>::fill <0xBE2AAAA4U> ()),			// -0.166666566840071513511254831176 x^3
+											xx, vec <float, 4>::fill <0x3F800000U> ()),				// 0.999999994686007336962522087826 x
 										x_reduced, zero);
 							}
 			
@@ -1443,7 +1443,7 @@ namespace std
 						using namespace macstl;
 						
 						return altivec::vxor (lhs,
-							vec <float, 4>::fill <0x80000000> ());
+							vec <float, 4>::fill <0x80000000U> ());
 					}
 			};
 
@@ -1458,7 +1458,7 @@ namespace std
 						
 						return data_cast <vec <stdext::complex <float>, 2> > (altivec::vxor (
 							data_cast <vec <float, 4> > (lhs),
-							vec <float, 4>::fill <0x80000000> ()));
+							vec <float, 4>::fill <0x80000000U> ()));
 					}
 			};
 
@@ -1632,7 +1632,7 @@ namespace std
 					{
 						using namespace macstl;
 						
-						return altivec::madd (lhs, rhs, vec <float, 4>::fill <0x80000000> ()); // -0.0f
+						return altivec::madd (lhs, rhs, vec <float, 4>::fill <0x80000000U> ()); // -0.0f
 					}
 			};
 
@@ -1677,7 +1677,7 @@ namespace std
 						using namespace macstl;
 						
 						return altivec::impl::complex_fma (lhs, rhs,
-							vec <stdext::complex <float>, 2>::fill <0x8000000080000000LL> ());	// (-0.0f, -0.0f)
+							vec <stdext::complex <float>, 2>::fill <0x8000000080000000ULL> ());	// (-0.0f, -0.0f)
 					}
 			};
 	
@@ -1823,12 +1823,12 @@ namespace std
 					{
 						using namespace macstl;
 						
-						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000> ();	// -0.0f
-						const vec <float, 4> scale = vec <float, 4>::fill <0x4B000000> ();	// scale by 2^23, converts smallest denorm into smallest norm
+						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();	// -0.0f
+						const vec <float, 4> scale = vec <float, 4>::fill <0x4B000000U> ();	// scale by 2^23, converts smallest denorm into smallest norm
 						
 						const vec <boolean <int>, 4> denormal =	// check if y is a denormalized number
 							altivec::cmpeq (
-								altivec::cmpb (y, vec <float, 4>::fill <0x007FFFFF> ()),
+								altivec::cmpb (y, vec <float, 4>::fill <0x007FFFFFU> ()),
 								vec <int, 4>::fill <0> ());
 								
 						// do the division on the renormalized numbers
@@ -1870,7 +1870,7 @@ namespace std
 							
 							altivec::vxor (
 								altivec::perm (rhs2, rhs2, altivec::vor (inc, four)),	// f f h h
-								vec <float, 4>::set <0, 0x80000000, 0, 0x80000000> ()),		// f -f h -h
+								vec <float, 4>::set <0, 0x80000000U, 0, 0x80000000U> ()),		// f -f h -h
 							
 							altivec::madd (
 								lhs2,
@@ -3015,7 +3015,7 @@ namespace stdext
 						return altivec::sums (altivec::sum4s (
 							altivec::sub (data_cast <vec <short, 8> > (lhs), vec <short, 8>::fill <-0x8000> ()),
 							vec <int, 4>::fill <0> ()), 
-							vec <int, 4>::fill <0x40000> ()) [3];
+							vec <int, 4>::fill <0x40000U> ()) [3];
 					}
 			};
 
@@ -3425,13 +3425,13 @@ namespace stdext
 					{
 						using namespace macstl;
 
-						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000> ();	// -0.0
+						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();	// -0.0
 						
 						const vec <float, 4> lhs_n = altivec::floor (
 							altivec::madd (lhs,
-								vec <float, 4>::fill <0x3EA2F983> (),	// 1/pi
+								vec <float, 4>::fill <0x3EA2F983U> (),	// 1/pi
 								zero));
-						const vec <float, 4> lhs_n1 = altivec::add (lhs_n, vec <float, 4>::fill <0x3F000000> ());
+						const vec <float, 4> lhs_n1 = altivec::add (lhs_n, vec <float, 4>::fill <0x3F000000U> ());
 						const vec <float, 4> lhs_sin = altivec::impl::sine_n (lhs, lhs_n1);
 
 						return
@@ -3455,16 +3455,16 @@ namespace stdext
 					{
 						using namespace macstl;
 						
-						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000> ();	// -0.0
+						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();	// -0.0
 													
 						// split lhs into integer and fractional parts [0, +ln2]
-						const vec <float, 4> lhs_by_ln2 = altivec::madd (lhs, vec <float, 4>::fill <0x3FB8AA3B> (), zero);		// 1/ln(2)
+						const vec <float, 4> lhs_by_ln2 = altivec::madd (lhs, vec <float, 4>::fill <0x3FB8AA3BU> (), zero);		// 1/ln(2)
 						const vec <float, 4> lhs_int = altivec::floor (lhs_by_ln2);
 						const vec <float, 4> lhs_frac = 
 							altivec::madd (
-								lhs_int, vec <float, 4>::fill <0xB377D1CF> (),	// minus second 24 bits of ln(2)
+								lhs_int, vec <float, 4>::fill <0xB377D1CFU> (),	// minus second 24 bits of ln(2)
 								altivec::madd (
-									lhs_int, vec <float, 4>::fill <0xBF317217> (), lhs));	// minus first 24 bits of ln(2)
+									lhs_int, vec <float, 4>::fill <0xBF317217U> (), lhs));	// minus first 24 bits of ln(2)
 							
 						// use Horner's rule on a degree-6 minimax polynomial of the fractional part
 						const vec <float, 4> lhs_frac_exp =
@@ -3474,13 +3474,13 @@ namespace stdext
 										altivec::madd (
 											altivec::madd (
 												altivec::madd (
-													lhs_frac, vec <float, 4>::fill <0x3B003E16> (), // 0.00195682552652430140353293184891 x^6
-													vec <float, 4>::fill <0x3BFEC2B1> ()),			// 0.00777467380338161389689207265976 x^5
-												lhs_frac, vec <float, 4>::fill <0x3D2BBE74> ()),	// 0.0419296764466847981348619399182 x^4
-											lhs_frac, vec <float, 4>::fill <0x3E2A9A52> ()),		// 0.166604308879848761318886951003 x^3
-										lhs_frac, vec <float, 4>::fill <0x3F000074> ()),			// 0.500006929532678917196283309815 x^2
-									lhs_frac, vec <float, 4>::fill <0x3F7FFFFB> ()),				// 0.999999716194003701324519731142 x
-								lhs_frac, vec <float, 4>::fill <0x3F800000> ());					// 1.00000000185580021465272157828
+													lhs_frac, vec <float, 4>::fill <0x3B003E16U> (), // 0.00195682552652430140353293184891 x^6
+													vec <float, 4>::fill <0x3BFEC2B1U> ()),			// 0.00777467380338161389689207265976 x^5
+												lhs_frac, vec <float, 4>::fill <0x3D2BBE74U> ()),	// 0.0419296764466847981348619399182 x^4
+											lhs_frac, vec <float, 4>::fill <0x3E2A9A52U> ()),		// 0.166604308879848761318886951003 x^3
+										lhs_frac, vec <float, 4>::fill <0x3F000074U> ()),			// 0.500006929532678917196283309815 x^2
+									lhs_frac, vec <float, 4>::fill <0x3F7FFFFBU> ()),				// 0.999999716194003701324519731142 x
+								lhs_frac, vec <float, 4>::fill <0x3F800000U> ());					// 1.00000000185580021465272157828
 						
 						// use exponent estimate on the integer part, which should be accurate according to Altivec spec
 						const vec <float, 4> lhs_int_exp = altivec::expte (lhs_int);
@@ -3490,8 +3490,8 @@ namespace stdext
 							lhs_int_exp,
 							// if exp would be +0 or +inf, use that directly instead of multiplying since a nan might otherwise result
 							altivec::vor (
-								altivec::cmple (lhs, vec <float, 4>::fill <0xC2CFF1B5> ()),		// smallest x such that exp(x) = 0
-								altivec::cmpeq (lhs, vec <float, 4>::fill <0x7F800000> ())));	// +inf
+								altivec::cmple (lhs, vec <float, 4>::fill <0xC2CFF1B5U> ()),		// smallest x such that exp(x) = 0
+								altivec::cmpeq (lhs, vec <float, 4>::fill <0x7F800000U> ())));	// +inf
 					}
 			};
 
@@ -3504,7 +3504,7 @@ namespace stdext
 					{
 						using namespace macstl;
 						
-						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000> ();	// -0.0
+						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();	// -0.0
 													
 						// split lhs into integer and fractional parts [0, 1]
 						const vec <float, 4> lhs_int = altivec::floor (lhs);
@@ -3518,13 +3518,13 @@ namespace stdext
 										altivec::madd (
 											altivec::madd (
 												altivec::madd (
-													lhs_frac, vec <float, 4>::fill <0x3963908C> (), // 0.000217022554601006748641498598969 x^6
-													vec <float, 4>::fill <0x3AA30CAA> ()),			// 0.00124396878272283273818119486344 x^5
-												lhs_frac, vec <float, 4>::fill <0x3C1E9400> ()),	// 0.00967884099612727763162995487637 x^4
-											lhs_frac, vec <float, 4>::fill <0x3D634280> ()),		// 0.0554833419845677471704726400130 x^3
-										lhs_frac, vec <float, 4>::fill <0x3E75FECF> ()),			// 0.240229836273961342768861150779 x^2
-									lhs_frac, vec <float, 4>::fill <0x3F317215> ()),				// 0.693146983840619148984048826026 x
-								lhs_frac, vec <float, 4>::fill <0x3F800000> ());					// 1.00000000185580021465272157828
+													lhs_frac, vec <float, 4>::fill <0x3963908CU> (), // 0.000217022554601006748641498598969 x^6
+													vec <float, 4>::fill <0x3AA30CAAU> ()),			// 0.00124396878272283273818119486344 x^5
+												lhs_frac, vec <float, 4>::fill <0x3C1E9400U> ()),	// 0.00967884099612727763162995487637 x^4
+											lhs_frac, vec <float, 4>::fill <0x3D634280U> ()),		// 0.0554833419845677471704726400130 x^3
+										lhs_frac, vec <float, 4>::fill <0x3E75FECFU> ()),			// 0.240229836273961342768861150779 x^2
+									lhs_frac, vec <float, 4>::fill <0x3F317215U> ()),				// 0.693146983840619148984048826026 x
+								lhs_frac, vec <float, 4>::fill <0x3F800000U> ());					// 1.00000000185580021465272157828
 						
 						// use exponent estimate on the integer part, which should be accurate according to Altivec spec
 						const vec <float, 4> lhs_int_exp = altivec::expte (lhs_int);
@@ -3534,8 +3534,8 @@ namespace stdext
 							lhs_int_exp,
 							// if exp would be +0 or +inf, use that directly instead of multiplying since a nan might otherwise result
 							altivec::vor (
-								altivec::cmple (lhs, vec <float, 4>::fill <0xC315FFFF> ()),		// smallest x such that exp2(x) = 0
-								altivec::cmpeq (lhs, vec <float, 4>::fill <0x7F800000> ())));	// +inf
+								altivec::cmple (lhs, vec <float, 4>::fill <0xC315FFFFU> ()),		// smallest x such that exp2(x) = 0
+								altivec::cmpeq (lhs, vec <float, 4>::fill <0x7F800000U> ())));	// +inf
 					}
 			};
 
@@ -3550,25 +3550,25 @@ namespace stdext
 					{
 						using namespace macstl;
 
-						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000> ();	// -0.0f
-						const vec <float, 4> one = vec <float, 4>::fill <0x3F800000> ();	// 1.0f
-						const vec <float, 4> inf = vec <float, 4>::fill <0x7F800000> ();	// +inf
+						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();	// -0.0f
+						const vec <float, 4> one = vec <float, 4>::fill <0x3F800000U> ();	// 1.0f
+						const vec <float, 4> inf = vec <float, 4>::fill <0x7F800000U> ();	// +inf
 						
-						const vec <unsigned int, 4> exponent_mask = vec <unsigned int, 4>::fill <0x7F800000> ();	// bit mask for IEEE 754 exponent
+						const vec <unsigned int, 4> exponent_mask = vec <unsigned int, 4>::fill <0x7F800000U> ();	// bit mask for IEEE 754 exponent
 
 						// if denormal, scale the lhs by 2^23 which converts the smallest denormal into the smallest normal
 						const vec <boolean <int>, 4> denormal =
 							altivec::cmpeq (
-								altivec::cmpb (lhs, vec <float, 4>::fill <0x007FFFFF> ()),
+								altivec::cmpb (lhs, vec <float, 4>::fill <0x007FFFFFU> ()),
 								vec <int, 4>::fill <0> ());
-						const vec <float, 4> scaled_lhs = altivec::sel (lhs, altivec::madd (lhs, vec <float, 4>::fill <0x4B000000> (), zero), denormal);
+						const vec <float, 4> scaled_lhs = altivec::sel (lhs, altivec::madd (lhs, vec <float, 4>::fill <0x4B000000U> (), zero), denormal);
 
 						// mantissa is [1.0, 1.5), exponent base is 0; mantissa is [1.5, 2.0), exponent base is -1 (remaps mantissa to [.75, 1.0))
 						const vec <int, 4> exponent_base =
 							altivec::sub (
 								data_cast <vec <int, 4> > (one),
 								altivec::sl (
-									altivec::vand (data_cast <vec <int, 4> > (scaled_lhs), vec <int, 4>::fill <0x00400000> ()),
+									altivec::vand (data_cast <vec <int, 4> > (scaled_lhs), vec <int, 4>::fill <0x00400000U> ()),
 									vec <unsigned int, 4>::fill <1> ()));
 						
 						// convert the masked out exponent back to a float, correcting for lhs == -ve, NAN or +/-0
@@ -3579,14 +3579,14 @@ namespace stdext
 							exponent_base);
 						const vec <float, 4> exponent_log_no_inf =
 							altivec::sel (
-								vec <float, 4>::fill <0x7FC00000> (),			
+								vec <float, 4>::fill <0x7FC00000U> (),			
 								altivec::sel (
 									altivec::ctf <23> (
 										altivec::sel (						// exponent scaled if denormal
 											exponent,
-											altivec::sub (exponent, vec <int, 4>::fill <0x0B800000> ()),
+											altivec::sub (exponent, vec <int, 4>::fill <0x0B800000U> ()),
 											denormal)),
-									vec <float, 4>::fill <0xFF800000> (),		// -inf
+									vec <float, 4>::fill <0xFF800000U> (),		// -inf
 									altivec::cmpeq (lhs, zero)),				// log (0) or log (-0) == -inf
 								altivec::cmpge (lhs, zero));					// log (-ve) or log (NAN) == NAN
 						
@@ -3609,24 +3609,24 @@ namespace stdext
 								altivec::madd (													// numerator polynomial * (x-1)
 									altivec::madd (	
 										altivec::madd (
-											mantissa, vec <float, 4>::fill <0x404D3311> (),		// 3.20624188116494258282979643094 x^2
-											vec <float, 4>::fill <0x413DCC4A> ()),				// 11.8623754244055151556763131910 x
-										mantissa, vec <float, 4>::fill <0x40684317> ()),		// 3.62909478362961322327103772332
+											mantissa, vec <float, 4>::fill <0x404D3311U> (),		// 3.20624188116494258282979643094 x^2
+											vec <float, 4>::fill <0x413DCC4AU> ()),				// 11.8623754244055151556763131910 x
+										mantissa, vec <float, 4>::fill <0x40684317U> ()),		// 3.62909478362961322327103772332
 									altivec::sub (mantissa, one),								// x-1
 									zero),
 								altivec::madd (													// denominator polynomial
 									altivec::madd (
 										altivec::madd (
-											mantissa, vec <float, 4>::fill <0x3F5C0BD7> (),		// 0.859555683739559800917799543335 x^3
-											vec <float, 4>::fill <0x41034F68> ()),				// 8.20688632350085657541581455421 x^2
-										mantissa, vec <float, 4>::fill <0x410A19AE> ()),		// 8.63126989781522129158072963582 x
+											mantissa, vec <float, 4>::fill <0x3F5C0BD7U> (),		// 0.859555683739559800917799543335 x^3
+											vec <float, 4>::fill <0x41034F68U> ()),				// 8.20688632350085657541581455421 x^2
+										mantissa, vec <float, 4>::fill <0x410A19AEU> ()),		// 8.63126989781522129158072963582 x
 									mantissa, one));												// 1
 
 						// recompose the result, since log (mantissa * exponent) = log (mantissa) + log (exponent)
 						return 
 							altivec::madd (
 								exponent_log,
-								vec <float, 4>::fill <0x3f317218> (),	// ln(2)
+								vec <float, 4>::fill <0x3F317218U> (),	// ln(2)
 								mantissa_log);
 					}
 			};
@@ -3640,25 +3640,25 @@ namespace stdext
 					{
 						using namespace macstl;
 
-						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000> ();	// -0.0f
-						const vec <float, 4> one = vec <float, 4>::fill <0x3F800000> ();	// 1.0f
-						const vec <float, 4> inf = vec <float, 4>::fill <0x7F800000> ();	// +inf
+						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();	// -0.0f
+						const vec <float, 4> one = vec <float, 4>::fill <0x3F800000U> ();	// 1.0f
+						const vec <float, 4> inf = vec <float, 4>::fill <0x7F800000U> ();	// +inf
 						
-						const vec <unsigned int, 4> exponent_mask = vec <unsigned int, 4>::fill <0x7F800000> ();	// bit mask for IEEE 754 exponent
+						const vec <unsigned int, 4> exponent_mask = vec <unsigned int, 4>::fill <0x7F800000U> ();	// bit mask for IEEE 754 exponent
 
 						// if denormal, scale the lhs by 2^23 which converts the smallest denormal into the smallest normal
 						const vec <boolean <int>, 4> denormal =
 							altivec::cmpeq (
-								altivec::cmpb (lhs, vec <float, 4>::fill <0x007FFFFF> ()),
+								altivec::cmpb (lhs, vec <float, 4>::fill <0x007FFFFFU> ()),
 								vec <int, 4>::fill <0> ());
-						const vec <float, 4> scaled_lhs = altivec::sel (lhs, altivec::madd (lhs, vec <float, 4>::fill <0x4B000000> (), zero), denormal);
+						const vec <float, 4> scaled_lhs = altivec::sel (lhs, altivec::madd (lhs, vec <float, 4>::fill <0x4B000000U> (), zero), denormal);
 
 						// mantissa is [1.0, 1.5), exponent base is 0; mantissa is [1.5, 2.0), exponent base is -1 (remaps mantissa to [.75, 1.0))
 						const vec <int, 4> exponent_base =
 							altivec::sub (
 								data_cast <vec <int, 4> > (one),
 								altivec::sl (
-									altivec::vand (data_cast <vec <int, 4> > (scaled_lhs), vec <int, 4>::fill <0x00400000> ()),
+									altivec::vand (data_cast <vec <int, 4> > (scaled_lhs), vec <int, 4>::fill <0x00400000U> ()),
 									vec <unsigned int, 4>::fill <1> ()));
 						
 						// convert the masked out exponent back to a float, correcting for lhs == -ve, NAN or +/-0
@@ -3669,14 +3669,14 @@ namespace stdext
 							exponent_base);
 						const vec <float, 4> exponent_log_no_inf =
 							altivec::sel (
-								vec <float, 4>::fill <0x7FC00000> (),			
+								vec <float, 4>::fill <0x7FC00000U> (),			
 								altivec::sel (
 									altivec::ctf <23> (
 										altivec::sel (						// exponent scaled if denormal
 											exponent,
-											altivec::sub (exponent, vec <int, 4>::fill <0x0B800000> ()),
+											altivec::sub (exponent, vec <int, 4>::fill <0x0B800000U> ()),
 											denormal)),
-									vec <float, 4>::fill <0xFF800000> (),		
+									vec <float, 4>::fill <0xFF800000U> (),		
 									altivec::cmpeq (lhs, zero)),				// log (0) or log (-0) == -inf
 								altivec::cmpge (lhs, zero));					// log (-ve) or log (NAN) == NAN
 
@@ -3700,17 +3700,17 @@ namespace stdext
 								altivec::madd (													// numerator polynomial * (x-1)
 									altivec::madd (	
 										altivec::madd (
-											mantissa, vec <float, 4>::fill <0x40940528> (),		// 5.23567704725844865881904827716 x^2
-											vec <float, 4>::fill <0x4188E90B> ()),				// 17.1137901979529493404012042551 x
-										mantissa, vec <float, 4>::fill <0x40A78AAB> ()),		// 5.23567704725844865881904827716
+											mantissa, vec <float, 4>::fill <0x40940528U> (),		// 5.23567704725844865881904827716 x^2
+											vec <float, 4>::fill <0x4188E90BU> ()),				// 17.1137901979529493404012042551 x
+										mantissa, vec <float, 4>::fill <0x40A78AABU> ()),		// 5.23567704725844865881904827716
 									altivec::sub (mantissa, one),								// x-1
 									zero),
 								altivec::madd (													// denominator polynomial
 									altivec::madd (
 										altivec::madd (
-											mantissa, vec <float, 4>::fill <0x3F5C0BD7> (),		// 0.859555683739559800917799540876 x^3
-											vec <float, 4>::fill <0x41034F68> ()),				// 8.20688632350085657541581453883 x^2
-										mantissa, vec <float, 4>::fill <0x410A19AE> ()),		// 8.63126989781522129158072962789 x
+											mantissa, vec <float, 4>::fill <0x3F5C0BD7U> (),		// 0.859555683739559800917799540876 x^3
+											vec <float, 4>::fill <0x41034F68U> ()),				// 8.20688632350085657541581453883 x^2
+										mantissa, vec <float, 4>::fill <0x410A19AEU> ()),		// 8.63126989781522129158072962789 x
 									mantissa, one));												// 1
 									
 						// recompose the result, since log (mantissa * exponent) = log (mantissa) + log (exponent)
@@ -3765,10 +3765,10 @@ namespace stdext
 					{
 						using namespace macstl;
 						
-						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000> ();
+						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();
 						
 						const vec <float, 4> rhs_int = altivec::trunc (rhs);
-						const vec <float, 4> rhs_half = altivec::madd (rhs_int, vec <float, 4>::fill <0x3F000000> (), zero);
+						const vec <float, 4> rhs_half = altivec::madd (rhs_int, vec <float, 4>::fill <0x3F000000U> (), zero);
 						
 						const vec <float, 4> lhs_power_rhs = exp2 (altivec::madd (log2 (altivec::andc (lhs, zero)), rhs, zero));
 						return altivec::sel (
@@ -3776,14 +3776,14 @@ namespace stdext
 								altivec::vxor (lhs_power_rhs, zero),
 								lhs_power_rhs,
 								altivec::cmpeq (rhs_half, altivec::trunc (rhs_half))),
-							vec <float, 4>::fill <0x7FFFFFFF> (),	// nan
+							vec <float, 4>::fill <0x7FFFFFFFU> (),	// nan
 							altivec::andc (altivec::cmple (lhs, zero), altivec::cmpeq (rhs, rhs_int)));
 							
 						/*
 						std::cout << "lhs = " << lhs << "; log2 = " << log2 (lhs) << "\n";
-						std::cout << "x = " << altivec::madd (log2 (lhs), rhs, vec <float, 4>::fill <0x80000000> ()) << "\n";
+						std::cout << "x = " << altivec::madd (log2 (lhs), rhs, vec <float, 4>::fill <0x80000000U> ()) << "\n";
 						std::cout << "exp2 = " << exp2 (vec <float, 4> ((__vector float) (1.0/0.0))) << "\n";
-						return exp2 (altivec::madd (log2 (lhs), rhs, vec <float, 4>::fill <0x80000000> ()));
+						return exp2 (altivec::madd (log2 (lhs), rhs, vec <float, 4>::fill <0x80000000U> ()));
 						*/
 					}
 			};
@@ -3799,12 +3799,12 @@ namespace stdext
 					{
 						using namespace macstl;
 
-						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000> ();	// -0.0
+						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();	// -0.0
 						
 						// force lhs to [-pi/2, pi/2]
 						const vec <float, 4> lhs_n = altivec::round (
 							altivec::madd (lhs,
-								vec <float, 4>::fill <0x3EA2F983> (),	// 1/pi
+								vec <float, 4>::fill <0x3EA2F983U> (),	// 1/pi
 								zero));
 								
 						const vec <float, 4> lhs_sin = altivec::impl::sine_n (lhs, lhs_n);
@@ -3834,15 +3834,15 @@ namespace stdext
 					{
 						using namespace macstl;
 						
-						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000> ();	// -0.0f
+						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();	// -0.0f
 						
 						const vec <float, 4> estimate = altivec::rsqrte (lhs);
 						const vec <float, 4> x_estimate = altivec::madd (lhs, estimate, zero);
 						
 						return altivec::sel (
 							altivec::madd (
-								altivec::nmsub (x_estimate, estimate, vec <float, 4>::fill <0x3F800000> ()),	// 1.0f
-								altivec::madd (x_estimate, vec <float, 4>::fill <0x3F000000> (), zero),	// 0.5f
+								altivec::nmsub (x_estimate, estimate, vec <float, 4>::fill <0x3F800000U> ()),	// 1.0f
+								altivec::madd (x_estimate, vec <float, 4>::fill <0x3F000000U> (), zero),	// 0.5f
 								x_estimate),
 							lhs,
 							// if +/-0 or +inf, just use lhs directly as result
@@ -3854,7 +3854,7 @@ namespace stdext
 								altivec::cmpeq (
 									lhs, vec <float, 4>::fill <0> ()),
 								altivec::cmpeq (
-									lhs, vec <float, 4>::fill <0x7F800000> ()))
+									lhs, vec <float, 4>::fill <0x7F800000U> ()))
 							#endif
 							);	// +inf
 					}
@@ -3869,21 +3869,21 @@ namespace stdext
 					{
 						using namespace macstl;
 						
-						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000> ();	// -0.0
-						const vec <float, 4> one = vec <float, 4>::fill <0x3F800000> ();	// 1.0
+						const vec <float, 4> zero = vec <float, 4>::fill <0x80000000U> ();	// -0.0
+						const vec <float, 4> one = vec <float, 4>::fill <0x3F800000U> ();	// 1.0
 												
 						// force lhs to [-pi/4, pi/4]
 						const vec <float, 4> lhs_n = altivec::round (
 							altivec::madd (lhs,
-								vec <float, 4>::fill <0x3F22F983> (),	// 2/Pi
+								vec <float, 4>::fill <0x3F22F983U> (),	// 2/Pi
 								zero));
 						const vec <float, 4> lhs_reduced =
 							altivec::madd (
-								lhs_n, vec <float, 4>::fill <0xA7C234C4> (), // minus third 24 bits of Pi/2
+								lhs_n, vec <float, 4>::fill <0xA7C234C4U> (), // minus third 24 bits of Pi/2
 								altivec::madd (
-									lhs_n, vec <float, 4>::fill <0xB3A22168> (),	// minus second 24 bits of Pi/2
+									lhs_n, vec <float, 4>::fill <0xB3A22168U> (),	// minus second 24 bits of Pi/2
 									altivec::madd (
-										lhs_n, vec <float, 4>::fill <0xBFC90FDA> (), // minus first 24 bits of Pi/2
+										lhs_n, vec <float, 4>::fill <0xBFC90FDAU> (), // minus first 24 bits of Pi/2
 										lhs)));
 
 						// minimax polynomial of degree 3,4 for tan(x) on [0,Pi/4] -- this also works on [-Pi/4,0]
@@ -3892,14 +3892,14 @@ namespace stdext
 						const vec <float, 4> lhs_top =
 							altivec::madd (
 								altivec::madd (
-									lhs_square, vec <float, 4>::fill <0xBDC433B8> (),	// -0.0958017695746054481568783178326 x^3
+									lhs_square, vec <float, 4>::fill <0xBDC433B8U> (),	// -0.0958017695746054481568783178326 x^3
 									one),												// 0.999999985836114771076206239598 x
 								lhs_reduced, zero);
 						const vec <float, 4> lhs_bottom =
 							altivec::madd (
 								altivec::madd (
-									lhs_square, vec <float, 4>::fill <0x3C1F3374> (),	// 0.00971685740156122723678148091232 x^4
-									vec <float, 4>::fill <0xBEDBB7AF> ()),				// -0.429135774643039347827850693821 x^2
+									lhs_square, vec <float, 4>::fill <0x3C1F3374U> (),	// 0.00971685740156122723678148091232 x^4
+									vec <float, 4>::fill <0xBEDBB7AFU> ()),				// -0.429135774643039347827850693821 x^2
 								lhs_square, one);										// 1
 							
 						// if even n, need to use -1/p(x) as result

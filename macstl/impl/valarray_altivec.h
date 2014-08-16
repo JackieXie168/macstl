@@ -62,14 +62,14 @@ namespace stdext
 								{
 									// allocate enough bytes to put equivalent of n elements of T, but as aligned chunks
 									base::init (
-										reinterpret_cast <chunk_type*> (malloc (sizeof (chunk_type) * ((n + chunk_type::length - 1) / chunk_type::length))),
+										reinterpret_cast <chunk_type*> (std::malloc (sizeof (chunk_type) * ((n + chunk_type::length - 1) / chunk_type::length))),
 										n);
 								}
 
 							/** Destructs entire array. */
 							~valarray_base ()
 								{
-									free (base::data_);
+									std::free (base::data_);
 								}
 					};
 																																										
@@ -459,6 +459,8 @@ namespace stdext
 							const std::size_t start_;
 							const std::size_t stride_;
 					};
+					
+				template <typename Term> class slice_term_base;
 					
 				template <typename T> struct is_vec_4							{ enum { value = false }; };
 				template <typename T> struct is_vec_4 <macstl::vec <T, 4> >		{ enum { value = true }; };

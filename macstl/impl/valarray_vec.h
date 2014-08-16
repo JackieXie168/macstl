@@ -35,12 +35,23 @@
 #ifndef MACSTL_IMPL_VALARRAY_VEC_H
 #define MACSTL_IMPL_VALARRAY_VEC_H
 
-#include "vec.h"
-
 namespace stdext
 	{
 		namespace impl
 			{
+				/// Chunking type.
+				
+				/// @internal
+				/// Template typedef to declare the chunking type corresponding to a scalar type.
+				///
+				/// @param	T	The scalar type.
+				
+				template <typename T> struct chunk
+					{
+						/// The chunking type. The default is the same type, but specializations may change this.
+						typedef T type;
+					};
+
 				template <typename V> class dechunk_iterator
 					{
 						public:

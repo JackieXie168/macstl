@@ -113,7 +113,7 @@
 				GCC_MODEL_PPC64 = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 3;
-				OTHER_CPLUSPLUSFLAGS = "-falign-loops=16 -falign-jumps=16 -falign-functions=16 -finline-limit=50000 -fstrict-aliasing -funroll-loops -mpowerpc-gpopt";
+				OTHER_CPLUSPLUSFLAGS = "-finline-limit=50000 -fstrict-aliasing -funroll-loops -mpowerpc-gpopt";
 				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
@@ -294,6 +294,7 @@
 				D807C42807A23B0A003DE6EC,
 			);
 			buildRules = (
+				D8C5FE0507BD7EB7009D7D5A,
 			);
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
@@ -373,6 +374,7 @@
 				D807C5B707A288B1003DE6EC,
 			);
 			buildRules = (
+				D8C5FE0407BD7EA9009D7D5A,
 			);
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
@@ -548,6 +550,7 @@
 				D807CC4007A4BA65003DE6EC,
 			);
 			buildRules = (
+				D8C5FE0207BD7E94009D7D5A,
 			);
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
@@ -758,6 +761,7 @@
 				D8785A08073845FF0011A618,
 			);
 			buildRules = (
+				D8C5FE0007BD7E7D009D7D5A,
 			);
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
@@ -874,6 +878,7 @@
 				D8B7B34B078F8AC000C1976A,
 			);
 			buildRules = (
+				D8C5FE0107BD7E8A009D7D5A,
 			);
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
@@ -953,6 +958,7 @@
 				D8B95E110731B525002340DA,
 			);
 			buildRules = (
+				D8C5FE0307BD7E9F009D7D5A,
 			);
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
@@ -1641,6 +1647,7 @@
 				D8C5249207313FB1008CB8AF,
 			);
 			buildRules = (
+				D8C5FE0607BD7EC2009D7D5A,
 			);
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
@@ -1673,6 +1680,62 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		D8C5FE0007BD7E7D009D7D5A = {
+			compilerSpec = com.apple.compilers.gcc.3_3.xlcc;
+			fileType = sourcecode.cpp;
+			isEditable = 1;
+			isa = PBXBuildRule;
+			outputFiles = (
+			);
+		};
+		D8C5FE0107BD7E8A009D7D5A = {
+			compilerSpec = com.apple.compilers.gcc.3_3.xlcc;
+			fileType = sourcecode.cpp;
+			isEditable = 1;
+			isa = PBXBuildRule;
+			outputFiles = (
+			);
+		};
+		D8C5FE0207BD7E94009D7D5A = {
+			compilerSpec = com.apple.compilers.gcc.3_3.xlcc;
+			fileType = sourcecode.cpp;
+			isEditable = 1;
+			isa = PBXBuildRule;
+			outputFiles = (
+			);
+		};
+		D8C5FE0307BD7E9F009D7D5A = {
+			compilerSpec = com.apple.compilers.gcc.3_3.xlcc;
+			fileType = sourcecode.cpp;
+			isEditable = 1;
+			isa = PBXBuildRule;
+			outputFiles = (
+			);
+		};
+		D8C5FE0407BD7EA9009D7D5A = {
+			compilerSpec = com.apple.compilers.gcc.3_3.xlcc;
+			fileType = sourcecode.cpp;
+			isEditable = 1;
+			isa = PBXBuildRule;
+			outputFiles = (
+			);
+		};
+		D8C5FE0507BD7EB7009D7D5A = {
+			compilerSpec = com.apple.compilers.gcc.3_3.xlcc;
+			fileType = sourcecode.cpp;
+			isEditable = 1;
+			isa = PBXBuildRule;
+			outputFiles = (
+			);
+		};
+		D8C5FE0607BD7EC2009D7D5A = {
+			compilerSpec = com.apple.compilers.gcc.3_3.xlcc;
+			fileType = sourcecode.cpp;
+			isEditable = 1;
+			isa = PBXBuildRule;
+			outputFiles = (
+			);
 		};
 		D8F56B70079AA1430064470A = {
 			fileEncoding = 4;

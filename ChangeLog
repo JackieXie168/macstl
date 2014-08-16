@@ -1,5 +1,14 @@
 Release history
 
+0.2.1	14 Feb 2005	
+	．Fixed member and binary min and max for vec <unsigned short, 4> [PBa].
+	．Fixed #include error with own projects [DCh].
+	．Added support for Intel ICC 8.1 [ACu].
+	．Fixed truncation of signed constants in unsigned parameters [DPi].
+	．Added partial support for IBM XLC 6.0.
+	．Fixed header access paths and missing functions malloc, free, vm_allocate, vm_copy, vm_deallocate for Codewarrior.
+	．Fixed #include <sys/mman.h> error, domain in trigonometric test for VC++. Improved inlining for ICC.
+
 0.2	31 Jan 2005	
 	．Added portable SIMD classes: partial support for MMX/SSE/SSE2/SSE3, standard initialization syntax.
 	．Added high-performance transcendental functions: exp, log, sin, cos, tan.

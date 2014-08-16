@@ -18,7 +18,9 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Qip -Qoption,c,-ip_ninl_max_stats=1000 -Qoption,c,-ip_ninl_max_total_stats=8000  "
 				Optimization="3"
+				OptimizeForProcessor="3"
 				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;__MMX__;__SSE__;__SSE2__"
 				RuntimeLibrary="2"

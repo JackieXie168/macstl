@@ -35,22 +35,20 @@
 #ifndef MACSTL_IMPL_COM_UUID_H
 #define MACSTL_IMPL_COM_UUID_H
 
-namespace macstl
+/// COM UUID finder.
+
+/// This associates a REFIID with a type, allowing QueryInterfaces to be done on the
+/// static type of COM objects. Define a specialization of uuid_of on the type.
+///
+/// @param	T	A COM type.
+
+template <typename T> struct uuid_of
 	{
-		/// COM UUID finder.
-		
-		/// This associates a REFIID with a type, allowing QueryInterfaces to be done on the
-		/// static type of COM objects. Define a specialization of uuid_of on the type.
-		///
-		/// @param	T	A COM type.
+		static const REFIID value;
+	};
 	
-		template <typename T> struct uuid_of
-			{
-				static const REFIID value;
-			};
-			
-		template <> const REFIID uuid_of <IUnknown>::value =
-			{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46};
-	}
+template <> const REFIID uuid_of <IUnknown>::value =
+	{0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0xC0U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x46U};
+	
 	
 #endif
