@@ -138,12 +138,12 @@ namespace impl
 
 		// dereferences: used in iterators whose operator* and operator[] could either return a value or a reference
 		
-		template <typename Type> class dereference
+		template <typename Type> struct dereference
 			{
 				typedef Type type;
 			};
 			
-		template <typename Type> class dereference <const Type&>
+		template <typename Type> struct dereference <const Type&>
 			{
 				typedef Type type;
 			};

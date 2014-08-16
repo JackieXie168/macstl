@@ -153,90 +153,131 @@ namespace macstl
 					{
 						static const specifier spec = signed_spec;
 						static const size_t size = 1;
-						static const __vector signed char zero = (__vector signed char) (0);
 						
 						typedef char value_type;
+						
+						static __vector signed char zero ()
+							{
+								return (__vector signed char) (0);
+							}
 					};
 
 				template <> struct from_vector <__vector unsigned char>
 					{
 						static const specifier spec = unsigned_spec;
 						static const size_t size = 1;
-						static const __vector unsigned char zero = (__vector unsigned char) (0);
 						
 						typedef unsigned char value_type;
+
+						static __vector unsigned char zero ()
+							{
+								return (__vector unsigned char) (0);
+							}
+
 					};
 
 				template <> struct from_vector <__vector bool char>
 					{
 						static const specifier spec = bool_spec;
 						static const size_t size = 1;
-						static const __vector bool char zero = (__vector bool char) (0);
 						
 						typedef boolean <char> value_type;
+
+						static __vector bool char zero ()
+							{
+								return (__vector bool char) (0);
+							}
 					};
 				
 				template <> struct from_vector <__vector signed short>
 					{
 						static const specifier spec = signed_spec;
 						static const size_t size = 2;
-						static const __vector signed short zero = (__vector signed short) (0);
 						
 						typedef short value_type;
+
+						static __vector signed short zero ()
+							{
+								return (__vector signed short) (0);
+							}
 					};
 
 				template <> struct from_vector <__vector unsigned short>
 					{
 						static const specifier spec = unsigned_spec;
 						static const size_t size = 2;
-						static const __vector unsigned short zero = (__vector unsigned short) (0);
 						
 						typedef unsigned short value_type;
+
+						static __vector unsigned short zero ()
+							{
+								return (__vector unsigned short) (0);
+							}
 					};
 
 				template <> struct from_vector <__vector bool short>
 					{
 						static const specifier spec = bool_spec;
 						static const size_t size = 2;
-						static const __vector bool short zero = (__vector bool short) (0);
 						
 						typedef boolean <short> value_type;
+
+						static __vector bool short zero ()
+							{
+								return (__vector bool short) (0);
+							}
 					};
 				
 				template <> struct from_vector <__vector signed int>
 					{
 						static const specifier spec = signed_spec;
 						static const size_t size = 4;
-						static const __vector signed int zero = (__vector signed int) (0);
 						
 						typedef long value_type;
+
+						static __vector signed int zero ()
+							{
+								return (__vector signed int) (0);
+							}
 					};
 
 				template <> struct from_vector <__vector unsigned int>
 					{
 						static const specifier spec = unsigned_spec;
 						static const size_t size = 4;
-						static const __vector unsigned int zero = (__vector unsigned int) (0);
 						
 						typedef unsigned long value_type;
+
+						static __vector unsigned int zero ()
+							{
+								return (__vector unsigned int) (0);
+							}
 					};
 
 				template <> struct from_vector <__vector bool int>
 					{
 						static const specifier spec = bool_spec;
 						static const size_t size = 4;
-						static const __vector bool int zero = (__vector bool int) (0);
 						
 						typedef boolean <long> value_type;
+
+						static __vector bool int zero ()
+							{
+								return (__vector bool int) (0);
+							}
 					};
 
 				template <> struct from_vector <__vector float>
 					{
 						static const specifier spec = float_spec;
 						static const size_t size = 4;
-						static const __vector float zero = (__vector float) (0.0f);
 						
 						typedef float value_type;
+
+						static __vector float zero ()
+							{
+								return (__vector float) (0.0f);
+							}
 					};
 
 				template <typename Type> struct altivec_base_traits
@@ -246,7 +287,6 @@ namespace macstl
 
 						static const size_t width = sizeof (vector_type);
 						static const size_t length = sizeof (vector_type) / sizeof (value_type);
-						static const vector_type zero = from_vector <vector_type>::zero;
 						
 						typedef typename to_vector <bool_spec, from_vector <vector_type>::size>::vector_type bool_vector_type;
 						typedef typename from_vector <bool_vector_type>::value_type bool_value_type;
@@ -256,6 +296,8 @@ namespace macstl
 								vector_type vec;
 								value_type val [length];
 							};
+							
+						static vector_type zero () { return from_vector <vector_type>::zero (); }
 						
 						static vector_type bitwise_not (vector_type x)					{ return vec_nor (x, x); }
 							
@@ -294,7 +336,7 @@ namespace macstl
 						typedef typename altivec_base_traits <Type>::bool_vector_type bool_vector_type;
 						
 						static vector_type abs (vector_type x)					{ return vec_abs (x); }
-						static vector_type negate (vector_type x) 				{ return vec_sub (zero, x); }
+						static vector_type negate (vector_type x) 				{ return vec_sub (zero (), x); }
 						
 						static vector_type plus (vector_type x, vector_type y) 	{ return vec_add (x, y); }
 						static vector_type minus (vector_type x, vector_type y) { return vec_sub (x, y); }
@@ -302,16 +344,16 @@ namespace macstl
 						static vector_type max (vector_type x, vector_type y)	{ return vec_max (x, y); }
 						static vector_type min (vector_type x, vector_type y)	{ return vec_min (x, y); }
 						
-						static bool_vector_type logical_not (vector_type x)		{ return vec_cmpeq (x, zero); }
+						static bool_vector_type logical_not (vector_type x)		{ return vec_cmpeq (x, zero ()); }
 						
 						static bool_vector_type logical_and (vector_type x, vector_type y)
 							{
-								return vec_nor (vec_cmpeq (x, zero), vec_cmpeq (y, zero));
+								return vec_nor (vec_cmpeq (x, zero ()), vec_cmpeq (y, zero ()));
 							}
 							
 						static bool_vector_type logical_or (vector_type x, vector_type y)
 							{
-								vector_type anded = vec_and (vec_cmpeq (x, zero), vec_cmpeq (y, zero));
+								vector_type anded = vec_and (vec_cmpeq (x, zero ()), vec_cmpeq (y, zero ()));
 								return vec_nor (anded, anded);
 							}
 				
@@ -419,7 +461,7 @@ namespace macstl
 						
 						static vector_type multiplies (vector_type x, vector_type y)
 							{
-								return vec_mladd (x, y, zero);
+								return vec_mladd (x, y, zero ());
 							}
 							
 						using impl::altivec_number_traits <Type>::max;
@@ -522,9 +564,9 @@ namespace macstl
 						static vector_type less_equal (vector_type x, vector_type y)	{ return vec_or (vec_nor (x, x), y); }
 						static vector_type greater_equal (vector_type x, vector_type y)	{ return vec_or (x, vec_nor (y, y)); }
 						
-						static value_type sum (vector_type x)	{ return (value_type) vec_any_ne (x, zero); }
-						static value_type min (vector_type x)	{ return (value_type) vec_all_ne (x, zero); }
-						static value_type max (vector_type x)	{ return (value_type) vec_any_ne (x, zero); }
+						static value_type sum (vector_type x)	{ return (value_type) vec_any_ne (x, zero ()); }
+						static value_type min (vector_type x)	{ return (value_type) vec_all_ne (x, zero ()); }
+						static value_type max (vector_type x)	{ return (value_type) vec_any_ne (x, zero ()); }
 					};
 		
 			};

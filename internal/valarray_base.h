@@ -102,7 +102,7 @@ namespace impl
 			};
 			
 
-		template <template <typename> class Op> class function
+		template <template <typename> class Op> struct function
 			{
 				template <typename Type> class operation: public Op <Type>
 					{
@@ -149,7 +149,7 @@ namespace impl
 					Type (*fn_) (const Type &);
 			};
 
-		template <template <typename> class Op> class left_scalar
+		template <template <typename> class Op> struct left_scalar
 			{
 				template <typename Type> class operation: public stdext::binder1st <Op <Type> >
 					{
@@ -171,7 +171,7 @@ namespace impl
 					};
 			};
 
-		template <template <typename> class Op> class right_scalar
+		template <template <typename> class Op> struct right_scalar
 			{
 				template <typename Type> class operation: public stdext::binder2nd <Op <Type> >
 					{

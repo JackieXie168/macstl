@@ -1,4 +1,7 @@
 Release history
 
+0.1.1	 26 Jul 2003	
+	．Fixed gcc 3.3 compile issues: stricter access control, in-class init of vector constant. [ACu]
+
 0.1	 9 Jul 2003	
 	．Initial release.

@@ -70,7 +70,7 @@ namespace macstl
 					
 							// constructors
 					
-					altivec (): data_ (altivec_traits::zero)
+					altivec (): data_ (altivec_traits::zero ())
 						{
 						}
 					
