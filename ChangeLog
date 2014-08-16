@@ -1,5 +1,24 @@
 Release history
 
+0.1.3	25 Sep 2003	
+	．Now builds with Metrowerks CodeWarrior 9.
+	．Now builds with August 2003 gcc 3.3 Updater.
+	．Added 65,566 generated Altivec constants, using optimal instruction sequences without memory loads [*HBe].
+	．Added all intrinsic Altivec operators.
+	．Added unit tests for operators and scalarizers against the builtin types [WTo].
+	．Added doxygen comments to most public classes and some internal classes.
+	．Added cshift member to altivec class.
+	．Added pixel class.
+	．Now works correctly as #included system headers:added include guards, fixed internal #lincludes.
+	．Simplified term use of template template functors, used explicit enchunking of functors.
+	．Removed libstdc++ dependencies: added destroy_n algorithm and identity functor, rewrote uninitialized_copy_n and copy_n, remapped type traits system.
+	．Fixed terms including >> and << not compiling.
+	．Fixed initial valarray fill not compiling if the type had a non-trivial destructor.
+	．Fixed valarray of bool compiling incorrectly if sizeof (bool) != 4.
+	．Fixed binder1st/2nd with differing argument types not compiling.
+	．Fixed operator- of some term iterators not compiling.
+	．Fixed incorrect value for chunked sum of char.
+
 0.1.2	 18 Aug 2003	
 	．Optimized chunked slicing of floats and longs e.g. v1 [slice]: used Altivec permutes, 39% faster.
 	．Optimized chunked relational min, max e.g. (v1 == v2).min (): used Altivec predicates, 21% faster.

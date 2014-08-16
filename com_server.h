@@ -6,16 +6,17 @@
  *
  *  Copyright (c) 2003, Pixelglow Software.
  *  http://www.pixelglow.com/macstl/
+ *  macstl@pixelglow.com
  *
- *  You may copy, modify, distribute and sell this software and its
+ *  You may copy, modify, distribute and sell this source code and its
  *  documentation without fee, provided that the above copyright notice
  *  appear in all copies and that both the copyright notice and these
  *  permission notices appear in supporting documentation. You may modify
- *  this software without further permission from the copyright holders,
+ *  this source code without further permission from the copyright holders,
  *  but all such modified files must carry prominent notices stating
  *  that you changed the files and the date of any change.
  *
- *  If you register this software with the copyright holders, you may
+ *  If you register this source code with the copyright holders, you may
  *  compile any part of it from source code to object code. If you
  *  do not register, you may only compile it within 30 days of the first
  *  compilation, and must ensure that all the compiled code and its copies,
@@ -26,20 +27,25 @@
  *  express or implied warranty.
  */
 
+#ifndef MACSTL_COM_SERVER_H
+#define MACSTL_COM_SERVER_H
+
 #include <map>
 
 #include "internal/com_traits.h"
 
 namespace macstl
 	{
-		// com_type
-		
-			// Provides a basic COM implementation, a la Microsoft's ATL. Instead of using macros to record interface pointers,
-			// we use an STL map of IIDs to interface pointers, which derived classes can register via add_interface. The
-			// map allows fast retrieval of pointers through QueryInterface so that derived classes need not override those IUnknown
-			// members. Typically, you don't need to explicitly subclass or construct com_type, since subclassing com_interface
-			// implicitly subclasses com_type as a virtual base, and com_type has an appropriate default constructor
-				
+		/**
+		 * @brief Base for COM implementations.
+		 *
+		 * Provides a basic COM implementation, a la Microsoft ATL. Instead of using ugly macros to record interface
+		 * pointers, we use an STL map of IIDs to interface pointers, which derived classes can register via
+		 * add_interface. The map allows fast retrieval of pointers through the QueryInterface implementation.
+		 *
+		 * Typically, you don't need to explicitly subclass or construct com_type, since subclassing com_interface
+		 * implicitly subclasses com_type as a virtual base, and com_type has an appropriate default constructor.
+		 */
 		class com_type
 			{
 				private:
@@ -53,13 +59,15 @@ namespace macstl
 					typedef std::map <REFIID, IUnknown*, compare_interface> interfaces;
 						
 					interfaces intf_;			// stores our interface pointers, keyed by UUID
-					ULONG ref_;									// reference count
+					ULONG ref_;					// reference count
 					
 				protected:
+					/** Constructs the object. */
 					com_type (): intf_ (), ref_ (1)
 						{
 						}
 						
+					/** Adds an interface pointer @a intf with identifier @a iid. */
 					void add_interface (REFIID iid, IUnknown* intf)
 						{
 							// register an interface pointer
@@ -67,6 +75,7 @@ namespace macstl
 							intf_ [iid] = intf;
 						}
 						
+					/** Removes the interface pointer with identifier @a iid. */
 					void remove_interface (REFIID iid)
 						{
 							// unregister an interface pointer
@@ -125,43 +134,67 @@ namespace macstl
 						}
 			};
 			
-		// com_interface <Intf>
-		
-			// Implementation of the given COM interface. It automatically registers its interface pointer upon construction
-			// in the virtual base com_type. The implementation of the interface delegates IUnknown calls to the virtual base's
-			// methods. Typically, a COM type subclasses com_interface for each COM interface it implements.
-			// It then defines the non-IUnknown member functions. At the minimum, the (non-aggregatable) COM type
-			// must at least subclass IUnknown e.g. if class C implements interface I1 and I2, declare:
-			//   class C: public com_interface <IUnknown>, public com_interface <I1>, public com_interface <I2> { ... };
-			
-			// NOTE: if you really want to step into the murky waters of COM aggregation, that is doable too. Just don't inherit
-			// directly from com_interface <IUnknown>, and in your constructor call add_interface with the outer IUnknown.
-				
+		/**
+		 * @brief Implementation of a COM interface.
+		 * @param Intf The COM interface to implement.
+		 *
+		 * By subclassing this template, instead of the COM interface directly, you automatically get an
+		 * implementation of the standard IUnknown methods: QueryInterface, AddRef and Release For example,
+		 * instead of:
+		 * @code
+		 * class C:
+		 * 	public IUnknown,
+		 *	public I1,
+		 *	public I2 ...
+		 * @endcode
+		 * code this:
+		 * @code
+		 * class C:
+		 * 	public com_interface <IUnknown>,
+		 *	public com_interface <I1>,
+		 *	public com_interface <I2> ...
+		 * @endcode
+		 *
+		 * Each interface declared with com_interface is registered with com_type on construction, and is
+		 * available to the QueryInterface implementation. You only need to ensure that com_traits associates the
+		 * right uuid with the interface.
+		 *
+		 * On Mac OS X, you can use this to write a CFPlugIn or kernel extension.
+		 *
+		 * @note If you really want to step into the murky waters of COM aggregation, that is doable too.
+		 * Just don't subclass com_interface \<IUnknown\>, and in your constructor call add_interface with the outer
+		 * IUnknown.
+		 */
 		template <typename Intf> class com_interface: public virtual com_type, private Intf
 			{
 				public:
+					/** Destructs the object. */
 					virtual ~com_interface ()
 						{
 							// remove that interface
 							remove_interface (com_traits <Intf>::uuid);
 						}
 						
+					/** Queries for an interface @a ppv for the identifier @a iid. */
 					virtual HRESULT STDMETHODCALLTYPE QueryInterface (REFIID iid, LPVOID* ppv)
 						{
 							return do_queryinterface (iid, ppv);
 						}
 					
+					/** Adds a reference to the object. */
 					virtual ULONG STDMETHODCALLTYPE AddRef ()
 						{
 							return do_addref ();
 						}
 						
+					/** Releases a reference. When there are no more references, frees the object. */
 					virtual ULONG STDMETHODCALLTYPE Release ()
 						{
 							return do_release ();
 						}
 						
 				protected:
+					/** Constructs the object. */
 					com_interface (): com_type ()
 						{
 							// add our IUnknown interface
@@ -205,5 +238,6 @@ namespace macstl
 			};
 	
 	
-	};
+	}
 
+#endif

@@ -6,16 +6,17 @@
  *
  *  Copyright (c) 2003, Pixelglow Software.
  *  http://www.pixelglow.com/macstl/
+ *  macstl@pixelglow.com
  *
- *  You may copy, modify, distribute and sell this software and its
+ *  You may copy, modify, distribute and sell this source code and its
  *  documentation without fee, provided that the above copyright notice
  *  appear in all copies and that both the copyright notice and these
  *  permission notices appear in supporting documentation. You may modify
- *  this software without further permission from the copyright holders,
+ *  this source code without further permission from the copyright holders,
  *  but all such modified files must carry prominent notices stating
  *  that you changed the files and the date of any change.
  *
- *  If you register this software with the copyright holders, you may
+ *  If you register this source code with the copyright holders, you may
  *  compile any part of it from source code to object code. If you
  *  do not register, you may only compile it within 30 days of the first
  *  compilation, and must ensure that all the compiled code and its copies,

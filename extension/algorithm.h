@@ -6,16 +6,17 @@
  *
  *  Copyright (c) 2003, Pixelglow Software.
  *  http://www.pixelglow.com/macstl/
+ *  macstl@pixelglow.com
  *
- *  You may copy, modify, distribute and sell this software and its
+ *  You may copy, modify, distribute and sell this source code and its
  *  documentation without fee, provided that the above copyright notice
  *  appear in all copies and that both the copyright notice and these
  *  permission notices appear in supporting documentation. You may modify
- *  this software without further permission from the copyright holders,
+ *  this source code without further permission from the copyright holders,
  *  but all such modified files must carry prominent notices stating
  *  that you changed the files and the date of any change.
  *
- *  If you register this software with the copyright holders, you may
+ *  If you register this source code with the copyright holders, you may
  *  compile any part of it from source code to object code. If you
  *  do not register, you may only compile it within 30 days of the first
  *  compilation, and must ensure that all the compiled code and its copies,
@@ -26,13 +27,42 @@
  *  express or implied warranty.
  */
 
-#include <algorithm>
-#include <ext/algorithm>
-#include <ext/memory>
+#ifndef MACSTL_EXTENSION_ALGORITHM_H
+#define MACSTL_EXTENSION_ALGORITHM_H
 
+#include <algorithm>
 
 namespace stdext
 	{
+		template <typename InIter, typename Size, typename InCat> inline void destroy_n_dispatch (InIter, Size, InCat, __true_type)
+			{
+			}
+
+		template <typename InIter, typename Size> inline void destroy_n_dispatch (InIter first, Size n, std::random_access_iterator_tag, __false_type)
+			{
+				typedef typename std::iterator_traits <InIter>::value_type value_type;
+				for (Size count = 0; count != n; ++count)
+					(&first [count])->~value_type ();
+			}
+			
+		template <typename InIter, typename Size, typename InCat> inline void destroy_n_dispatch (InIter first, Size n, InCat, __false_type)
+			{
+				typedef typename std::iterator_traits <InIter>::value_type value_type;
+				for (; n > 0; --n)
+					{
+						(&*first)->~value_type ();
+						++first;
+					}
+			}
+			
+		template <typename InIter, typename Size> inline void destroy_n (InIter first, Size n)
+			{
+				typedef std::iterator_traits <InIter> in_traits;
+				destroy_n_dispatch (first, n,
+					typename in_traits::iterator_category (),
+					typename __type_traits <typename std::iterator_traits <InIter>::value_type>::has_trivial_destructor ());
+			}
+			
 		// both in & out iterators are random access
 		// optimization: use explicit loop count, index into instead of incrementing iterators
 		// unwind already constructed values if any construction throws
@@ -61,7 +91,24 @@ namespace stdext
 			inline std::pair <InIter, OutIter> uninitialized_copy_n_dispatch (InIter first, Size n, OutIter result,
 				InCat, OutCat)
 			{
-				return __gnu_cxx::uninitialized_copy_n (first, n, result);
+				typedef typename std::iterator_traits <OutIter>::value_type value_type;
+				Size index = 0;
+				try
+					{
+						for (; n > 0; --n)
+							{
+								new (&*result) value_type (*first);
+								++first;
+								++result;
+							}
+						return std::pair <InIter, OutIter> (first + n, result + n);
+					}
+				catch (...)
+					{
+						for (Size unwind = 0; unwind != index; ++unwind)
+							result [unwind].~value_type ();
+						throw;
+					}
 			}
 		
 		template <typename InIter, typename Size, typename OutIter>
@@ -92,25 +139,25 @@ namespace stdext
 					unaliased_first [index] = unaliased_val;
 			}
 */
-			
+
 		// out iterators is random access
 		// optimization: pass by value, use explicit loop count, index into instead of incrementing iterators
 		// unwind already constructed values if any construction throws
 		template <typename OutIter, typename Size, typename Val>
-			inline OutIter uninitialized_fill_n_dispatch (OutIter first, Size n, Val val,
+			inline OutIter uninitialized_fill_n_dispatch (OutIter first, Size n, const Val& val,
 				std::random_access_iterator_tag)
 			{
 				Size index = 0;
 				try
 					{
 						for (; index != n; ++index)
-							new (&result [index]) Val (first [index]);
-						return result + n;
+							new (&first [index]) Val (val);
+						return first + n;
 					}
 				catch (...)
 					{
 						for (Size unwind = 0; unwind != index; ++unwind)
-							result [unwind].~Val ();
+							(&first [unwind])->~Val ();
 						throw;
 					}
 			}
@@ -124,7 +171,7 @@ namespace stdext
 			}
 
 		template <typename OutIter, typename Size, typename Val>
-			inline OutIter uninitialized_fill_n (OutIter first, Size n, const Val& val)
+			inline OutIter uninitialized_fill_n (OutIter first, Size n, Val val)
 			{
 				typedef std::iterator_traits <OutIter> out_traits;
 				return uninitialized_fill_n_dispatch (first, n, val,
@@ -148,8 +195,6 @@ namespace stdext
 					result [index] = first [index];
 			}
 			
-
-			
 		// both in & out iterators are random access
 		// optimization: use explicit loop count, index into instead of incrementing iterators,
 		template <typename InIter, typename Size, typename OutIter>
@@ -164,9 +209,16 @@ namespace stdext
 		template <typename InIter, typename Size, typename OutIter, typename InCat, typename OutCat>
 			inline std::pair <InIter, OutIter> copy_n_dispatch (InIter first, Size n, OutIter result, InCat, OutCat)
 			{
-				return __gnu_cxx::copy_n (first, n, result);
+				for (; n > 0; --n)
+					{
+						*result = *first;
+						++first;
+						++result;
+					}
+				return std::pair <InIter, OutIter> (first, result);
 			}
 			
+
 		template <typename InIter, typename Size, typename OutIter>
 			inline std::pair <InIter, OutIter> copy_n (InIter first, Size n, OutIter result)
 			{
@@ -176,9 +228,9 @@ namespace stdext
 					typename in_traits::iterator_category (),
 					typename out_traits::iterator_category ());
 			}
-			
+		
 		template <typename OutIter, typename Size, typename Val>
-			inline void fill_n_core (OutIter first, Size n, Val val)
+			inline void fill_n_core (OutIter first, Size n, const Val& val)
 			{
 				for (Size index = 0; index != n; ++index)
 					first [index] = val;
@@ -187,7 +239,7 @@ namespace stdext
 		// out iterators is random access
 		// optimization: pass by value, use explicit loop count, index into instead of incrementing iterators
 		template <typename OutIter, typename Size, typename Val>
-			inline OutIter fill_n_dispatch (OutIter first, Size n, Val val,
+			inline OutIter fill_n_dispatch (OutIter first, Size n, const Val& val,
 				std::random_access_iterator_tag)
 			{
 				fill_n_core (first, n, val);
@@ -207,7 +259,7 @@ namespace stdext
 			{
 				typedef std::iterator_traits <OutIter> out_traits;
 				return fill_n_dispatch (first, n, val,
-					typename out_traits::iterator_category ());
+					typename out_traits::iterator_category ());		
 			}
 			
 		template <typename InIter, typename Size, typename UOp>
@@ -269,4 +321,6 @@ namespace stdext
 					typename in_traits2::iterator_category ());
 			}
 
-	};
+	}
+
+#endif

@@ -6,16 +6,17 @@
  *
  *  Copyright (c) 2003, Pixelglow Software.
  *  http://www.pixelglow.com/macstl/
+ *  macstl@pixelglow.com
  *
- *  You may copy, modify, distribute and sell this software and its
+ *  You may copy, modify, distribute and sell this source code and its
  *  documentation without fee, provided that the above copyright notice
  *  appear in all copies and that both the copyright notice and these
  *  permission notices appear in supporting documentation. You may modify
- *  this software without further permission from the copyright holders,
+ *  this source code without further permission from the copyright holders,
  *  but all such modified files must carry prominent notices stating
  *  that you changed the files and the date of any change.
  *
- *  If you register this software with the copyright holders, you may
+ *  If you register this source code with the copyright holders, you may
  *  compile any part of it from source code to object code. If you
  *  do not register, you may only compile it within 30 days of the first
  *  compilation, and must ensure that all the compiled code and its copies,
@@ -26,6 +27,9 @@
  *  express or implied warranty.
  */
  
+#ifndef MACSTL_EXTENSION_FUNCTIONAL_H
+#define MACSTL_EXTENSION_FUNCTIONAL_H
+
 #include <functional>
 
 namespace stdext
@@ -43,6 +47,14 @@ namespace stdext
 				const Type& operator() (const Type& x, const Type& y) const
 					{
 						return x < y ? x : y;
+					}
+			};
+
+		template <typename Type> struct identity: public std::unary_function <Type, Type>
+			{
+				Type operator() (const Type& x) const	
+					{
+						return x;
 					}
 			};
 		
@@ -185,7 +197,7 @@ namespace stdext
 		template <typename Operation> class binder1st: protected Operation
 			{
 				public:
-					typedef typename Operation::first_argument_type argument_type;
+					typedef typename Operation::second_argument_type argument_type;
 					typedef typename Operation::result_type result_type;
 					
 					binder1st (const Operation& op,
@@ -199,11 +211,10 @@ namespace stdext
 						{
 							return (*this) (bound_, x); 
 						}
-	
-				protected:
+
+				private:
 					typename Operation::first_argument_type bound_;
 					
-				private:
 					using Operation::operator();
 			};
 		
@@ -224,7 +235,7 @@ namespace stdext
 		template <typename Operation> class binder2nd: protected Operation
 			{
 				public:
-					typedef typename Operation::second_argument_type argument_type;
+					typedef typename Operation::first_argument_type argument_type;
 					typedef typename Operation::result_type result_type;
 					
 					binder2nd (const Operation& op,
@@ -239,10 +250,9 @@ namespace stdext
 							return (*this) (x, bound_); 
 						}
 						
-				protected:
+				private:
 					typename Operation::second_argument_type bound_;
 					
-				private:
 					using Operation::operator();
 			};
 		
@@ -250,19 +260,18 @@ namespace stdext
 			bind2nd (const Operation& fn, const Type& x) 
 			{
 				typedef typename parameter <typename Operation::second_argument_type>::type second_argument_type;
-				return binder2nd<Operation> (fn, second_argument_type (x));
+				return binder2nd <Operation> (fn, second_argument_type (x));
 			}
 	
 		template <typename Operation, typename Type> inline binder2nd <Operation> 
 			bind2nd (const Operation& fn, Type& x) 
 			{
 				typedef typename parameter <typename Operation::second_argument_type>::type second_argument_type;
-				return binder2nd<Operation> (fn, second_argument_type (x));
+				return binder2nd <Operation> (fn, second_argument_type (x));
 			}
-	};
+	}
 	
-	
-	
+#endif
 	
 
 
